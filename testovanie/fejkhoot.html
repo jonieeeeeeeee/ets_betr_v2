@@ -26,6 +26,10 @@
             --border: rgba(255, 255, 255, 0.1);
             --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
             --nav-link-bg: rgba(255, 255, 255, 0.05);
+            --red: #ef4444;
+            --blue: #3b82f6;
+            --yellow: #f59e0b;
+            --green: #10b981;
         }
         body.light-theme {
             --bg-primary: #f8fafc;
@@ -119,7 +123,7 @@
         .players-panel { flex: 1; background: var(--surface); border-radius: 24px; padding: 24px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 16px; }
         .room-code { text-align: center; background: var(--card-bg); padding: 16px; border-radius: 20px; border: 2px dashed var(--accent); }
         .code-display { font-size: 2rem; font-weight: 800; letter-spacing: 6px; color: var(--accent); font-family: monospace; }
-        .players-list { background: var(--card-bg); border-radius: 20px; padding: 16px; }
+        .players-list { background: var(--card-bg); border-radius: 20px; padding: 16px; max-height: 200px; overflow-y: auto; }
         .players-list h3 { margin-bottom: 12px; font-size: 1rem; }
         .player-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
         .question-text { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
@@ -134,16 +138,52 @@
             text-align: left;
             color: var(--text-primary);
         }
+        .opt-host-btn.A { border-left: 8px solid var(--red); }
+        .opt-host-btn.B { border-left: 8px solid var(--blue); }
+        .opt-host-btn.C { border-left: 8px solid var(--yellow); }
+        .opt-host-btn.D { border-left: 8px solid var(--green); }
         .opt-host-btn.correct-answer { background: var(--success); border-color: var(--success); }
         .quiz-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
         .btn { padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.85rem; }
         .btn:hover { background: var(--accent-hover); }
         .btn-danger { background: var(--danger); }
+        .btn-fullscreen { background: var(--surface-light); color: var(--text-primary); }
         .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
         .checkbox-group label { display: flex; align-items: center; gap: 6px; background: var(--card-bg); padding: 5px 12px; border-radius: 40px; border: 1px solid var(--border); cursor: pointer; font-size: 0.8rem; }
         select.btn { background: var(--surface-light); color: var(--text-primary); }
 
-        /* ========== HRÁČ - FULLSCREEN ŠTÝL ========== */
+        /* FULLSCREEN HOST MODE */
+        .host-fullscreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        .host-fullscreen.active { display: flex; }
+        .host-fullscreen .question-text { font-size: 2.5rem; }
+        .host-fullscreen .opt-host-btn { padding: 30px; font-size: 1.5rem; }
+        .close-fullscreen {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* HRÁČ - FULLSCREEN */
         .player-view {
             display: none;
             position: fixed;
@@ -181,7 +221,6 @@
             margin: 8px 0;
         }
         
-        /* FULLSCREEN GAME SCREEN */
         .game-fullscreen {
             display: none;
             flex-direction: column;
@@ -190,9 +229,7 @@
             background: var(--bg-primary);
             position: relative;
         }
-        .game-fullscreen.active {
-            display: flex;
-        }
+        .game-fullscreen.active { display: flex; }
         
         .game-header {
             padding: 16px;
@@ -202,12 +239,7 @@
             background: var(--surface);
             border-bottom: 1px solid var(--border);
         }
-        .question-progress {
-            font-size: 0.85rem;
-            background: var(--card-bg);
-            padding: 6px 12px;
-            border-radius: 40px;
-        }
+        .question-progress { font-size: 0.85rem; background: var(--card-bg); padding: 6px 12px; border-radius: 40px; }
         .timer-circle {
             width: 50px;
             height: 50px;
@@ -222,15 +254,8 @@
             border: 2px solid var(--accent);
             color: var(--accent);
         }
-        .timer-circle.warning {
-            border-color: var(--danger);
-            color: var(--danger);
-            animation: pulse 0.5s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
+        .timer-circle.warning { border-color: var(--danger); color: var(--danger); animation: pulse 0.5s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
         
         .game-question {
             flex: 1;
@@ -267,21 +292,12 @@
         }
         .game-ans-btn:active { transform: scale(0.96); }
         .game-ans-btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-        .ans-letter {
-            font-size: 2rem;
-            font-weight: 900;
-        }
-        .ans-text {
-            font-size: 0.7rem;
-            font-weight: 400;
-            text-align: center;
-            word-break: break-word;
-            max-width: 100%;
-        }
-        .ans-btn-A { background: #ef4444; color: white; }
-        .ans-btn-B { background: #3b82f6; color: white; }
-        .ans-btn-C { background: #f59e0b; color: #1a1a00; }
-        .ans-btn-D { background: #10b981; color: white; }
+        .ans-letter { font-size: 2rem; font-weight: 900; }
+        .ans-text { font-size: 0.7rem; font-weight: 400; text-align: center; word-break: break-word; max-width: 100%; }
+        .ans-btn-A { background: var(--red); color: white; }
+        .ans-btn-B { background: var(--blue); color: white; }
+        .ans-btn-C { background: var(--yellow); color: #1a1a00; }
+        .ans-btn-D { background: var(--green); color: white; }
         
         .game-feedback {
             position: fixed;
@@ -297,9 +313,7 @@
             transition: transform 0.3s;
             z-index: 1001;
         }
-        .game-feedback.show {
-            transform: translateY(0);
-        }
+        .game-feedback.show { transform: translateY(0); }
         .game-feedback.correct { background: var(--success); color: white; }
         .game-feedback.wrong { background: var(--danger); color: white; }
         
@@ -313,6 +327,7 @@
             padding: 20px;
         }
         
+        /* RESULTS OVERLAY */
         .results-overlay {
             position: fixed;
             top: 0;
@@ -337,15 +352,31 @@
             width: 100%;
             text-align: center;
         }
-        .final-score {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--accent);
-            margin: 16px 0;
+        .final-score { font-size: 3rem; font-weight: 800; color: var(--accent); margin: 16px 0; }
+        
+        /* ROUND RESULTS */
+        .round-results {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--surface);
+            border-radius: 32px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            z-index: 2001;
+            display: none;
+            text-align: center;
+            border: 2px solid var(--accent);
         }
-        .close-results {
-            margin-top: 20px;
-        }
+        .round-results.active { display: block; animation: popIn 0.3s ease; }
+        @keyframes popIn { from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+        .round-results h3 { color: var(--accent); margin-bottom: 16px; }
+        .top-list { text-align: left; margin: 16px 0; max-height: 300px; overflow-y: auto; }
+        .top-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--border); }
+        .top-item.first { background: rgba(245,158,11,0.2); border-radius: 12px; font-weight: 800; }
+        .my-rank { margin-top: 16px; padding: 12px; background: var(--card-bg); border-radius: 16px; }
 
         footer { text-align: center; padding: 16px; background: var(--surface); color: var(--text-secondary); border-top: 1px solid var(--border); font-size: 0.75rem; }
         .footer-links { margin-top: 8px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
@@ -377,6 +408,11 @@
                     <h2>Hostiteľ</h2>
                     <p>Vytvor hru na veľkej obrazovke</p>
                 </div>
+                <div class="role-card" onclick="selectRole('presenter')">
+                    <div class="role-icon">📽️</div>
+                    <h2>Prezentujúci</h2>
+                    <p>Len zobrazuje otázky (bez hráčov)</p>
+                </div>
                 <div class="role-card" onclick="selectRole('player')">
                     <div class="role-icon">📱</div>
                     <h2>Hráč</h2>
@@ -385,9 +421,10 @@
             </div>
         </div>
 
+        <!-- HOST VIEW -->
         <div id="hostView" class="kahoot-layout" style="display: none;">
             <div class="host-panel">
-                <h2>🎮 Hostiteľ</h2>
+                <h2>🎮 Hostiteľ <button class="btn btn-fullscreen" onclick="toggleHostFullscreen()" style="margin-left:10px">🖥️ Celá obrazovka</button></h2>
                 <div class="question-area">
                     <div class="question-text" id="questionText">Vyber kategórie a klikni Štart</div>
                     <div class="options-host" id="hostOptions"></div>
@@ -405,7 +442,7 @@
                             <option value="15">15 otázok</option>
                             <option value="20">20 otázok</option>
                         </select>
-                        <button class="btn" id="startGameBtn">🚀 Štart hry</button>
+                        <button class="btn" id="startGameBtn" disabled>🚀 Spustiť hru</button>
                         <button class="btn" id="nextQuestionBtn" style="display: none;">⏩ Ďalšia otázka</button>
                         <button class="btn btn-danger" id="endGameBtn" style="display: none;">🏁 Ukončiť</button>
                     </div>
@@ -417,9 +454,52 @@
                     <div class="code-display" id="roomCode">------</div>
                     <p style="font-size: 0.7rem; margin-top: 8px;">Hráči zadajú tento kód</p>
                 </div>
-                <div class="players-list"><h3>👥 Hráči</h3><div id="playersList"></div></div>
+                <div class="players-list"><h3>👥 Hráči v lobby (<span id="playerCount">0</span>)</h3><div id="playersList"></div></div>
                 <div class="players-list"><h3>🏆 Leaderboard</h3><div id="leaderboard"></div></div>
             </div>
+        </div>
+        
+        <!-- FULLSCREEN HOST MODE -->
+        <div id="hostFullscreen" class="host-fullscreen">
+            <button class="close-fullscreen" onclick="toggleHostFullscreen()">✕</button>
+            <div class="question-text" id="fsQuestionText">Vyber kategórie a klikni Štart</div>
+            <div class="options-host" id="fsHostOptions"></div>
+        </div>
+
+        <!-- PRESENTER VIEW -->
+        <div id="presenterView" class="kahoot-layout" style="display: none;">
+            <div class="host-panel" style="flex:1">
+                <h2>📽️ Prezentujúci <button class="btn btn-fullscreen" onclick="togglePresenterFullscreen()" style="margin-left:10px">🖥️ Celá obrazovka</button></h2>
+                <div class="question-area">
+                    <div class="question-text" id="presQuestionText">Vyber kategórie a klikni Štart</div>
+                    <div class="options-host" id="presOptions"></div>
+                    <div class="quiz-controls">
+                        <div class="checkbox-group" id="presCategoryCheckboxes">
+                            <label><input type="checkbox" value="A" checked> Test A</label>
+                            <label><input type="checkbox" value="B" checked> Test B</label>
+                            <label><input type="checkbox" value="C" checked> Test C</label>
+                            <label><input type="checkbox" value="D" checked> Test D</label>
+                            <label><input type="checkbox" value="LEG" checked> Legislatíva</label>
+                        </div>
+                        <select id="presQuestionCountSelect" class="btn">
+                            <option value="5">5 otázok</option>
+                            <option value="10" selected>10 otázok</option>
+                            <option value="15">15 otázok</option>
+                            <option value="20">20 otázok</option>
+                        </select>
+                        <button class="btn" id="presStartBtn">🚀 Spustiť prezentáciu</button>
+                        <button class="btn" id="presNextBtn" style="display: none;">⏩ Ďalšia otázka</button>
+                        <button class="btn btn-danger" id="presEndBtn" style="display: none;">🏁 Ukončiť</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="presFullscreen" class="host-fullscreen">
+            <button class="close-fullscreen" onclick="togglePresenterFullscreen()">✕</button>
+            <div class="question-text" id="presFsQuestionText"></div>
+            <div class="options-host" id="presFsOptions"></div>
+            <div class="timer-circle" id="presTimer" style="position: absolute; top: 20px; right: 80px;">15</div>
         </div>
 
         <!-- HRÁČ - FULLSCREEN -->
@@ -450,7 +530,13 @@
             </div>
         </div>
         
-        <!-- Výsledky po hre -->
+        <div id="roundResults" class="round-results">
+            <h3>📊 Výsledky kola</h3>
+            <div id="roundTopList" class="top-list"></div>
+            <div id="roundMyRank" class="my-rank"></div>
+            <button class="btn" onclick="closeRoundResults()" style="margin-top: 16px;">Pokračovať</button>
+        </div>
+        
         <div id="resultsOverlay" class="results-overlay">
             <div class="results-card">
                 <h2>🏆 Kvíz skončil!</h2>
@@ -473,10 +559,8 @@
 </div>
 
 <script>
-    // ========== FIREBASE KONFIGURÁCIA ==========
-    const firebaseConfig = {
-        databaseURL: "https://eltec-fejkhoot-default-rtdb.europe-west1.firebasedatabase.app/"
-    };
+    // ========== FIREBASE ==========
+    const firebaseConfig = { databaseURL: "https://eltec-fejkhoot-default-rtdb.europe-west1.firebasedatabase.app/" };
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
@@ -2583,7 +2667,41 @@
     let playerTimerInterval = null;
     let playerCurrentIndex = -1;
     let totalQuestionsCount = 0;
+    let questionStartTime = 0;
+    let roundResultsCallback = null;
+    let presenterMode = false;
 
+    // ========== SPOLOČNÉ FUNKCIE ==========
+    function shuffleArray(arr) {
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function prepareQuestions(categoryCheckboxesId, countSelectId) {
+        const categories = Array.from(document.querySelectorAll(`#${categoryCheckboxesId} input:checked`)).map(cb => cb.value);
+        if (categories.length === 0) { alert('Vyber aspoň jednu kategóriu!'); return null; }
+        let all = [];
+        categories.forEach(c => { if (questionsDatabase[c]) all.push(...questionsDatabase[c]); });
+        if (all.length === 0) { alert('Žiadne otázky!'); return null; }
+        const count = parseInt(document.getElementById(countSelectId).value);
+        return shuffleArray([...all]).slice(0, Math.min(count, all.length));
+    }
+
+    function displayHostOptions(containerId, options, correctIndices = null) {
+        const container = document.getElementById(containerId);
+        const letters = ['A','B','C','D'];
+        let html = '';
+        options.forEach((opt, i) => {
+            const isCorrect = correctIndices && correctIndices.includes(i);
+            html += `<div class="opt-host-btn ${letters[i]} ${isCorrect ? 'correct-answer' : ''}">${letters[i]}) ${opt}</div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    // ========== HOSTITEĽ ==========
     function selectRole(r) {
         role = r;
         document.getElementById('roleScreen').style.display = 'none';
@@ -2591,17 +2709,55 @@
             gameId = Math.random().toString(36).substring(2,8).toUpperCase();
             document.getElementById('roomCode').textContent = gameId;
             document.getElementById('hostView').style.display = 'flex';
-            listenForPlayers();
+            database.ref(`games/${gameId}`).set({ players: {}, status: 'lobby', totalQuestions: 0 });
+            listenForLobby();
+        } else if (r === 'presenter') {
+            document.getElementById('presenterView').style.display = 'flex';
+            presenterMode = true;
         } else {
             document.getElementById('playerView').classList.add('active');
         }
     }
 
-    function listenForPlayers() {
+    function listenForLobby() {
         database.ref(`games/${gameId}/players`).on('value', (snap) => {
             players = snap.val() || {};
             updatePlayersList();
+            document.getElementById('startGameBtn').disabled = Object.keys(players).length === 0;
         });
+    }
+
+    function updatePlayersList() {
+        const arr = Object.values(players);
+        document.getElementById('playerCount').textContent = arr.length;
+        const playersDiv = document.getElementById('playersList');
+        const leaderDiv = document.getElementById('leaderboard');
+        arr.sort((a,b) => (b.score||0) - (a.score||0));
+        playersDiv.innerHTML = arr.map(p => `<div class="player-item"><span>${p.name}</span><span>${p.score||0}</span></div>`).join('');
+        leaderDiv.innerHTML = arr.slice(0,5).map((p,i) => `<div class="player-item"><span>${i+1}. ${p.name}</span><span>${p.score||0}</span></div>`).join('');
+        if (arr.length === 0) { playersDiv.innerHTML = '<div style="text-align:center">Zatiaľ žiadni hráči</div>'; leaderDiv.innerHTML = '<div style="text-align:center">-</div>'; }
+    }
+
+    async function startGame() {
+        const qs = prepareQuestions('categoryCheckboxes', 'questionCountSelect');
+        if (!qs) return;
+        currentQuestions = qs;
+        currentIndex = 0;
+        gameActive = true;
+        totalQuestionsCount = currentQuestions.length;
+        await database.ref(`games/${gameId}`).update({
+            questions: currentQuestions,
+            totalQuestions: totalQuestionsCount,
+            status: 'playing',
+            currentQuestion: { index: 0, question: currentQuestions[0] }
+        });
+        document.getElementById('startGameBtn').style.display = 'none';
+        document.getElementById('endGameBtn').style.display = 'inline-block';
+        displayHostQuestion();
+        listenForGameStart();
+    }
+
+    function listenForGameStart() {
         database.ref(`games/${gameId}/currentQuestion`).on('value', (snap) => {
             const qData = snap.val();
             if (qData && gameActive && qData.index !== currentIndex) {
@@ -2613,74 +2769,25 @@
                 displayHostQuestion();
             }
         });
-    }
-
-    function updatePlayersList() {
-        const playersDiv = document.getElementById('playersList');
-        const leaderDiv = document.getElementById('leaderboard');
-        const arr = Object.values(players);
-        arr.sort((a,b) => (b.score||0) - (a.score||0));
-        playersDiv.innerHTML = arr.map(p => `<div class="player-item"><span>${p.name}</span><span>${p.score||0}</span></div>`).join('');
-        leaderDiv.innerHTML = arr.map((p,i) => `<div class="player-item"><span>${i+1}. ${p.name}</span><span>${p.score||0}</span></div>`).join('');
-    }
-
-    function shuffleArray(arr) {
-        for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-    }
-
-    function prepareQuestions() {
-        const categories = Array.from(document.querySelectorAll('#categoryCheckboxes input:checked')).map(cb => cb.value);
-        if (categories.length === 0) { alert('Vyber aspoň jednu kategóriu!'); return null; }
-        let all = [];
-        categories.forEach(c => { if (questionsDatabase[c]) all.push(...questionsDatabase[c]); });
-        if (all.length === 0) { alert('Žiadne otázky!'); return null; }
-        const count = parseInt(document.getElementById('questionCountSelect').value);
-        return shuffleArray([...all]).slice(0, Math.min(count, all.length));
-    }
-
-    async function startGame() {
-        const qs = prepareQuestions();
-        if (!qs) return;
-        currentQuestions = qs;
-        currentIndex = 0;
-        gameActive = true;
-        currentQuestion = currentQuestions[0];
-        acceptingAnswers = true;
-        totalQuestionsCount = currentQuestions.length;
-        
-        await database.ref(`games/${gameId}`).set({
-            players: {},
-            currentQuestion: { index: 0, question: currentQuestions[0] },
-            questions: currentQuestions,
-            status: 'playing',
-            totalQuestions: totalQuestionsCount
+        database.ref(`games/${gameId}/questionDone`).on('value', (snap) => {
+            const done = snap.val();
+            if (done && done[currentIndex] === true && gameActive) {
+                document.getElementById('nextQuestionBtn').style.display = 'inline-block';
+            }
         });
-        
-        document.getElementById('startGameBtn').style.display = 'none';
-        document.getElementById('endGameBtn').style.display = 'inline-block';
-        document.getElementById('nextQuestionBtn').style.display = 'none';
-        displayHostQuestion();
     }
 
     function displayHostQuestion() {
         if (!currentQuestion) return;
-        const isMulti = currentQuestion.type === 'multi';
-        document.getElementById('questionText').innerHTML = `${currentIndex+1}. ${currentQuestion.question} ${isMulti ? '<span style="color:var(--warning)">(✅ viac správnych)</span>' : ''}`;
-        let html = '';
-        currentQuestion.options.forEach((opt, i) => {
-            html += `<div class="opt-host-btn">${String.fromCharCode(65+i)}) ${opt}</div>`;
-        });
-        document.getElementById('hostOptions').innerHTML = html;
+        displayHostOptions('hostOptions', currentQuestion.options);
+        displayHostOptions('fsHostOptions', currentQuestion.options);
+        document.getElementById('questionText').innerHTML = `${currentIndex+1}. ${currentQuestion.question}`;
+        document.getElementById('fsQuestionText').innerHTML = `${currentIndex+1}. ${currentQuestion.question}`;
         document.querySelectorAll('.opt-host-btn').forEach(btn => btn.classList.remove('correct-answer'));
         
         if (revealTimer) clearTimeout(revealTimer);
-        revealTimer = setTimeout(() => {
-            if (acceptingAnswers) revealAnswers();
-        }, 15000);
+        questionStartTime = Date.now();
+        revealTimer = setTimeout(() => { if (acceptingAnswers) revealAnswers(); }, 15000);
     }
 
     async function revealAnswers() {
@@ -2692,28 +2799,51 @@
         const answersSnap = await database.ref(`games/${gameId}/answers/${currentIndex}`).once('value');
         const answers = answersSnap.val() || {};
         
-        const btns = document.querySelectorAll('.opt-host-btn');
-        q.correct.forEach(c => { if (btns[c]) btns[c].classList.add('correct-answer'); });
+        // Zoradíme odpovede podľa času
+        const sortedAnswers = Object.entries(answers).sort((a,b) => (a[1].time || 999) - (b[1].time || 999));
+        const totalTime = 15000;
         
-        for (const [pid, ansData] of Object.entries(answers)) {
+        for (let i = 0; i < sortedAnswers.length; i++) {
+            const [pid, ansData] = sortedAnswers[i];
             const player = players[pid];
             if (!player) continue;
             let points = 0;
-            if (isMulti) {
-                const userSelected = ansData.answers || [];
-                const correctSet = new Set(q.correct);
-                let correctCount = 0;
-                userSelected.forEach(a => { if (correctSet.has(a)) correctCount++; });
-                points = Math.floor((correctCount / q.correct.length) * 1000);
-            } else {
-                if (ansData.answer === q.correct[0]) points = 1000;
+            const isCorrect = isMulti ? 
+                ansData.answers && ansData.answers.length === q.correct.length && ansData.answers.every(a => q.correct.includes(a)) :
+                ansData.answer === q.correct[0];
+            
+            if (isCorrect) {
+                const remainingTime = Math.max(0, totalTime - (ansData.time || totalTime));
+                points = Math.floor(1000 * (remainingTime / totalTime));
             }
-            const newScore = (player.score || 0) + points;
-            await database.ref(`games/${gameId}/players/${pid}/score`).set(newScore);
+            await database.ref(`games/${gameId}/players/${pid}/score`).set((player.score || 0) + points);
+            await database.ref(`games/${gameId}/players/${pid}/lastPoints`).set(points);
         }
         
+        // Zvýrazni správne odpovede
+        const btns = document.querySelectorAll('.opt-host-btn');
+        q.correct.forEach(c => { if (btns[c]) btns[c].classList.add('correct-answer'); });
+        
         await database.ref(`games/${gameId}/questionDone/${currentIndex}`).set(true);
-        document.getElementById('nextQuestionBtn').style.display = 'inline-block';
+        await showRoundResults();
+    }
+
+    async function showRoundResults() {
+        const playersSnap = await database.ref(`games/${gameId}/players`).once('value');
+        const allPlayers = Object.values(playersSnap.val() || {});
+        allPlayers.sort((a,b) => (b.score||0) - (a.score||0));
+        const top5 = allPlayers.slice(0,5);
+        const topHtml = top5.map((p,i) => `<div class="top-item ${i===0?'first':''}"><span>${i+1}. ${p.name}</span><span>${p.score} b</span></div>`).join('');
+        document.getElementById('roundTopList').innerHTML = topHtml;
+        document.getElementById('roundResults').classList.add('active');
+        
+        return new Promise(resolve => { roundResultsCallback = resolve; });
+    }
+    
+    function closeRoundResults() {
+        document.getElementById('roundResults').classList.remove('active');
+        if (roundResultsCallback) roundResultsCallback();
+        roundResultsCallback = null;
     }
 
     async function nextQuestion() {
@@ -2725,10 +2855,8 @@
         currentQuestion = currentQuestions[currentIndex];
         acceptingAnswers = true;
         answerSubmitted = false;
-        
         await database.ref(`games/${gameId}/answers/${currentIndex}`).remove();
         await database.ref(`games/${gameId}/currentQuestion`).set({ index: currentIndex, question: currentQuestion });
-        
         document.getElementById('nextQuestionBtn').style.display = 'none';
         displayHostQuestion();
     }
@@ -2745,9 +2873,87 @@
         document.getElementById('nextQuestionBtn').style.display = 'none';
         document.getElementById('questionText').innerHTML = 'Vyber kategórie a klikni Štart';
         document.getElementById('hostOptions').innerHTML = '';
+        listenForLobby();
     }
 
-    // ========== HRÁČ - FULLSCREEN ==========
+    function toggleHostFullscreen() {
+        const fs = document.getElementById('hostFullscreen');
+        fs.classList.toggle('active');
+        if (fs.classList.contains('active')) {
+            displayHostOptions('fsHostOptions', currentQuestion?.options || []);
+            document.getElementById('fsQuestionText').innerHTML = currentQuestion ? `${currentIndex+1}. ${currentQuestion.question}` : 'Vyber kategórie a klikni Štart';
+        }
+    }
+
+    // ========== PREZENTUJÚCI ==========
+    let presQuestions = [];
+    let presIndex = 0;
+    let presActive = false;
+    let presTimerInterval = null;
+    
+    function startPresentation() {
+        const qs = prepareQuestions('presCategoryCheckboxes', 'presQuestionCountSelect');
+        if (!qs) return;
+        presQuestions = qs;
+        presIndex = 0;
+        presActive = true;
+        showPresQuestion();
+        document.getElementById('presStartBtn').style.display = 'none';
+        document.getElementById('presEndBtn').style.display = 'inline-block';
+    }
+    
+    function showPresQuestion() {
+        if (!presActive || presIndex >= presQuestions.length) { endPresentation(); return; }
+        const q = presQuestions[presIndex];
+        document.getElementById('presQuestionText').innerHTML = `${presIndex+1}. ${q.question}`;
+        document.getElementById('presFsQuestionText').innerHTML = `${presIndex+1}. ${q.question}`;
+        displayHostOptions('presOptions', q.options);
+        displayHostOptions('presFsOptions', q.options);
+        startPresTimer(15);
+        document.getElementById('presNextBtn').style.display = 'inline-block';
+    }
+    
+    function startPresTimer(seconds) {
+        if (presTimerInterval) clearInterval(presTimerInterval);
+        let remaining = seconds;
+        const timerEl = document.getElementById('presTimer');
+        timerEl.textContent = remaining;
+        presTimerInterval = setInterval(() => {
+            remaining--;
+            timerEl.textContent = remaining;
+            if (remaining <= 0) clearInterval(presTimerInterval);
+        }, 1000);
+    }
+    
+    function nextPresentation() {
+        presIndex++;
+        if (presIndex >= presQuestions.length) { endPresentation(); return; }
+        showPresQuestion();
+        document.getElementById('presNextBtn').style.display = 'none';
+    }
+    
+    function endPresentation() {
+        presActive = false;
+        if (presTimerInterval) clearInterval(presTimerInterval);
+        alert('Prezentácia skončila!');
+        document.getElementById('presStartBtn').style.display = 'inline-block';
+        document.getElementById('presEndBtn').style.display = 'none';
+        document.getElementById('presNextBtn').style.display = 'none';
+        document.getElementById('presQuestionText').innerHTML = 'Vyber kategórie a klikni Štart';
+        document.getElementById('presOptions').innerHTML = '';
+    }
+    
+    function togglePresenterFullscreen() {
+        const fs = document.getElementById('presFullscreen');
+        fs.classList.toggle('active');
+        if (fs.classList.contains('active') && presQuestions[presIndex]) {
+            const q = presQuestions[presIndex];
+            document.getElementById('presFsQuestionText').innerHTML = `${presIndex+1}. ${q.question}`;
+            displayHostOptions('presFsOptions', q.options);
+        }
+    }
+
+    // ========== HRÁČ ==========
     document.getElementById('joinGameBtn').addEventListener('click', async () => {
         const code = document.getElementById('joinCodeInput').value.toUpperCase();
         const name = document.getElementById('playerNameInput').value;
@@ -2757,137 +2963,19 @@
         
         const gameRef = database.ref(`games/${gameId}`);
         const gameSnap = await gameRef.once('value');
-        if (!gameSnap.exists()) { alert('Hra neexistuje! Skontroluj kód.'); return; }
+        if (!gameSnap.exists() || gameSnap.val().status !== 'lobby') { alert('Hra neexistuje alebo už začala!'); return; }
         
         totalQuestionsCount = gameSnap.val().totalQuestions || 10;
-        
         await gameRef.child(`players/${playerId}`).set({ name, score: 0 });
         
         document.getElementById('joinScreen').style.display = 'none';
         document.getElementById('gameWaiting').classList.add('active');
         document.getElementById('gameFullscreen').classList.remove('active');
         
-        listenForGame();
+        listenForPlayerGame();
     });
     
-    function startPlayerTimer(seconds) {
-        if (playerTimerInterval) clearInterval(playerTimerInterval);
-        let remaining = seconds;
-        const timerEl = document.getElementById('gameTimer');
-        timerEl.textContent = remaining;
-        timerEl.classList.remove('warning');
-        
-        playerTimerInterval = setInterval(() => {
-            remaining--;
-            timerEl.textContent = remaining;
-            if (remaining <= 5) {
-                timerEl.classList.add('warning');
-            }
-            if (remaining <= 0) {
-                clearInterval(playerTimerInterval);
-                timerEl.classList.remove('warning');
-            }
-        }, 1000);
-    }
-    
-    function stopPlayerTimer() {
-        if (playerTimerInterval) clearInterval(playerTimerInterval);
-    }
-    
-    function showFeedback(message, isCorrect) {
-        const fb = document.getElementById('gameFeedback');
-        fb.textContent = message;
-        fb.className = `game-feedback show ${isCorrect ? 'correct' : 'wrong'}`;
-        setTimeout(() => {
-            fb.classList.remove('show');
-        }, 2000);
-    }
-    
-    function displayPlayerQuestion() {
-        stopPlayerTimer();
-        startPlayerTimer(15);
-        
-        document.getElementById('gameProgress').textContent = `Otázka ${playerCurrentIndex+1} / ${totalQuestionsCount}`;
-        document.getElementById('gameQuestionText').textContent = currentQuestion.question;
-        
-        const container = document.getElementById('gameAnswers');
-        let html = '';
-        const letters = ['A', 'B', 'C', 'D'];
-        
-        currentQuestion.options.forEach((opt, i) => {
-            // Skrátenie textu pre mobil
-            let shortText = opt;
-            if (opt.length > 30) {
-                shortText = opt.substring(0, 27) + '...';
-            }
-            html += `
-                <button class="game-ans-btn ans-btn-${letters[i]}" data-ans="${i}">
-                    <span class="ans-letter">${letters[i]}</span>
-                    <span class="ans-text">${shortText}</span>
-                </button>
-            `;
-        });
-        container.innerHTML = html;
-        
-        myAnswers = [];
-        answerSubmitted = false;
-        isMultiChoice = currentQuestion.type === 'multi';
-        
-        if (isMultiChoice) {
-            document.querySelectorAll('.game-ans-btn').forEach(btn => {
-                btn.onclick = () => {
-                    if (!acceptingAnswers) { showFeedback('⏰ Už neskoro!', false); return; }
-                    if (answerSubmitted) return;
-                    const val = parseInt(btn.dataset.ans);
-                    if (myAnswers.includes(val)) {
-                        myAnswers = myAnswers.filter(v => v !== val);
-                        btn.style.opacity = '0.7';
-                        btn.style.transform = 'scale(1)';
-                    } else {
-                        myAnswers.push(val);
-                        btn.style.opacity = '1';
-                        btn.style.transform = 'scale(1.05)';
-                    }
-                };
-            });
-            
-            // Pridať tlačidlo pre odoslanie pri multichoice
-            const submitBtn = document.createElement('button');
-            submitBtn.textContent = '✅ Odoslať odpoveď';
-            submitBtn.className = 'btn';
-            submitBtn.style.width = '100%';
-            submitBtn.style.marginTop = '10px';
-            submitBtn.style.gridColumn = 'span 2';
-            submitBtn.onclick = async () => {
-                if (!acceptingAnswers) { showFeedback('⏰ Už neskoro!', false); return; }
-                if (answerSubmitted) return;
-                if (myAnswers.length === 0) { showFeedback('Vyber aspoň jednu odpoveď!', false); return; }
-                answerSubmitted = true;
-                await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answers: myAnswers });
-                showFeedback('✅ Odpoveď zaznamenaná!', true);
-                document.querySelectorAll('.game-ans-btn').forEach(btn => btn.disabled = true);
-                submitBtn.disabled = true;
-                submitBtn.style.opacity = '0.5';
-                stopPlayerTimer();
-            };
-            container.parentNode.appendChild(submitBtn);
-        } else {
-            document.querySelectorAll('.game-ans-btn').forEach(btn => {
-                btn.onclick = async () => {
-                    if (!acceptingAnswers) { showFeedback('⏰ Už neskoro!', false); return; }
-                    if (answerSubmitted) return;
-                    answerSubmitted = true;
-                    const answer = parseInt(btn.dataset.ans);
-                    await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answer: answer });
-                    showFeedback('✅ Odpoveď zaznamenaná!', true);
-                    document.querySelectorAll('.game-ans-btn').forEach(b => b.disabled = true);
-                    stopPlayerTimer();
-                };
-            });
-        }
-    }
-    
-    function listenForGame() {
+    function listenForPlayerGame() {
         database.ref(`games/${gameId}/currentQuestion`).on('value', (snap) => {
             const qData = snap.val();
             if (qData && playerCurrentIndex !== qData.index) {
@@ -2896,7 +2984,7 @@
                 acceptingAnswers = true;
                 answerSubmitted = false;
                 myAnswers = [];
-                
+                questionStartTime = Date.now();
                 document.getElementById('gameWaiting').classList.remove('active');
                 document.getElementById('gameFullscreen').classList.add('active');
                 displayPlayerQuestion();
@@ -2909,28 +2997,18 @@
                 stopPlayerTimer();
                 document.getElementById('gameFullscreen').classList.remove('active');
                 document.getElementById('gameWaiting').classList.add('active');
-                document.getElementById('gameWaiting').innerHTML = `
-                    <div class="game-waiting">
-                        <div style="font-size: 3rem; margin-bottom: 20px;">⏳</div>
-                        <h2>Čakáme na ďalšiu otázku...</h2>
-                        <p style="color: var(--text-secondary); margin-top: 10px;">Hostiteľ čoskoro spustí ďalšiu</p>
-                    </div>
-                `;
             }
         });
         
         database.ref(`games/${gameId}/status`).on('value', async (snap) => {
             if (snap.val() === 'ended') {
                 stopPlayerTimer();
-                // Získaj výsledky hráča
                 const gameSnap = await database.ref(`games/${gameId}`).once('value');
-                const gameData = gameSnap.val();
-                const playersData = gameData?.players || {};
+                const playersData = gameSnap.val()?.players || {};
                 const myData = playersData[playerId];
                 const allPlayers = Object.values(playersData);
                 allPlayers.sort((a,b) => (b.score||0) - (a.score||0));
                 const rank = allPlayers.findIndex(p => p.name === myData?.name) + 1;
-                
                 document.getElementById('finalScore').textContent = `${myData?.score || 0} bodov`;
                 document.getElementById('finalRank').innerHTML = `<p style="font-size: 1.2rem;">Tvoje umiestnenie: #${rank}</p>`;
                 document.getElementById('resultsOverlay').classList.add('active');
@@ -2940,26 +3018,107 @@
         });
     }
     
+    function startPlayerTimer() {
+        if (playerTimerInterval) clearInterval(playerTimerInterval);
+        let remaining = 15;
+        const timerEl = document.getElementById('gameTimer');
+        timerEl.textContent = remaining;
+        timerEl.classList.remove('warning');
+        playerTimerInterval = setInterval(() => {
+            remaining--;
+            timerEl.textContent = remaining;
+            if (remaining <= 5) timerEl.classList.add('warning');
+            if (remaining <= 0) clearInterval(playerTimerInterval);
+        }, 1000);
+    }
+    
+    function stopPlayerTimer() { if (playerTimerInterval) clearInterval(playerTimerInterval); }
+    
+    function displayPlayerQuestion() {
+        startPlayerTimer();
+        document.getElementById('gameProgress').textContent = `Otázka ${playerCurrentIndex+1} / ${totalQuestionsCount}`;
+        document.getElementById('gameQuestionText').textContent = currentQuestion.question;
+        const container = document.getElementById('gameAnswers');
+        const letters = ['A','B','C','D'];
+        let html = '';
+        currentQuestion.options.forEach((opt, i) => {
+            let shortText = opt.length > 30 ? opt.substring(0,27)+'...' : opt;
+            html += `<button class="game-ans-btn ans-btn-${letters[i]}" data-ans="${i}"><span class="ans-letter">${letters[i]}</span><span class="ans-text">${shortText}</span></button>`;
+        });
+        container.innerHTML = html;
+        
+        isMultiChoice = currentQuestion.type === 'multi';
+        if (isMultiChoice) {
+            document.querySelectorAll('.game-ans-btn').forEach(btn => {
+                btn.onclick = () => {
+                    if (!acceptingAnswers || answerSubmitted) return;
+                    const val = parseInt(btn.dataset.ans);
+                    if (myAnswers.includes(val)) {
+                        myAnswers = myAnswers.filter(v => v !== val);
+                        btn.style.opacity = '0.7';
+                    } else {
+                        myAnswers.push(val);
+                        btn.style.opacity = '1';
+                    }
+                };
+            });
+            const submitBtn = document.createElement('button');
+            submitBtn.textContent = '✅ Odoslať odpoveď';
+            submitBtn.className = 'btn';
+            submitBtn.style.width = '100%';
+            submitBtn.style.marginTop = '10px';
+            submitBtn.style.gridColumn = 'span 2';
+            submitBtn.onclick = async () => {
+                if (!acceptingAnswers || answerSubmitted) return;
+                if (myAnswers.length === 0) { showPlayerFeedback('Vyber aspoň jednu odpoveď!', false); return; }
+                answerSubmitted = true;
+                const timeTaken = Date.now() - questionStartTime;
+                await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answers: myAnswers, time: timeTaken });
+                showPlayerFeedback('✅ Odpoveď zaznamenaná!', true);
+                document.querySelectorAll('.game-ans-btn').forEach(b => b.disabled = true);
+                submitBtn.disabled = true;
+            };
+            container.parentNode.appendChild(submitBtn);
+        } else {
+            document.querySelectorAll('.game-ans-btn').forEach(btn => {
+                btn.onclick = async () => {
+                    if (!acceptingAnswers || answerSubmitted) return;
+                    answerSubmitted = true;
+                    const timeTaken = Date.now() - questionStartTime;
+                    await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answer: parseInt(btn.dataset.ans), time: timeTaken });
+                    showPlayerFeedback('✅ Odpoveď zaznamenaná!', true);
+                    document.querySelectorAll('.game-ans-btn').forEach(b => b.disabled = true);
+                };
+            });
+        }
+    }
+    
+    function showPlayerFeedback(msg, isCorrect) {
+        const fb = document.getElementById('gameFeedback');
+        fb.textContent = msg;
+        fb.className = `game-feedback show ${isCorrect ? 'correct' : 'wrong'}`;
+        setTimeout(() => fb.classList.remove('show'), 2000);
+    }
+    
     function closeResults() {
         document.getElementById('resultsOverlay').classList.remove('active');
-        document.getElementById('joinScreen').style.display = 'block';
-        document.getElementById('gameFullscreen').classList.remove('active');
-        document.getElementById('gameWaiting').classList.remove('active');
-        document.getElementById('joinCodeInput').value = '';
-        document.getElementById('playerNameInput').value = '';
+        location.reload();
     }
 
     function toggleTheme() {
         document.body.classList.toggle('light-theme');
-        const isLight = document.body.classList.contains('light-theme');
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
-        document.getElementById('themeToggle').textContent = isLight ? '☀️' : '🌙';
+        localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+        const toggle = document.getElementById('themeToggle');
+        if (toggle) toggle.textContent = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
     }
-    (function() { const saved = localStorage.getItem('theme'); if (saved === 'light') { document.body.classList.add('light-theme'); document.getElementById('themeToggle').textContent = '☀️'; } })();
+    (function() { if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-theme'); document.getElementById('themeToggle').textContent = '☀️'; } })();
     
     document.getElementById('startGameBtn')?.addEventListener('click', startGame);
     document.getElementById('nextQuestionBtn')?.addEventListener('click', nextQuestion);
     document.getElementById('endGameBtn')?.addEventListener('click', endGame);
+    document.getElementById('presStartBtn')?.addEventListener('click', startPresentation);
+    document.getElementById('presNextBtn')?.addEventListener('click', nextPresentation);
+    document.getElementById('presEndBtn')?.addEventListener('click', endPresentation);
 </script>
 </body>
 </html>
