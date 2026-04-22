@@ -2,7 +2,7 @@
 <html lang="sk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>🎮 Kahoot štýl | ELTEC Certifikačný systém</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -143,19 +143,209 @@
         .checkbox-group label { display: flex; align-items: center; gap: 6px; background: var(--card-bg); padding: 5px 12px; border-radius: 40px; border: 1px solid var(--border); cursor: pointer; font-size: 0.8rem; }
         select.btn { background: var(--surface-light); color: var(--text-primary); }
 
-        .player-view { display: none; align-items: center; justify-content: center; min-height: 60vh; padding: 30px; }
+        /* ========== HRÁČ - FULLSCREEN ŠTÝL ========== */
+        .player-view {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
         .player-view.active { display: flex; }
-        .join-card { background: var(--surface); border-radius: 32px; padding: 32px; text-align: center; max-width: 380px; width: 100%; border: 1px solid var(--border); }
-        .join-input { padding: 12px 16px; font-size: 1rem; border-radius: 40px; border: 1px solid var(--border); background: var(--surface); color: var(--text-primary); width: 100%; text-align: center; margin: 8px 0; }
-        .player-waiting { text-align: center; padding: 30px; }
-        .player-options { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 450px; margin: 0 auto; }
-        .player-opt { padding: 30px; font-size: 1.8rem; font-weight: 800; border: none; border-radius: 24px; cursor: pointer; }
-        .player-opt:active { transform: scale(0.95); }
-        .opt-a { background: #ef4444; color: white; }
-        .opt-b { background: #3b82f6; color: white; }
-        .opt-c { background: #f59e0b; color: white; }
-        .opt-d { background: #10b981; color: white; }
-        .player-feedback { margin-top: 20px; padding: 12px; border-radius: 16px; text-align: center; font-size: 1rem; }
+        
+        .join-card {
+            background: var(--surface);
+            border-radius: 32px;
+            padding: 32px;
+            text-align: center;
+            max-width: 380px;
+            width: 100%;
+            border: 1px solid var(--border);
+        }
+        .join-input {
+            padding: 12px 16px;
+            font-size: 1rem;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            background: var(--surface);
+            color: var(--text-primary);
+            width: 100%;
+            text-align: center;
+            margin: 8px 0;
+        }
+        
+        /* FULLSCREEN GAME SCREEN */
+        .game-fullscreen {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            position: relative;
+        }
+        .game-fullscreen.active {
+            display: flex;
+        }
+        
+        .game-header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+        .question-progress {
+            font-size: 0.85rem;
+            background: var(--card-bg);
+            padding: 6px 12px;
+            border-radius: 40px;
+        }
+        .timer-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            font-family: monospace;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+        .timer-circle.warning {
+            border-color: var(--danger);
+            color: var(--danger);
+            animation: pulse 0.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .game-question {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+        
+        .game-answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 20px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+        }
+        .game-ans-btn {
+            padding: 20px 12px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .game-ans-btn:active { transform: scale(0.96); }
+        .game-ans-btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+        .ans-letter {
+            font-size: 2rem;
+            font-weight: 900;
+        }
+        .ans-text {
+            font-size: 0.7rem;
+            font-weight: 400;
+            text-align: center;
+            word-break: break-word;
+            max-width: 100%;
+        }
+        .ans-btn-A { background: #ef4444; color: white; }
+        .ans-btn-B { background: #3b82f6; color: white; }
+        .ans-btn-C { background: #f59e0b; color: #1a1a00; }
+        .ans-btn-D { background: #10b981; color: white; }
+        
+        .game-feedback {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 600;
+            background: rgba(0,0,0,0.9);
+            transform: translateY(100%);
+            transition: transform 0.3s;
+            z-index: 1001;
+        }
+        .game-feedback.show {
+            transform: translateY(0);
+        }
+        .game-feedback.correct { background: var(--success); color: white; }
+        .game-feedback.wrong { background: var(--danger); color: white; }
+        
+        .game-waiting {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .results-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-primary);
+            z-index: 1002;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .results-overlay.active { display: flex; }
+        .results-card {
+            background: var(--surface);
+            border-radius: 32px;
+            padding: 24px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        .final-score {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            margin: 16px 0;
+        }
+        .close-results {
+            margin-top: 20px;
+        }
 
         footer { text-align: center; padding: 16px; background: var(--surface); color: var(--text-secondary); border-top: 1px solid var(--border); font-size: 0.75rem; }
         .footer-links { margin-top: 8px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
@@ -232,20 +422,41 @@
             </div>
         </div>
 
+        <!-- HRÁČ - FULLSCREEN -->
         <div id="playerView" class="player-view">
-            <div class="join-card" id="joinScreen">
+            <div id="joinScreen" class="join-card">
                 <h2>🎮 Pripojiť sa</h2>
                 <input type="text" id="joinCodeInput" class="join-input" placeholder="Kód miestnosti" maxlength="6">
                 <input type="text" id="playerNameInput" class="join-input" placeholder="Tvoje meno">
                 <button class="btn" id="joinGameBtn" style="width:100%">🔗 Pripojiť sa</button>
             </div>
-            <div id="gameScreen" style="display: none; width: 100%;">
-                <div id="waitingMessage" class="player-waiting"><h3>⏳ Čakáme na začiatok...</h3><p>Hostiteľ čoskoro spustí hru</p></div>
-                <div id="questionScreen" style="display: none;">
-                    <h3 id="playerQuestionText" style="margin-bottom: 16px; text-align:center;">Otázka</h3>
-                    <div class="player-options" id="playerOptions"></div>
-                    <div id="playerFeedback" class="player-feedback"></div>
+            
+            <div id="gameFullscreen" class="game-fullscreen">
+                <div class="game-header">
+                    <span class="question-progress" id="gameProgress">Otázka 1/10</span>
+                    <div class="timer-circle" id="gameTimer">15</div>
                 </div>
+                <div class="game-question" id="gameQuestionText">Načítavam...</div>
+                <div class="game-answers" id="gameAnswers"></div>
+                <div id="gameFeedback" class="game-feedback"></div>
+            </div>
+            
+            <div id="gameWaiting" class="game-fullscreen">
+                <div class="game-waiting">
+                    <div style="font-size: 3rem; margin-bottom: 20px;">⏳</div>
+                    <h2>Čakáme na začiatok...</h2>
+                    <p style="color: var(--text-secondary); margin-top: 10px;">Hostiteľ čoskoro spustí hru</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Výsledky po hre -->
+        <div id="resultsOverlay" class="results-overlay">
+            <div class="results-card">
+                <h2>🏆 Kvíz skončil!</h2>
+                <div class="final-score" id="finalScore">0 bodov</div>
+                <div id="finalRank"></div>
+                <button class="btn close-results" onclick="closeResults()">🔙 Späť do lobby</button>
             </div>
         </div>
     </main>
@@ -2356,7 +2567,6 @@
                 ]
         };
 
-    // ========== GLOBÁLNE PREMENNÉ ==========
     let gameId = null;
     let role = null;
     let currentQuestions = [];
@@ -2370,10 +2580,10 @@
     let isMultiChoice = false;
     let answerSubmitted = false;
     let revealTimer = null;
-    let playerQuestionActive = false;
+    let playerTimerInterval = null;
     let playerCurrentIndex = -1;
+    let totalQuestionsCount = 0;
 
-    // ========== FUNKCIE ==========
     function selectRole(r) {
         role = r;
         document.getElementById('roleScreen').style.display = 'none';
@@ -2388,7 +2598,6 @@
     }
 
     function listenForPlayers() {
-        if (!database) return;
         database.ref(`games/${gameId}/players`).on('value', (snap) => {
             players = snap.val() || {};
             updatePlayersList();
@@ -2396,7 +2605,6 @@
         database.ref(`games/${gameId}/currentQuestion`).on('value', (snap) => {
             const qData = snap.val();
             if (qData && gameActive && qData.index !== currentIndex) {
-                // Ukonči aktuálnu otázku
                 if (revealTimer) clearTimeout(revealTimer);
                 currentIndex = qData.index;
                 currentQuestion = qData.question;
@@ -2442,12 +2650,14 @@
         gameActive = true;
         currentQuestion = currentQuestions[0];
         acceptingAnswers = true;
+        totalQuestionsCount = currentQuestions.length;
         
         await database.ref(`games/${gameId}`).set({
             players: {},
             currentQuestion: { index: 0, question: currentQuestions[0] },
             questions: currentQuestions,
-            status: 'playing'
+            status: 'playing',
+            totalQuestions: totalQuestionsCount
         });
         
         document.getElementById('startGameBtn').style.display = 'none';
@@ -2465,8 +2675,6 @@
             html += `<div class="opt-host-btn">${String.fromCharCode(65+i)}) ${opt}</div>`;
         });
         document.getElementById('hostOptions').innerHTML = html;
-        
-        // Odstráň zvýraznenie z predchádzajúcej otázky
         document.querySelectorAll('.opt-host-btn').forEach(btn => btn.classList.remove('correct-answer'));
         
         if (revealTimer) clearTimeout(revealTimer);
@@ -2481,15 +2689,12 @@
         const q = currentQuestion;
         const isMulti = q.type === 'multi';
         
-        // Získaj odpovede hráčov
         const answersSnap = await database.ref(`games/${gameId}/answers/${currentIndex}`).once('value');
         const answers = answersSnap.val() || {};
         
-        // Zvýrazni správne odpovede pre hostiteľa
         const btns = document.querySelectorAll('.opt-host-btn');
         q.correct.forEach(c => { if (btns[c]) btns[c].classList.add('correct-answer'); });
         
-        // Spočítaj body
         for (const [pid, ansData] of Object.entries(answers)) {
             const player = players[pid];
             if (!player) continue;
@@ -2507,10 +2712,7 @@
             await database.ref(`games/${gameId}/players/${pid}/score`).set(newScore);
         }
         
-        // Ulož že táto otázka je hotová
         await database.ref(`games/${gameId}/questionDone/${currentIndex}`).set(true);
-        
-        // Zobraz tlačidlo pre ďalšiu otázku
         document.getElementById('nextQuestionBtn').style.display = 'inline-block';
     }
 
@@ -2524,7 +2726,6 @@
         acceptingAnswers = true;
         answerSubmitted = false;
         
-        // Vymaž odpovede pre novú otázku
         await database.ref(`games/${gameId}/answers/${currentIndex}`).remove();
         await database.ref(`games/${gameId}/currentQuestion`).set({ index: currentIndex, question: currentQuestion });
         
@@ -2535,6 +2736,7 @@
     async function endGame() {
         gameActive = false;
         if (revealTimer) clearTimeout(revealTimer);
+        await database.ref(`games/${gameId}/status`).set('ended');
         const sorted = Object.values(players).sort((a,b) => (b.score||0) - (a.score||0));
         alert('🏆 Hra skončila! Víťaz: ' + (sorted[0]?.name || 'nikto'));
         await database.ref(`games/${gameId}`).remove();
@@ -2545,7 +2747,7 @@
         document.getElementById('hostOptions').innerHTML = '';
     }
 
-    // ========== HRÁČ ==========
+    // ========== HRÁČ - FULLSCREEN ==========
     document.getElementById('joinGameBtn').addEventListener('click', async () => {
         const code = document.getElementById('joinCodeInput').value.toUpperCase();
         const name = document.getElementById('playerNameInput').value;
@@ -2557,126 +2759,194 @@
         const gameSnap = await gameRef.once('value');
         if (!gameSnap.exists()) { alert('Hra neexistuje! Skontroluj kód.'); return; }
         
+        totalQuestionsCount = gameSnap.val().totalQuestions || 10;
+        
         await gameRef.child(`players/${playerId}`).set({ name, score: 0 });
+        
         document.getElementById('joinScreen').style.display = 'none';
-        document.getElementById('gameScreen').style.display = 'block';
-        document.getElementById('waitingMessage').style.display = 'block';
-        document.getElementById('questionScreen').style.display = 'none';
+        document.getElementById('gameWaiting').classList.add('active');
+        document.getElementById('gameFullscreen').classList.remove('active');
         
         listenForGame();
     });
-
-    function listenForGame() {
-        // Sleduj aktuálnu otázku
-        database.ref(`games/${gameId}/currentQuestion`).on('value', (snap) => {
-            const qData = snap.val();
-            if (qData) {
-                // Ak je to nová otázka, resetni stav
-                if (playerCurrentIndex !== qData.index) {
-                    playerCurrentIndex = qData.index;
-                    currentQuestion = qData.question;
-                    isMultiChoice = currentQuestion.type === 'multi';
-                    acceptingAnswers = true;
-                    answerSubmitted = false;
-                    myAnswers = [];
-                    playerQuestionActive = true;
-                    
-                    // Zobraz otázku
-                    document.getElementById('waitingMessage').style.display = 'none';
-                    document.getElementById('questionScreen').style.display = 'block';
-                    document.getElementById('playerFeedback').innerHTML = '';
-                    displayPlayerQuestion();
-                }
-            }
-        });
+    
+    function startPlayerTimer(seconds) {
+        if (playerTimerInterval) clearInterval(playerTimerInterval);
+        let remaining = seconds;
+        const timerEl = document.getElementById('gameTimer');
+        timerEl.textContent = remaining;
+        timerEl.classList.remove('warning');
         
-        // Sleduj kedy sa otázka skončila (aby hráč vedel čakať na ďalšiu)
-        database.ref(`games/${gameId}/questionDone`).on('value', (snap) => {
-            const done = snap.val();
-            if (done && done[playerCurrentIndex] === true && playerQuestionActive) {
-                // Táto otázka je hotová, prepni do čakacieho režimu
-                playerQuestionActive = false;
-                document.getElementById('questionScreen').style.display = 'none';
-                document.getElementById('waitingMessage').style.display = 'block';
-                document.getElementById('waitingMessage').innerHTML = '<h3>⏳ Čakáme na ďalšiu otázku...</h3><p>Hostiteľ čoskoro spustí ďalšiu</p>';
+        playerTimerInterval = setInterval(() => {
+            remaining--;
+            timerEl.textContent = remaining;
+            if (remaining <= 5) {
+                timerEl.classList.add('warning');
             }
-        });
+            if (remaining <= 0) {
+                clearInterval(playerTimerInterval);
+                timerEl.classList.remove('warning');
+            }
+        }, 1000);
     }
-
+    
+    function stopPlayerTimer() {
+        if (playerTimerInterval) clearInterval(playerTimerInterval);
+    }
+    
+    function showFeedback(message, isCorrect) {
+        const fb = document.getElementById('gameFeedback');
+        fb.textContent = message;
+        fb.className = `game-feedback show ${isCorrect ? 'correct' : 'wrong'}`;
+        setTimeout(() => {
+            fb.classList.remove('show');
+        }, 2000);
+    }
+    
     function displayPlayerQuestion() {
-        document.getElementById('playerQuestionText').innerHTML = currentQuestion.question;
-        const container = document.getElementById('playerOptions');
+        stopPlayerTimer();
+        startPlayerTimer(15);
+        
+        document.getElementById('gameProgress').textContent = `Otázka ${playerCurrentIndex+1} / ${totalQuestionsCount}`;
+        document.getElementById('gameQuestionText').textContent = currentQuestion.question;
+        
+        const container = document.getElementById('gameAnswers');
         let html = '';
+        const letters = ['A', 'B', 'C', 'D'];
+        
+        currentQuestion.options.forEach((opt, i) => {
+            // Skrátenie textu pre mobil
+            let shortText = opt;
+            if (opt.length > 30) {
+                shortText = opt.substring(0, 27) + '...';
+            }
+            html += `
+                <button class="game-ans-btn ans-btn-${letters[i]}" data-ans="${i}">
+                    <span class="ans-letter">${letters[i]}</span>
+                    <span class="ans-text">${shortText}</span>
+                </button>
+            `;
+        });
+        container.innerHTML = html;
+        
+        myAnswers = [];
+        answerSubmitted = false;
+        isMultiChoice = currentQuestion.type === 'multi';
         
         if (isMultiChoice) {
-            currentQuestion.options.forEach((opt, i) => {
-                const letter = String.fromCharCode(65+i);
-                html += `<button class="player-opt" data-ans="${i}" style="background:var(--surface); border:2px solid var(--border); color:var(--text-primary); padding:20px; font-size:1rem;">${letter}) ${opt}</button>`;
-            });
-            container.innerHTML = html;
-            
-            // Odstráň starý submit button ak existuje
-            const oldBtn = document.getElementById('multiSubmitBtn');
-            if (oldBtn) oldBtn.remove();
-            
-            const submitBtn = document.createElement('button');
-            submitBtn.id = 'multiSubmitBtn';
-            submitBtn.textContent = '✅ Odoslať odpoveď';
-            submitBtn.className = 'btn';
-            submitBtn.style.width = '100%';
-            submitBtn.style.marginTop = '16px';
-            submitBtn.onclick = async () => {
-                if (!acceptingAnswers) { document.getElementById('playerFeedback').innerHTML = '⏰ Už neskoro!'; return; }
-                if (answerSubmitted) return;
-                if (myAnswers.length === 0) { alert('Vyber aspoň jednu odpoveď!'); return; }
-                answerSubmitted = true;
-                await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answers: myAnswers });
-                document.getElementById('playerFeedback').innerHTML = '✅ Odpoveď zaznamenaná!';
-                document.querySelectorAll('.player-opt').forEach(btn => btn.style.opacity = '0.5');
-                submitBtn.disabled = true;
-                submitBtn.style.opacity = '0.5';
-            };
-            container.parentNode.appendChild(submitBtn);
-            
-            // Eventy pre výber odpovedí
-            document.querySelectorAll('.player-opt').forEach(btn => {
+            document.querySelectorAll('.game-ans-btn').forEach(btn => {
                 btn.onclick = () => {
-                    if (!acceptingAnswers) return;
+                    if (!acceptingAnswers) { showFeedback('⏰ Už neskoro!', false); return; }
                     if (answerSubmitted) return;
                     const val = parseInt(btn.dataset.ans);
                     if (myAnswers.includes(val)) {
                         myAnswers = myAnswers.filter(v => v !== val);
-                        btn.style.background = 'var(--surface)';
-                        btn.style.borderColor = 'var(--border)';
+                        btn.style.opacity = '0.7';
+                        btn.style.transform = 'scale(1)';
                     } else {
                         myAnswers.push(val);
-                        btn.style.background = 'var(--accent)';
-                        btn.style.borderColor = 'var(--accent)';
-                        btn.style.color = 'white';
+                        btn.style.opacity = '1';
+                        btn.style.transform = 'scale(1.05)';
                     }
                 };
             });
-        } else {
-            // Single choice
-            currentQuestion.options.forEach((opt, i) => {
-                const letter = String.fromCharCode(65+i);
-                const colorClass = `opt-${letter.toLowerCase()}`;
-                html += `<button class="player-opt ${colorClass}" data-ans="${i}">${letter}) ${opt}</button>`;
-            });
-            container.innerHTML = html;
             
-            document.querySelectorAll('.player-opt').forEach(btn => {
+            // Pridať tlačidlo pre odoslanie pri multichoice
+            const submitBtn = document.createElement('button');
+            submitBtn.textContent = '✅ Odoslať odpoveď';
+            submitBtn.className = 'btn';
+            submitBtn.style.width = '100%';
+            submitBtn.style.marginTop = '10px';
+            submitBtn.style.gridColumn = 'span 2';
+            submitBtn.onclick = async () => {
+                if (!acceptingAnswers) { showFeedback('⏰ Už neskoro!', false); return; }
+                if (answerSubmitted) return;
+                if (myAnswers.length === 0) { showFeedback('Vyber aspoň jednu odpoveď!', false); return; }
+                answerSubmitted = true;
+                await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answers: myAnswers });
+                showFeedback('✅ Odpoveď zaznamenaná!', true);
+                document.querySelectorAll('.game-ans-btn').forEach(btn => btn.disabled = true);
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                stopPlayerTimer();
+            };
+            container.parentNode.appendChild(submitBtn);
+        } else {
+            document.querySelectorAll('.game-ans-btn').forEach(btn => {
                 btn.onclick = async () => {
-                    if (!acceptingAnswers) { document.getElementById('playerFeedback').innerHTML = '⏰ Už neskoro!'; return; }
+                    if (!acceptingAnswers) { showFeedback('⏰ Už neskoro!', false); return; }
                     if (answerSubmitted) return;
                     answerSubmitted = true;
                     const answer = parseInt(btn.dataset.ans);
                     await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answer: answer });
-                    document.getElementById('playerFeedback').innerHTML = '✅ Odpoveď zaznamenaná!';
-                    document.querySelectorAll('.player-opt').forEach(b => b.style.opacity = '0.5');
+                    showFeedback('✅ Odpoveď zaznamenaná!', true);
+                    document.querySelectorAll('.game-ans-btn').forEach(b => b.disabled = true);
+                    stopPlayerTimer();
                 };
             });
         }
+    }
+    
+    function listenForGame() {
+        database.ref(`games/${gameId}/currentQuestion`).on('value', (snap) => {
+            const qData = snap.val();
+            if (qData && playerCurrentIndex !== qData.index) {
+                playerCurrentIndex = qData.index;
+                currentQuestion = qData.question;
+                acceptingAnswers = true;
+                answerSubmitted = false;
+                myAnswers = [];
+                
+                document.getElementById('gameWaiting').classList.remove('active');
+                document.getElementById('gameFullscreen').classList.add('active');
+                displayPlayerQuestion();
+            }
+        });
+        
+        database.ref(`games/${gameId}/questionDone`).on('value', (snap) => {
+            const done = snap.val();
+            if (done && done[playerCurrentIndex] === true && document.getElementById('gameFullscreen').classList.contains('active')) {
+                stopPlayerTimer();
+                document.getElementById('gameFullscreen').classList.remove('active');
+                document.getElementById('gameWaiting').classList.add('active');
+                document.getElementById('gameWaiting').innerHTML = `
+                    <div class="game-waiting">
+                        <div style="font-size: 3rem; margin-bottom: 20px;">⏳</div>
+                        <h2>Čakáme na ďalšiu otázku...</h2>
+                        <p style="color: var(--text-secondary); margin-top: 10px;">Hostiteľ čoskoro spustí ďalšiu</p>
+                    </div>
+                `;
+            }
+        });
+        
+        database.ref(`games/${gameId}/status`).on('value', async (snap) => {
+            if (snap.val() === 'ended') {
+                stopPlayerTimer();
+                // Získaj výsledky hráča
+                const gameSnap = await database.ref(`games/${gameId}`).once('value');
+                const gameData = gameSnap.val();
+                const playersData = gameData?.players || {};
+                const myData = playersData[playerId];
+                const allPlayers = Object.values(playersData);
+                allPlayers.sort((a,b) => (b.score||0) - (a.score||0));
+                const rank = allPlayers.findIndex(p => p.name === myData?.name) + 1;
+                
+                document.getElementById('finalScore').textContent = `${myData?.score || 0} bodov`;
+                document.getElementById('finalRank').innerHTML = `<p style="font-size: 1.2rem;">Tvoje umiestnenie: #${rank}</p>`;
+                document.getElementById('resultsOverlay').classList.add('active');
+                document.getElementById('gameFullscreen').classList.remove('active');
+                document.getElementById('gameWaiting').classList.remove('active');
+            }
+        });
+    }
+    
+    function closeResults() {
+        document.getElementById('resultsOverlay').classList.remove('active');
+        document.getElementById('joinScreen').style.display = 'block';
+        document.getElementById('gameFullscreen').classList.remove('active');
+        document.getElementById('gameWaiting').classList.remove('active');
+        document.getElementById('joinCodeInput').value = '';
+        document.getElementById('playerNameInput').value = '';
     }
 
     function toggleTheme() {
