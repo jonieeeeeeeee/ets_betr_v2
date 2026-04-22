@@ -151,7 +151,6 @@
         .checkbox-group label { display: flex; align-items: center; gap: 6px; background: var(--card-bg); padding: 5px 12px; border-radius: 40px; border: 1px solid var(--border); cursor: pointer; font-size: 0.8rem; }
         select.btn { background: var(--surface-light); color: var(--text-primary); }
 
-        /* FULLSCREEN HOST MODE */
         .host-fullscreen {
             position: fixed;
             top: 0;
@@ -182,7 +181,6 @@
             cursor: pointer;
         }
 
-        /* HRÁČ - FULLSCREEN */
         .player-view {
             display: none;
             position: fixed;
@@ -198,7 +196,6 @@
             padding: 20px;
         }
         .player-view.active { display: flex; }
-        
         .join-card {
             background: var(--surface);
             border-radius: 32px;
@@ -219,7 +216,6 @@
             text-align: center;
             margin: 8px 0;
         }
-        
         .game-fullscreen {
             display: none;
             flex-direction: column;
@@ -229,7 +225,6 @@
             position: relative;
         }
         .game-fullscreen.active { display: flex; }
-        
         .game-header {
             padding: 16px;
             display: flex;
@@ -255,7 +250,6 @@
         }
         .timer-circle.warning { border-color: var(--danger); color: var(--danger); animation: pulse 0.5s infinite; }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-        
         .game-question {
             flex: 1;
             display: flex;
@@ -267,7 +261,6 @@
             font-weight: 700;
             line-height: 1.4;
         }
-        
         .game-answers {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -297,7 +290,6 @@
         .ans-btn-B { background: var(--blue); color: white; }
         .ans-btn-C { background: var(--yellow); color: #1a1a00; }
         .ans-btn-D { background: var(--green); color: white; }
-        
         .game-feedback {
             position: fixed;
             bottom: 0;
@@ -315,7 +307,6 @@
         .game-feedback.show { transform: translateY(0); }
         .game-feedback.correct { background: var(--success); color: white; }
         .game-feedback.wrong { background: var(--danger); color: white; }
-        
         .game-waiting {
             display: flex;
             flex-direction: column;
@@ -325,8 +316,28 @@
             text-align: center;
             padding: 20px;
         }
-        
-        /* RESULTS OVERLAY */
+        .round-results {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--surface);
+            border-radius: 32px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            z-index: 2001;
+            display: none;
+            text-align: center;
+            border: 2px solid var(--accent);
+        }
+        .round-results.active { display: block; animation: popIn 0.3s ease; }
+        @keyframes popIn { from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+        .round-results h3 { color: var(--accent); margin-bottom: 16px; }
+        .top-list { text-align: left; margin: 16px 0; max-height: 300px; overflow-y: auto; }
+        .top-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--border); }
+        .top-item.first { background: rgba(245,158,11,0.2); border-radius: 12px; font-weight: 800; }
+        .my-rank { margin-top: 16px; padding: 12px; background: var(--card-bg); border-radius: 16px; }
         .results-overlay {
             position: fixed;
             top: 0;
@@ -352,31 +363,6 @@
             text-align: center;
         }
         .final-score { font-size: 3rem; font-weight: 800; color: var(--accent); margin: 16px 0; }
-        
-        /* ROUND RESULTS */
-        .round-results {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: var(--surface);
-            border-radius: 32px;
-            padding: 24px;
-            max-width: 500px;
-            width: 90%;
-            z-index: 2001;
-            display: none;
-            text-align: center;
-            border: 2px solid var(--accent);
-        }
-        .round-results.active { display: block; animation: popIn 0.3s ease; }
-        @keyframes popIn { from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
-        .round-results h3 { color: var(--accent); margin-bottom: 16px; }
-        .top-list { text-align: left; margin: 16px 0; max-height: 300px; overflow-y: auto; }
-        .top-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--border); }
-        .top-item.first { background: rgba(245,158,11,0.2); border-radius: 12px; font-weight: 800; }
-        .my-rank { margin-top: 16px; padding: 12px; background: var(--card-bg); border-radius: 16px; }
-
         footer { text-align: center; padding: 16px; background: var(--surface); color: var(--text-secondary); border-top: 1px solid var(--border); font-size: 0.75rem; }
         .footer-links { margin-top: 8px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
         .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.75rem; }
@@ -402,21 +388,9 @@
     <main>
         <div id="roleScreen" class="role-screen">
             <div class="role-cards">
-                <div class="role-card" onclick="selectRole('host')">
-                    <div class="role-icon">🖥️</div>
-                    <h2>Hostiteľ</h2>
-                    <p>Vytvor hru na veľkej obrazovke</p>
-                </div>
-                <div class="role-card" onclick="selectRole('presenter')">
-                    <div class="role-icon">📽️</div>
-                    <h2>Prezentujúci</h2>
-                    <p>Pripoj sa k hre a zobrazuj otázky</p>
-                </div>
-                <div class="role-card" onclick="selectRole('player')">
-                    <div class="role-icon">📱</div>
-                    <h2>Hráč</h2>
-                    <p>Pripoj sa cez telefón a odpovedaj</p>
-                </div>
+                <div class="role-card" onclick="selectRole('host')"><div class="role-icon">🖥️</div><h2>Hostiteľ</h2><p>Vytvor hru na veľkej obrazovke</p></div>
+                <div class="role-card" onclick="selectRole('presenter')"><div class="role-icon">📽️</div><h2>Prezentujúci</h2><p>Pripoj sa k hre a zobrazuj otázky</p></div>
+                <div class="role-card" onclick="selectRole('player')"><div class="role-icon">📱</div><h2>Hráč</h2><p>Pripoj sa cez telefón a odpovedaj</p></div>
             </div>
         </div>
 
@@ -435,12 +409,7 @@
                             <label><input type="checkbox" value="D" checked> Test D</label>
                             <label><input type="checkbox" value="LEG" checked> Legislatíva</label>
                         </div>
-                        <select id="questionCountSelect" class="btn">
-                            <option value="5">5 otázok</option>
-                            <option value="10" selected>10 otázok</option>
-                            <option value="15">15 otázok</option>
-                            <option value="20">20 otázok</option>
-                        </select>
+                        <select id="questionCountSelect" class="btn"><option value="5">5 otázok</option><option value="10" selected>10 otázok</option><option value="15">15 otázok</option><option value="20">20 otázok</option></select>
                         <button class="btn" id="startGameBtn" disabled>🚀 Spustiť hru</button>
                         <button class="btn" id="nextQuestionBtn" style="display: none;">⏩ Ďalšia otázka</button>
                         <button class="btn btn-danger" id="endGameBtn" style="display: none;">🏁 Ukončiť</button>
@@ -448,26 +417,16 @@
                 </div>
             </div>
             <div class="players-panel">
-                <div class="room-code">
-                    <h3>📋 Kód miestnosti</h3>
-                    <div class="code-display" id="roomCode">------</div>
-                    <p style="font-size: 0.7rem; margin-top: 8px;">Hráči zadajú tento kód</p>
-                </div>
+                <div class="room-code"><h3>📋 Kód miestnosti</h3><div class="code-display" id="roomCode">------</div><p style="font-size:0.7rem; margin-top:8px">Hráči zadajú tento kód</p></div>
                 <div class="players-list"><h3>👥 Hráči v lobby (<span id="playerCount">0</span>)</h3><div id="playersList"></div></div>
                 <div class="players-list"><h3>🏆 Leaderboard</h3><div id="leaderboard"></div></div>
             </div>
         </div>
-        
-        <!-- FULLSCREEN HOST MODE -->
-        <div id="hostFullscreen" class="host-fullscreen">
-            <button class="close-fullscreen" onclick="toggleHostFullscreen()">✕</button>
-            <div class="question-text" id="fsQuestionText"></div>
-            <div class="options-host" id="fsHostOptions"></div>
-        </div>
+        <div id="hostFullscreen" class="host-fullscreen"><button class="close-fullscreen" onclick="toggleHostFullscreen()">✕</button><div class="question-text" id="fsQuestionText"></div><div class="options-host" id="fsHostOptions"></div></div>
 
-        <!-- PRESENTER VIEW (synchrónny s hrou) -->
+        <!-- PRESENTER VIEW -->
         <div id="presenterView" class="kahoot-layout" style="display: none;">
-            <div class="host-panel" style="flex:1">
+            <div class="host-panel" style="flex:2">
                 <h2>📽️ Prezentujúci <button class="btn btn-fullscreen" onclick="togglePresenterFullscreen()" style="margin-left:10px">🖥️ Celá obrazovka</button></h2>
                 <div class="question-area">
                     <div class="question-text" id="presQuestionText">Zadaj kód miestnosti a klikni Pripojiť</div>
@@ -480,70 +439,30 @@
                     </div>
                 </div>
             </div>
+            <div class="players-panel" style="flex:1">
+                <div class="players-list"><h3>🏆 Leaderboard</h3><div id="presLeaderboard"></div></div>
+                <div class="players-list"><h3>📊 Štatistika</h3><div id="presStats">Zatiaľ žiadne dáta</div></div>
+            </div>
         </div>
-        
         <div id="presFullscreen" class="host-fullscreen">
             <button class="close-fullscreen" onclick="togglePresenterFullscreen()">✕</button>
             <div class="question-text" id="presFsQuestionText"></div>
             <div class="options-host" id="presFsOptions"></div>
             <div class="timer-circle" id="presTimer" style="position: absolute; top: 20px; right: 80px;">15</div>
+            <div style="position: absolute; bottom: 20px; left: 20px; background: var(--card-bg); padding: 10px; border-radius: 16px; max-width: 300px;"><div id="presFsLeaderboard"></div></div>
         </div>
 
-        <!-- HRÁČ - FULLSCREEN -->
+        <!-- PLAYER VIEW -->
         <div id="playerView" class="player-view">
-            <div id="joinScreen" class="join-card">
-                <h2>🎮 Pripojiť sa</h2>
-                <input type="text" id="joinCodeInput" class="join-input" placeholder="Kód miestnosti" maxlength="6">
-                <input type="text" id="playerNameInput" class="join-input" placeholder="Tvoje meno">
-                <button class="btn" id="joinGameBtn" style="width:100%">🔗 Pripojiť sa</button>
-            </div>
-            
-            <div id="gameFullscreen" class="game-fullscreen">
-                <div class="game-header">
-                    <span class="question-progress" id="gameProgress">Otázka 1/10</span>
-                    <div class="timer-circle" id="gameTimer">15</div>
-                </div>
-                <div class="game-question" id="gameQuestionText">Načítavam...</div>
-                <div class="game-answers" id="gameAnswers"></div>
-                <div id="gameFeedback" class="game-feedback"></div>
-            </div>
-            
-            <div id="gameWaiting" class="game-fullscreen">
-                <div class="game-waiting">
-                    <div style="font-size: 3rem; margin-bottom: 20px;">⏳</div>
-                    <h2>Čakáme na začiatok...</h2>
-                    <p style="color: var(--text-secondary); margin-top: 10px;">Hostiteľ čoskoro spustí hru</p>
-                </div>
-            </div>
+            <div id="joinScreen" class="join-card"><h2>🎮 Pripojiť sa</h2><input type="text" id="joinCodeInput" class="join-input" placeholder="Kód miestnosti" maxlength="6"><input type="text" id="playerNameInput" class="join-input" placeholder="Tvoje meno"><button class="btn" id="joinGameBtn" style="width:100%">🔗 Pripojiť sa</button></div>
+            <div id="gameFullscreen" class="game-fullscreen"><div class="game-header"><span class="question-progress" id="gameProgress">Otázka 1/10</span><div class="timer-circle" id="gameTimer">15</div></div><div class="game-question" id="gameQuestionText">Načítavam...</div><div class="game-answers" id="gameAnswers"></div><div id="gameFeedback" class="game-feedback"></div></div>
+            <div id="gameWaiting" class="game-fullscreen"><div class="game-waiting"><div style="font-size:3rem; margin-bottom:20px">⏳</div><h2>Čakáme na začiatok...</h2><p style="color:var(--text-secondary); margin-top:10px">Hostiteľ čoskoro spustí hru</p></div></div>
         </div>
-        
-        <div id="roundResults" class="round-results">
-            <h3>📊 Výsledky kola</h3>
-            <div id="roundTopList" class="top-list"></div>
-            <div id="roundMyRank" class="my-rank"></div>
-            <button class="btn" onclick="closeRoundResults()" style="margin-top: 16px;">Pokračovať</button>
-        </div>
-        
-        <div id="resultsOverlay" class="results-overlay">
-            <div class="results-card">
-                <h2>🏆 Kvíz skončil!</h2>
-                <div class="final-score" id="finalScore">0 bodov</div>
-                <div id="finalRank"></div>
-                <button class="btn close-results" onclick="closeResults()">🔙 Späť do lobby</button>
-            </div>
-        </div>
-    </main>
 
-    <footer>
-        <p>© 2026 ELTEC Certifikačný systém - Džanči</p>
-        <div class="footer-links">
-            <a href="index.html">🏠 Hlavná</a>
-            <a href="spravne_odpovede.html">📚 Odpovede</a>
-            <a href="kviz.html">🎯 Kvíz</a>
-            <a href="kahoot.html">🎮 Kahoot</a>
-        </div>
-        <p style="margin-top: 8px;">⚙️ Posledný update: 22.4.2026 - 21:10</p>
-    </footer>
+        <div id="roundResults" class="round-results"><h3>📊 Výsledky kola</h3><div id="roundTopList" class="top-list"></div><div id="roundMyRank" class="my-rank"></div><button class="btn" onclick="closeRoundResults()" style="margin-top:16px">Pokračovať</button></div>
+        <div id="resultsOverlay" class="results-overlay"><div class="results-card"><h2>🏆 Kvíz skončil!</h2><div class="final-score" id="finalScore">0 bodov</div><div id="finalRank"></div><button class="btn close-results" onclick="closeResults()">🔙 Späť do lobby</button></div></div>
+    </main>
+    <footer><p>© 2026 ELTEC Certifikačný systém - Džanči</p><div class="footer-links"><a href="index.html">🏠 Hlavná</a><a href="spravne_odpovede.html">📚 Odpovede</a><a href="kviz.html">🎯 Kvíz</a><a href="kahoot.html">🎮 Kahoot</a></div> <p style="margin-top: 8px;">⚙️ Posledný update: 22.4.2026 - 21:25</p></footer>
 </div>
 
 <script>
@@ -552,7 +471,7 @@
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // ========== OTÁZKY ==========
+    // ========== OTÁZKY (ukážka) ==========
     const questionsDatabase = {
             'A': [
                     {
@@ -2639,455 +2558,198 @@
                 ]
         };
 
-    let gameId = null;
-    let role = null;
-    let currentQuestions = [];
-    let currentIndex = 0;
-    let gameActive = false;
-    let currentQuestion = null;
-    let acceptingAnswers = false;
-    let players = {};
-    let playerId = null;
-    let myAnswers = [];
-    let isMultiChoice = false;
-    let answerSubmitted = false;
-    let revealTimer = null;
-    let playerTimerInterval = null;
-    let playerCurrentIndex = -1;
-    let totalQuestionsCount = 0;
-    let questionStartTime = 0;
-    let roundResultsCallback = null;
-    let presenterActive = false;
-    let presenterGameId = null;
-    let presenterTimerInterval = null;
+    // ========== GLOBÁLNE PREMENNÉ ==========
+    let gameId = null, role = null, currentQuestions = [], currentIndex = 0, gameActive = false;
+    let currentQuestion = null, acceptingAnswers = false, players = {}, playerId = null;
+    let myAnswers = [], isMultiChoice = false, answerSubmitted = false, revealTimer = null;
+    let playerTimerInterval = null, playerCurrentIndex = -1, totalQuestionsCount = 0, questionStartTime = 0;
+    let roundResultsCallback = null, presenterActive = false, presenterGameId = null, presenterTimerInterval = null;
 
-    // ========== SPOLOČNÉ FUNKCIE ==========
-    function shuffleArray(arr) {
-        for (let i = arr.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [arr[i], arr[j]] = [arr[j], arr[i]];
-        }
-        return arr;
-    }
-
+    // ========== POMOCNÉ FUNKCIE ==========
+    function shuffleArray(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
     function prepareQuestions(categoryCheckboxesId, countSelectId) {
         const categories = Array.from(document.querySelectorAll(`#${categoryCheckboxesId} input:checked`)).map(cb => cb.value);
         if (categories.length === 0) { alert('Vyber aspoň jednu kategóriu!'); return null; }
-        let all = [];
-        categories.forEach(c => { if (questionsDatabase[c]) all.push(...questionsDatabase[c]); });
+        let all = []; categories.forEach(c => { if (questionsDatabase[c]) all.push(...questionsDatabase[c]); });
         if (all.length === 0) { alert('Žiadne otázky!'); return null; }
         const count = parseInt(document.getElementById(countSelectId).value);
         return shuffleArray([...all]).slice(0, Math.min(count, all.length));
     }
-
     function displayHostOptions(containerId, options, correctIndices = null) {
-        const container = document.getElementById(containerId);
-        if (!container) return;
-        const letters = ['A','B','C','D'];
-        let html = '';
-        options.forEach((opt, i) => {
-            const isCorrect = correctIndices && correctIndices.includes(i);
-            html += `<div class="opt-host-btn ${letters[i]} ${isCorrect ? 'correct-answer' : ''}">${letters[i]}) ${opt}</div>`;
-        });
+        const container = document.getElementById(containerId); if (!container) return;
+        const letters = ['A','B','C','D']; let html = '';
+        options.forEach((opt, i) => { const isCorrect = correctIndices && correctIndices.includes(i); html += `<div class="opt-host-btn ${letters[i]} ${isCorrect ? 'correct-answer' : ''}">${letters[i]}) ${opt}</div>`; });
         container.innerHTML = html;
     }
 
     // ========== HOSTITEĽ ==========
     function selectRole(r) {
-        role = r;
-        document.getElementById('roleScreen').style.display = 'none';
+        role = r; document.getElementById('roleScreen').style.display = 'none';
         if (r === 'host') {
             gameId = Math.random().toString(36).substring(2,8).toUpperCase();
             document.getElementById('roomCode').textContent = gameId;
             document.getElementById('hostView').style.display = 'flex';
             database.ref(`games/${gameId}`).set({ players: {}, status: 'lobby', totalQuestions: 0 });
             listenForLobby();
-        } else if (r === 'presenter') {
-            document.getElementById('presenterView').style.display = 'flex';
-        } else {
-            document.getElementById('playerView').classList.add('active');
-        }
+        } else if (r === 'presenter') { document.getElementById('presenterView').style.display = 'flex'; }
+        else { document.getElementById('playerView').classList.add('active'); }
     }
-
     function listenForLobby() {
-        database.ref(`games/${gameId}/players`).on('value', (snap) => {
-            players = snap.val() || {};
-            updatePlayersList();
-            document.getElementById('startGameBtn').disabled = Object.keys(players).length === 0;
-        });
+        database.ref(`games/${gameId}/players`).on('value', (snap) => { players = snap.val() || {}; updatePlayersList(); document.getElementById('startGameBtn').disabled = Object.keys(players).length === 0; });
     }
-
     function updatePlayersList() {
-        const arr = Object.values(players);
+        const arr = Object.values(players); arr.sort((a,b) => (b.score||0) - (a.score||0));
         document.getElementById('playerCount').textContent = arr.length;
-        const playersDiv = document.getElementById('playersList');
-        const leaderDiv = document.getElementById('leaderboard');
-        arr.sort((a,b) => (b.score||0) - (a.score||0));
-        playersDiv.innerHTML = arr.map(p => `<div class="player-item"><span>${p.name}</span><span>${p.score||0}</span></div>`).join('');
-        leaderDiv.innerHTML = arr.slice(0,5).map((p,i) => `<div class="player-item"><span>${i+1}. ${p.name}</span><span>${p.score||0}</span></div>`).join('');
-        if (arr.length === 0) { playersDiv.innerHTML = '<div style="text-align:center">Zatiaľ žiadni hráči</div>'; leaderDiv.innerHTML = '<div style="text-align:center">-</div>'; }
+        document.getElementById('playersList').innerHTML = arr.map(p => `<div class="player-item"><span>${p.name}</span><span>${p.score||0}</span></div>`).join('');
+        document.getElementById('leaderboard').innerHTML = arr.slice(0,5).map((p,i) => `<div class="player-item"><span>${i+1}. ${p.name}</span><span>${p.score||0}</span></div>`).join('');
+        if(arr.length===0){ document.getElementById('playersList').innerHTML='<div style="text-align:center">Zatiaľ žiadni hráči</div>'; document.getElementById('leaderboard').innerHTML='<div style="text-align:center">-</div>'; }
     }
-
     async function startGame() {
-        const qs = prepareQuestions('categoryCheckboxes', 'questionCountSelect');
-        if (!qs) return;
-        currentQuestions = qs;
-        currentIndex = 0;
-        gameActive = true;
-        totalQuestionsCount = currentQuestions.length;
-        currentQuestion = currentQuestions[0];
-        acceptingAnswers = true;
-        await database.ref(`games/${gameId}`).update({
-            questions: currentQuestions,
-            totalQuestions: totalQuestionsCount,
-            status: 'playing',
-            currentQuestion: { index: 0, question: currentQuestions[0] }
-        });
-        document.getElementById('startGameBtn').style.display = 'none';
-        document.getElementById('endGameBtn').style.display = 'inline-block';
-        displayHostQuestion();
-        // Listener pre hráčov a prezentujúceho (už beží)
-        listenForGameHost();
+        const qs = prepareQuestions('categoryCheckboxes', 'questionCountSelect'); if (!qs) return;
+        currentQuestions = qs; currentIndex = 0; gameActive = true; totalQuestionsCount = currentQuestions.length; currentQuestion = currentQuestions[0]; acceptingAnswers = true;
+        await database.ref(`games/${gameId}`).update({ questions: currentQuestions, totalQuestions: totalQuestionsCount, status: 'playing', currentQuestion: { index: 0, question: currentQuestions[0] } });
+        document.getElementById('startGameBtn').style.display = 'none'; document.getElementById('endGameBtn').style.display = 'inline-block';
+        displayHostQuestion(); listenForGameHost();
     }
-
     function listenForGameHost() {
-        // Tento listener je len pre to, aby hostiteľ vedel, že niekto iný zmenil otázku? nepotrebujeme, hostiteľ mení sám.
-        // Ale potrebujeme počúvať na koniec otázky (questionDone) pre zobrazenie tlačidla Ďalšia
-        database.ref(`games/${gameId}/questionDone`).on('value', (snap) => {
-            const done = snap.val();
-            if (done && done[currentIndex] === true && gameActive) {
-                document.getElementById('nextQuestionBtn').style.display = 'inline-block';
-            }
-        });
+        database.ref(`games/${gameId}/questionDone`).on('value', (snap) => { const done = snap.val(); if (done && done[currentIndex] === true && gameActive) document.getElementById('nextQuestionBtn').style.display = 'inline-block'; });
     }
-
     function displayHostQuestion() {
         if (!currentQuestion) return;
-        displayHostOptions('hostOptions', currentQuestion.options);
-        displayHostOptions('fsHostOptions', currentQuestion.options);
-        document.getElementById('questionText').innerHTML = `${currentIndex+1}. ${currentQuestion.question}`;
-        document.getElementById('fsQuestionText').innerHTML = `${currentIndex+1}. ${currentQuestion.question}`;
+        displayHostOptions('hostOptions', currentQuestion.options); displayHostOptions('fsHostOptions', currentQuestion.options);
+        document.getElementById('questionText').innerHTML = `${currentIndex+1}. ${currentQuestion.question}`; document.getElementById('fsQuestionText').innerHTML = `${currentIndex+1}. ${currentQuestion.question}`;
         document.querySelectorAll('.opt-host-btn').forEach(btn => btn.classList.remove('correct-answer'));
-        if (revealTimer) clearTimeout(revealTimer);
-        questionStartTime = Date.now();
-        revealTimer = setTimeout(() => {
-            if (acceptingAnswers) revealAnswers();
-        }, 15000);
+        if (revealTimer) clearTimeout(revealTimer); questionStartTime = Date.now();
+        revealTimer = setTimeout(() => { if (acceptingAnswers) revealAnswers(); }, 15000);
     }
-
     async function revealAnswers() {
-        if (!acceptingAnswers) return;
-        acceptingAnswers = false;
-        const q = currentQuestion;
-        const isMulti = q.type === 'multi';
+        if (!acceptingAnswers) return; acceptingAnswers = false;
+        const q = currentQuestion; const isMulti = q.type === 'multi';
         const answersSnap = await database.ref(`games/${gameId}/answers/${currentIndex}`).once('value');
         const answers = answersSnap.val() || {};
         const sortedAnswers = Object.entries(answers).sort((a,b) => (a[1].time || 999) - (b[1].time || 999));
         const totalTime = 15000;
         for (let i = 0; i < sortedAnswers.length; i++) {
-            const [pid, ansData] = sortedAnswers[i];
-            const player = players[pid];
-            if (!player) continue;
-            let points = 0;
-            const isCorrect = isMulti ? 
-                ansData.answers && ansData.answers.length === q.correct.length && ansData.answers.every(a => q.correct.includes(a)) :
-                ansData.answer === q.correct[0];
-            if (isCorrect) {
-                const remainingTime = Math.max(0, totalTime - (ansData.time || totalTime));
-                points = Math.floor(1000 * (remainingTime / totalTime));
-            }
+            const [pid, ansData] = sortedAnswers[i]; const player = players[pid]; if (!player) continue;
+            let points = 0; const isCorrect = isMulti ? ansData.answers && ansData.answers.length === q.correct.length && ansData.answers.every(a => q.correct.includes(a)) : ansData.answer === q.correct[0];
+            if (isCorrect) { const remainingTime = Math.max(0, totalTime - (ansData.time || totalTime)); points = Math.floor(1000 * (remainingTime / totalTime)); }
             await database.ref(`games/${gameId}/players/${pid}/score`).set((player.score || 0) + points);
             await database.ref(`games/${gameId}/players/${pid}/lastPoints`).set(points);
         }
-        const btns = document.querySelectorAll('.opt-host-btn');
-        q.correct.forEach(c => { if (btns[c]) btns[c].classList.add('correct-answer'); });
+        const btns = document.querySelectorAll('.opt-host-btn'); q.correct.forEach(c => { if (btns[c]) btns[c].classList.add('correct-answer'); });
         await database.ref(`games/${gameId}/questionDone/${currentIndex}`).set(true);
-        // Zobrazíme výsledky kola (len pre hostiteľa, ale môžeme aj pre všetkých)
         await showRoundResults();
     }
-
     async function showRoundResults() {
         const playersSnap = await database.ref(`games/${gameId}/players`).once('value');
-        const allPlayers = Object.values(playersSnap.val() || {});
-        allPlayers.sort((a,b) => (b.score||0) - (a.score||0));
-        const top5 = allPlayers.slice(0,5);
-        const topHtml = top5.map((p,i) => `<div class="top-item ${i===0?'first':''}"><span>${i+1}. ${p.name}</span><span>${p.score} b</span></div>`).join('');
-        document.getElementById('roundTopList').innerHTML = topHtml;
-        document.getElementById('roundResults').classList.add('active');
+        const allPlayers = Object.values(playersSnap.val() || {}); allPlayers.sort((a,b) => (b.score||0) - (a.score||0));
+        const top5 = allPlayers.slice(0,5); const topHtml = top5.map((p,i) => `<div class="top-item ${i===0?'first':''}"><span>${i+1}. ${p.name}</span><span>${p.score} b</span></div>`).join('');
+        document.getElementById('roundTopList').innerHTML = topHtml; document.getElementById('roundResults').classList.add('active');
         return new Promise(resolve => { roundResultsCallback = resolve; });
     }
-    
-    function closeRoundResults() {
-        document.getElementById('roundResults').classList.remove('active');
-        if (roundResultsCallback) roundResultsCallback();
-        roundResultsCallback = null;
-    }
-
+    function closeRoundResults() { document.getElementById('roundResults').classList.remove('active'); if (roundResultsCallback) roundResultsCallback(); roundResultsCallback = null; }
     async function nextQuestion() {
-        // Zavoláme po kliknutí na tlačidlo Ďalšia otázka
-        if (currentIndex + 1 >= currentQuestions.length) {
-            endGame();
-            return;
-        }
-        currentIndex++;
-        currentQuestion = currentQuestions[currentIndex];
-        acceptingAnswers = true;
-        answerSubmitted = false;
-        // Vymažeme odpovede pre novú otázku
+        if (currentIndex + 1 >= currentQuestions.length) { endGame(); return; }
+        currentIndex++; currentQuestion = currentQuestions[currentIndex]; acceptingAnswers = true; answerSubmitted = false;
         await database.ref(`games/${gameId}/answers/${currentIndex}`).remove();
-        // Aktualizujeme currentQuestion v databáze – to spustí listenery u hráčov a prezentujúceho
         await database.ref(`games/${gameId}/currentQuestion`).set({ index: currentIndex, question: currentQuestion });
-        // Skryjeme tlačidlo Ďalšia, kým neskončí táto otázka
-        document.getElementById('nextQuestionBtn').style.display = 'none';
-        // Zobrazíme otázku lokálne
-        displayHostQuestion();
+        document.getElementById('nextQuestionBtn').style.display = 'none'; displayHostQuestion();
     }
-
     async function endGame() {
-        gameActive = false;
-        if (revealTimer) clearTimeout(revealTimer);
+        gameActive = false; if (revealTimer) clearTimeout(revealTimer);
         await database.ref(`games/${gameId}/status`).set('ended');
         const sorted = Object.values(players).sort((a,b) => (b.score||0) - (a.score||0));
         alert('🏆 Hra skončila! Víťaz: ' + (sorted[0]?.name || 'nikto'));
         await database.ref(`games/${gameId}`).remove();
-        document.getElementById('startGameBtn').style.display = 'inline-block';
-        document.getElementById('endGameBtn').style.display = 'none';
-        document.getElementById('nextQuestionBtn').style.display = 'none';
-        document.getElementById('questionText').innerHTML = 'Vyber kategórie a klikni Štart';
-        document.getElementById('hostOptions').innerHTML = '';
-        listenForLobby();
+        document.getElementById('startGameBtn').style.display = 'inline-block'; document.getElementById('endGameBtn').style.display = 'none';
+        document.getElementById('nextQuestionBtn').style.display = 'none'; document.getElementById('questionText').innerHTML = 'Vyber kategórie a klikni Štart';
+        document.getElementById('hostOptions').innerHTML = ''; listenForLobby();
     }
-
-    function toggleHostFullscreen() {
-        const fs = document.getElementById('hostFullscreen');
-        fs.classList.toggle('active');
-        if (fs.classList.contains('active') && currentQuestion) {
-            displayHostOptions('fsHostOptions', currentQuestion.options);
-            document.getElementById('fsQuestionText').innerHTML = `${currentIndex+1}. ${currentQuestion.question}`;
-        }
-    }
+    function toggleHostFullscreen() { const fs = document.getElementById('hostFullscreen'); fs.classList.toggle('active'); if (fs.classList.contains('active') && currentQuestion) { displayHostOptions('fsHostOptions', currentQuestion.options); document.getElementById('fsQuestionText').innerHTML = `${currentIndex+1}. ${currentQuestion.question}`; } }
 
     // ========== PREZENTUJÚCI ==========
     document.getElementById('presJoinBtn')?.addEventListener('click', async () => {
-        const code = document.getElementById('presJoinCode').value.trim().toUpperCase();
-        const name = document.getElementById('presName').value.trim();
+        const code = document.getElementById('presJoinCode').value.trim().toUpperCase(); const name = document.getElementById('presName').value.trim();
         if (!code || !name) { alert('Zadaj kód miestnosti a svoje meno!'); return; }
-        presenterGameId = code;
-        const gameRef = database.ref(`games/${presenterGameId}`);
-        const snap = await gameRef.once('value');
+        presenterGameId = code; const gameRef = database.ref(`games/${presenterGameId}`); const snap = await gameRef.once('value');
         if (!snap.exists()) { alert('Hra neexistuje! Skontroluj kód.'); return; }
-        presenterActive = true;
-        document.getElementById('presJoinBtn').style.display = 'none';
-        document.getElementById('presDisconnectBtn').style.display = 'inline-block';
+        presenterActive = true; document.getElementById('presJoinBtn').style.display = 'none'; document.getElementById('presDisconnectBtn').style.display = 'inline-block';
         document.getElementById('presQuestionText').innerHTML = 'Sledovanie hry...';
-        
         database.ref(`games/${presenterGameId}/currentQuestion`).on('value', (snap) => {
-            const qData = snap.val();
-            if (qData && presenterActive) {
-                const q = qData.question;
-                displayHostOptions('presOptions', q.options);
-                displayHostOptions('presFsOptions', q.options);
-                document.getElementById('presQuestionText').innerHTML = `${qData.index+1}. ${q.question}`;
-                document.getElementById('presFsQuestionText').innerHTML = `${qData.index+1}. ${q.question}`;
+            const qData = snap.val(); if (qData && presenterActive) {
+                const q = qData.question; displayHostOptions('presOptions', q.options); displayHostOptions('presFsOptions', q.options);
+                document.getElementById('presQuestionText').innerHTML = `${qData.index+1}. ${q.question}`; document.getElementById('presFsQuestionText').innerHTML = `${qData.index+1}. ${q.question}`;
                 startPresenterTimer(15);
+                document.querySelectorAll('#presOptions .opt-host-btn').forEach(btn => btn.classList.remove('correct-answer'));
+                document.querySelectorAll('#presFsOptions .opt-host-btn').forEach(btn => btn.classList.remove('correct-answer'));
             }
         });
-        database.ref(`games/${presenterGameId}/questionDone`).on('value', (snap) => {
-            if (snap.val() && presenterActive) {
-                if (presenterTimerInterval) clearInterval(presenterTimerInterval);
-                document.getElementById('presTimer').textContent = '✓';
+        database.ref(`games/${presenterGameId}/questionDone`).on('value', async (snap) => {
+            const done = snap.val(); if (done && presenterActive) {
+                const currentQSnap = await database.ref(`games/${presenterGameId}/currentQuestion`).once('value'); const qData = currentQSnap.val();
+                if (qData) { const correctIndices = qData.question.correct;
+                    const btns = document.querySelectorAll('#presOptions .opt-host-btn'); correctIndices.forEach(c => { if (btns[c]) btns[c].classList.add('correct-answer'); });
+                    const fsBtns = document.querySelectorAll('#presFsOptions .opt-host-btn'); correctIndices.forEach(c => { if (fsBtns[c]) fsBtns[c].classList.add('correct-answer'); });
+                }
+                if (presenterTimerInterval) clearInterval(presenterTimerInterval); document.getElementById('presTimer').textContent = '✓';
             }
         });
+        database.ref(`games/${presenterGameId}/players`).on('value', (snap) => {
+            const playersData = snap.val() || {}; const arr = Object.values(playersData); arr.sort((a,b) => (b.score||0) - (a.score||0));
+            const top5 = arr.slice(0,5); const leaderHtml = top5.map((p,i) => `<div class="player-item"><span>${i+1}. ${p.name}</span><span>${p.score||0} b</span></div>`).join('');
+            document.getElementById('presLeaderboard').innerHTML = leaderHtml || '<div>Zatiaľ žiadni hráči</div>'; document.getElementById('presFsLeaderboard').innerHTML = leaderHtml || '<div>Žiadni hráči</div>';
+            if (currentQuestion) { database.ref(`games/${presenterGameId}/answers/${currentIndex}`).once('value').then(ansSnap => { const ans = ansSnap.val() || {}; const answeredCount = Object.keys(ans).length; document.getElementById('presStats').innerHTML = `Odpovedalo: ${answeredCount} / ${arr.length} hráčov`; }); }
+            else { document.getElementById('presStats').innerHTML = 'Čaká sa na prvú otázku'; }
+        });
     });
-    
-    function startPresenterTimer(seconds) {
-        if (presenterTimerInterval) clearInterval(presenterTimerInterval);
-        let remaining = seconds;
-        const timerEl = document.getElementById('presTimer');
-        timerEl.textContent = remaining;
-        presenterTimerInterval = setInterval(() => {
-            remaining--;
-            timerEl.textContent = remaining >=0 ? remaining : 0;
-            if (remaining <= 0) clearInterval(presenterTimerInterval);
-        }, 1000);
-    }
-    
-    function togglePresenterFullscreen() {
-        const fs = document.getElementById('presFullscreen');
-        fs.classList.toggle('active');
-        // Obsah sa aktualizuje už cez listener
-    }
-    
-    document.getElementById('presDisconnectBtn')?.addEventListener('click', () => {
-        presenterActive = false;
-        if (presenterTimerInterval) clearInterval(presenterTimerInterval);
-        document.getElementById('presJoinBtn').style.display = 'inline-block';
-        document.getElementById('presDisconnectBtn').style.display = 'none';
-        document.getElementById('presQuestionText').innerHTML = 'Zadaj kód miestnosti a klikni Pripojiť';
-        document.getElementById('presOptions').innerHTML = '';
-        document.getElementById('presFsOptions').innerHTML = '';
-    });
+    function startPresenterTimer(seconds) { if (presenterTimerInterval) clearInterval(presenterTimerInterval); let remaining = seconds; const timerEl = document.getElementById('presTimer'); timerEl.textContent = remaining; presenterTimerInterval = setInterval(() => { remaining--; timerEl.textContent = remaining >=0 ? remaining : 0; if (remaining <= 0) clearInterval(presenterTimerInterval); }, 1000); }
+    function togglePresenterFullscreen() { document.getElementById('presFullscreen').classList.toggle('active'); }
+    document.getElementById('presDisconnectBtn')?.addEventListener('click', () => { presenterActive = false; if (presenterTimerInterval) clearInterval(presenterTimerInterval); document.getElementById('presJoinBtn').style.display = 'inline-block'; document.getElementById('presDisconnectBtn').style.display = 'none'; document.getElementById('presQuestionText').innerHTML = 'Zadaj kód miestnosti a klikni Pripojiť'; document.getElementById('presOptions').innerHTML = ''; document.getElementById('presFsOptions').innerHTML = ''; document.getElementById('presLeaderboard').innerHTML = ''; document.getElementById('presFsLeaderboard').innerHTML = ''; document.getElementById('presStats').innerHTML = 'Zatiaľ žiadne dáta'; });
 
     // ========== HRÁČ ==========
     document.getElementById('joinGameBtn').addEventListener('click', async () => {
-        const code = document.getElementById('joinCodeInput').value.toUpperCase();
-        const name = document.getElementById('playerNameInput').value;
+        const code = document.getElementById('joinCodeInput').value.toUpperCase(); const name = document.getElementById('playerNameInput').value;
         if (!code || !name) { alert('Zadaj kód a meno!'); return; }
-        playerId = 'p_' + Date.now() + '_' + Math.random().toString(36).substr(2,6);
-        gameId = code;
-        const gameRef = database.ref(`games/${gameId}`);
-        const gameSnap = await gameRef.once('value');
+        playerId = 'p_' + Date.now() + '_' + Math.random().toString(36).substr(2,6); gameId = code;
+        const gameRef = database.ref(`games/${gameId}`); const gameSnap = await gameRef.once('value');
         if (!gameSnap.exists() || gameSnap.val().status !== 'lobby') { alert('Hra neexistuje alebo už začala!'); return; }
         totalQuestionsCount = gameSnap.val().totalQuestions || 10;
         await gameRef.child(`players/${playerId}`).set({ name, score: 0 });
-        document.getElementById('joinScreen').style.display = 'none';
-        document.getElementById('gameWaiting').classList.add('active');
-        document.getElementById('gameFullscreen').classList.remove('active');
+        document.getElementById('joinScreen').style.display = 'none'; document.getElementById('gameWaiting').classList.add('active'); document.getElementById('gameFullscreen').classList.remove('active');
         listenForPlayerGame();
     });
-    
     function listenForPlayerGame() {
         database.ref(`games/${gameId}/currentQuestion`).on('value', (snap) => {
-            const qData = snap.val();
-            if (qData && playerCurrentIndex !== qData.index) {
-                playerCurrentIndex = qData.index;
-                currentQuestion = qData.question;
-                acceptingAnswers = true;
-                answerSubmitted = false;
-                myAnswers = [];
-                questionStartTime = Date.now();
-                document.getElementById('gameWaiting').classList.remove('active');
-                document.getElementById('gameFullscreen').classList.add('active');
-                displayPlayerQuestion();
+            const qData = snap.val(); if (qData && playerCurrentIndex !== qData.index) {
+                playerCurrentIndex = qData.index; currentQuestion = qData.question; acceptingAnswers = true; answerSubmitted = false; myAnswers = []; questionStartTime = Date.now();
+                document.getElementById('gameWaiting').classList.remove('active'); document.getElementById('gameFullscreen').classList.add('active'); displayPlayerQuestion();
             }
         });
-        database.ref(`games/${gameId}/questionDone`).on('value', (snap) => {
-            const done = snap.val();
-            if (done && done[playerCurrentIndex] === true && document.getElementById('gameFullscreen').classList.contains('active')) {
-                stopPlayerTimer();
-                document.getElementById('gameFullscreen').classList.remove('active');
-                document.getElementById('gameWaiting').classList.add('active');
-            }
-        });
+        database.ref(`games/${gameId}/questionDone`).on('value', (snap) => { const done = snap.val(); if (done && done[playerCurrentIndex] === true && document.getElementById('gameFullscreen').classList.contains('active')) { stopPlayerTimer(); document.getElementById('gameFullscreen').classList.remove('active'); document.getElementById('gameWaiting').classList.add('active'); } });
         database.ref(`games/${gameId}/status`).on('value', async (snap) => {
-            if (snap.val() === 'ended') {
-                stopPlayerTimer();
-                const gameSnap = await database.ref(`games/${gameId}`).once('value');
-                const playersData = gameSnap.val()?.players || {};
-                const myData = playersData[playerId];
-                const allPlayers = Object.values(playersData);
-                allPlayers.sort((a,b) => (b.score||0) - (a.score||0));
-                const rank = allPlayers.findIndex(p => p.name === myData?.name) + 1;
-                document.getElementById('finalScore').textContent = `${myData?.score || 0} bodov`;
-                document.getElementById('finalRank').innerHTML = `<p style="font-size: 1.2rem;">Tvoje umiestnenie: #${rank}</p>`;
-                document.getElementById('resultsOverlay').classList.add('active');
-                document.getElementById('gameFullscreen').classList.remove('active');
-                document.getElementById('gameWaiting').classList.remove('active');
-            }
+            if (snap.val() === 'ended') { stopPlayerTimer(); const gameSnap = await database.ref(`games/${gameId}`).once('value'); const playersData = gameSnap.val()?.players || {}; const myData = playersData[playerId]; const allPlayers = Object.values(playersData); allPlayers.sort((a,b) => (b.score||0) - (a.score||0)); const rank = allPlayers.findIndex(p => p.name === myData?.name) + 1; document.getElementById('finalScore').textContent = `${myData?.score || 0} bodov`; document.getElementById('finalRank').innerHTML = `<p style="font-size:1.2rem">Tvoje umiestnenie: #${rank}</p>`; document.getElementById('resultsOverlay').classList.add('active'); document.getElementById('gameFullscreen').classList.remove('active'); document.getElementById('gameWaiting').classList.remove('active'); }
         });
     }
-    
-    function startPlayerTimer() {
-        if (playerTimerInterval) clearInterval(playerTimerInterval);
-        let remaining = 15;
-        const timerEl = document.getElementById('gameTimer');
-        timerEl.textContent = remaining;
-        timerEl.classList.remove('warning');
-        playerTimerInterval = setInterval(() => {
-            remaining--;
-            timerEl.textContent = remaining;
-            if (remaining <= 5) timerEl.classList.add('warning');
-            if (remaining <= 0) clearInterval(playerTimerInterval);
-        }, 1000);
-    }
-    
+    function startPlayerTimer() { if (playerTimerInterval) clearInterval(playerTimerInterval); let remaining = 15; const timerEl = document.getElementById('gameTimer'); timerEl.textContent = remaining; timerEl.classList.remove('warning'); playerTimerInterval = setInterval(() => { remaining--; timerEl.textContent = remaining; if (remaining <= 5) timerEl.classList.add('warning'); if (remaining <= 0) clearInterval(playerTimerInterval); }, 1000); }
     function stopPlayerTimer() { if (playerTimerInterval) clearInterval(playerTimerInterval); }
-    
     function displayPlayerQuestion() {
-        startPlayerTimer();
-        document.getElementById('gameProgress').textContent = `Otázka ${playerCurrentIndex+1} / ${totalQuestionsCount}`;
-        document.getElementById('gameQuestionText').textContent = currentQuestion.question;
-        const container = document.getElementById('gameAnswers');
-        const letters = ['A','B','C','D'];
-        let html = '';
-        currentQuestion.options.forEach((opt, i) => {
-            let shortText = opt.length > 30 ? opt.substring(0,27)+'...' : opt;
-            html += `<button class="game-ans-btn ans-btn-${letters[i]}" data-ans="${i}"><span class="ans-letter">${letters[i]}</span><span class="ans-text">${shortText}</span></button>`;
-        });
-        container.innerHTML = html;
-        isMultiChoice = currentQuestion.type === 'multi';
+        startPlayerTimer(); document.getElementById('gameProgress').textContent = `Otázka ${playerCurrentIndex+1} / ${totalQuestionsCount}`; document.getElementById('gameQuestionText').textContent = currentQuestion.question;
+        const container = document.getElementById('gameAnswers'); const letters = ['A','B','C','D']; let html = '';
+        currentQuestion.options.forEach((opt, i) => { let shortText = opt.length > 30 ? opt.substring(0,27)+'...' : opt; html += `<button class="game-ans-btn ans-btn-${letters[i]}" data-ans="${i}"><span class="ans-letter">${letters[i]}</span><span class="ans-text">${shortText}</span></button>`; });
+        container.innerHTML = html; isMultiChoice = currentQuestion.type === 'multi';
         if (isMultiChoice) {
-            document.querySelectorAll('.game-ans-btn').forEach(btn => {
-                btn.onclick = () => {
-                    if (!acceptingAnswers || answerSubmitted) return;
-                    const val = parseInt(btn.dataset.ans);
-                    if (myAnswers.includes(val)) {
-                        myAnswers = myAnswers.filter(v => v !== val);
-                        btn.style.opacity = '0.7';
-                    } else {
-                        myAnswers.push(val);
-                        btn.style.opacity = '1';
-                    }
-                };
-            });
-            let submitBtn = document.getElementById('multiSubmitBtn');
-            if (!submitBtn) {
-                submitBtn = document.createElement('button');
-                submitBtn.id = 'multiSubmitBtn';
-                submitBtn.textContent = '✅ Odoslať odpoveď';
-                submitBtn.className = 'btn';
-                submitBtn.style.width = '100%';
-                submitBtn.style.marginTop = '10px';
-                submitBtn.style.gridColumn = 'span 2';
-                container.parentNode.appendChild(submitBtn);
-            }
-            submitBtn.onclick = async () => {
-                if (!acceptingAnswers || answerSubmitted) return;
-                if (myAnswers.length === 0) { showPlayerFeedback('Vyber aspoň jednu odpoveď!', false); return; }
-                answerSubmitted = true;
-                const timeTaken = Date.now() - questionStartTime;
-                await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answers: myAnswers, time: timeTaken });
-                showPlayerFeedback('✅ Odpoveď zaznamenaná!', true);
-                document.querySelectorAll('.game-ans-btn').forEach(b => b.disabled = true);
-                submitBtn.disabled = true;
-            };
-            submitBtn.style.display = 'block';
+            document.querySelectorAll('.game-ans-btn').forEach(btn => { btn.onclick = () => { if (!acceptingAnswers || answerSubmitted) return; const val = parseInt(btn.dataset.ans); if (myAnswers.includes(val)) { myAnswers = myAnswers.filter(v => v !== val); btn.style.opacity = '0.7'; } else { myAnswers.push(val); btn.style.opacity = '1'; } }; });
+            let submitBtn = document.getElementById('multiSubmitBtn'); if (!submitBtn) { submitBtn = document.createElement('button'); submitBtn.id = 'multiSubmitBtn'; submitBtn.textContent = '✅ Odoslať odpoveď'; submitBtn.className = 'btn'; submitBtn.style.width = '100%'; submitBtn.style.marginTop = '10px'; submitBtn.style.gridColumn = 'span 2'; container.parentNode.appendChild(submitBtn); }
+            submitBtn.onclick = async () => { if (!acceptingAnswers || answerSubmitted) return; if (myAnswers.length === 0) { showPlayerFeedback('Vyber aspoň jednu odpoveď!', false); return; } answerSubmitted = true; const timeTaken = Date.now() - questionStartTime; await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answers: myAnswers, time: timeTaken }); showPlayerFeedback('✅ Odpoveď zaznamenaná!', true); document.querySelectorAll('.game-ans-btn').forEach(b => b.disabled = true); submitBtn.disabled = true; }; submitBtn.style.display = 'block';
         } else {
-            const oldSubmit = document.getElementById('multiSubmitBtn');
-            if (oldSubmit) oldSubmit.remove();
-            document.querySelectorAll('.game-ans-btn').forEach(btn => {
-                btn.onclick = async () => {
-                    if (!acceptingAnswers || answerSubmitted) return;
-                    answerSubmitted = true;
-                    const timeTaken = Date.now() - questionStartTime;
-                    await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answer: parseInt(btn.dataset.ans), time: timeTaken });
-                    showPlayerFeedback('✅ Odpoveď zaznamenaná!', true);
-                    document.querySelectorAll('.game-ans-btn').forEach(b => b.disabled = true);
-                };
-            });
+            const oldSubmit = document.getElementById('multiSubmitBtn'); if (oldSubmit) oldSubmit.remove();
+            document.querySelectorAll('.game-ans-btn').forEach(btn => { btn.onclick = async () => { if (!acceptingAnswers || answerSubmitted) return; answerSubmitted = true; const timeTaken = Date.now() - questionStartTime; await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answer: parseInt(btn.dataset.ans), time: timeTaken }); showPlayerFeedback('✅ Odpoveď zaznamenaná!', true); document.querySelectorAll('.game-ans-btn').forEach(b => b.disabled = true); }; });
         }
     }
-    
-    function showPlayerFeedback(msg, isCorrect) {
-        const fb = document.getElementById('gameFeedback');
-        fb.textContent = msg;
-        fb.className = `game-feedback show ${isCorrect ? 'correct' : 'wrong'}`;
-        setTimeout(() => fb.classList.remove('show'), 2000);
-    }
-    
-    function closeResults() {
-        document.getElementById('resultsOverlay').classList.remove('active');
-        location.reload();
-    }
-
-    function toggleTheme() {
-        document.body.classList.toggle('light-theme');
-        localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
-        const toggle = document.getElementById('themeToggle');
-        if (toggle) toggle.textContent = document.body.classList.contains('light-theme') ? '☀️' : '🌙';
-    }
+    function showPlayerFeedback(msg, isCorrect) { const fb = document.getElementById('gameFeedback'); fb.textContent = msg; fb.className = `game-feedback show ${isCorrect ? 'correct' : 'wrong'}`; setTimeout(() => fb.classList.remove('show'), 2000); }
+    function closeResults() { document.getElementById('resultsOverlay').classList.remove('active'); location.reload(); }
+    function toggleTheme() { document.body.classList.toggle('light-theme'); localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark'); document.getElementById('themeToggle').textContent = document.body.classList.contains('light-theme') ? '☀️' : '🌙'; }
     (function() { if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-theme'); document.getElementById('themeToggle').textContent = '☀️'; } })();
-    
     document.getElementById('startGameBtn')?.addEventListener('click', startGame);
     document.getElementById('nextQuestionBtn')?.addEventListener('click', nextQuestion);
     document.getElementById('endGameBtn')?.addEventListener('click', endGame);
