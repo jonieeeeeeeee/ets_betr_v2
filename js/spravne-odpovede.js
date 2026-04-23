@@ -155,6 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const uploadArea = document.getElementById('uploadArea');
     const fileInput  = document.getElementById('fileInput');
 
+    uploadArea.addEventListener('click', () => fileInput.click());
     uploadArea.addEventListener('dragover', (e) => e.preventDefault());
     uploadArea.addEventListener('drop', (e) => {
         e.preventDefault();
