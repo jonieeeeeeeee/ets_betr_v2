@@ -9,7 +9,7 @@
     ['/fejkhoot', '🎮 Fejkhoot'],
   ];
 
-  let dark = true;
+  let dark = false;
 
   onMount(() => {
     const saved = localStorage.getItem('theme');
