@@ -5,22 +5,25 @@
 
   let tab = 'A';
   let data = {};
-  let pdfFiles = [];
   let fileInput;
   let dragOver = false;
+  let pdfFiles = [];
+
+  // PDF viewer modal
+  let viewerOpen = false;
+  let viewerUrl = '';
+  let viewerName = '';
 
   const permanentPDFs = [
-    { name: '📘 Zhrnutie A',   url: '/data/Zhrnutie-A.pdf' },
-    { name: '📗 Zhrnutie B',   url: '/data/Zhrnutie-B.pdf' },
-    { name: '📕 Zhrnutie C',   url: '/data/Zhrnutie-C.pdf' },
-    { name: '📙 Zhrnutie D',   url: '/data/Zhrnutie-D.pdf' },
-    { name: '📓 Legislatíva',  url: '/data/Zhrnutie-LEG.pdf' },
+    { name: 'Zhrnutie A',  emoji: '📘', url: '/data/Zhrnutie-A.pdf'   },
+    { name: 'Zhrnutie B',  emoji: '📗', url: '/data/Zhrnutie-B.pdf'   },
+    { name: 'Zhrnutie C',  emoji: '📕', url: '/data/Zhrnutie-C.pdf'   },
+    { name: 'Zhrnutie D',  emoji: '📙', url: '/data/Zhrnutie-D.pdf'   },
+    { name: 'Legislatíva', emoji: '📓', url: '/data/Zhrnutie-leg.pdf' },
   ];
 
   onMount(async () => {
-    const saved = localStorage.getItem('pdfs');
-    if (saved) pdfFiles = JSON.parse(saved);
-    // Preload current tab
+    try { pdfFiles = JSON.parse(localStorage.getItem('pdfs') ?? '[]'); } catch {}
     if (!data[tab]) data[tab] = await loadQuestions(tab);
   });
 
@@ -29,27 +32,37 @@
     if (!data[t]) data[t] = await loadQuestions(t);
   }
 
-  function save() { localStorage.setItem('pdfs', JSON.stringify(pdfFiles)); }
+  function openViewer(url, name) {
+    viewerUrl = url;
+    viewerName = name;
+    viewerOpen = true;
+  }
+
+  function closeViewer() {
+    viewerOpen = false;
+    viewerUrl = '';
+  }
 
   function handleFiles(files) {
     Array.from(files).forEach(file => {
       if (file.type !== 'application/pdf') return alert('Len PDF!');
       const r = new FileReader();
-      r.onload = e => { pdfFiles = [...pdfFiles, { name: file.name, size: (file.size/1024).toFixed(0)+'KB', data: e.target.result.split(',')[1] }]; save(); };
+      r.onload = e => {
+        pdfFiles = [...pdfFiles, { name: file.name, size: (file.size/1024).toFixed(0)+'KB', data: e.target.result }];
+        localStorage.setItem('pdfs', JSON.stringify(pdfFiles));
+      };
       r.readAsDataURL(file);
     });
   }
 
-  function openPDF(i) {
-    const pdf = pdfFiles[i];
-    const blob = new Blob([Uint8Array.from(atob(pdf.data), c => c.charCodeAt(0))], { type: 'application/pdf' });
-    window.open(URL.createObjectURL(blob), '_blank');
+  function openUserPDF(i) {
+    openViewer(pdfFiles[i].data, pdfFiles[i].name);
   }
 
   function delPDF(i) {
     if (!confirm('Vymazať?')) return;
     pdfFiles = pdfFiles.filter((_, j) => j !== i);
-    save();
+    localStorage.setItem('pdfs', JSON.stringify(pdfFiles));
   }
 </script>
 
@@ -65,7 +78,8 @@
 
     <!-- PDF sidebar -->
     <aside class="lg:w-72 flex-shrink-0 space-y-5 lg:sticky lg:top-6 lg:self-start">
-      <!-- Upload -->
+
+      <!-- Upload zone -->
       <div on:click={() => fileInput.click()}
            on:dragover|preventDefault={() => dragOver=true}
            on:dragleave={() => dragOver=false}
@@ -84,12 +98,13 @@
       <div>
         <p class="text-sm font-bold text-slate-400 border-l-2 border-blue-500 pl-2 mb-2">📌 Trvalé materiály</p>
         {#each permanentPDFs as pdf}
-          <div class="flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/50 rounded-xl p-3 mb-2 hover:border-blue-500/40 transition-colors">
-            <span>📄</span>
-            <span class="flex-1 text-sm truncate">{pdf.name}</span>
-            <button on:click={() => window.open(pdf.url,'_blank')}
-              class="w-7 h-7 rounded-lg bg-slate-700 hover:bg-blue-500 transition-colors flex items-center justify-center text-xs">🔍</button>
-          </div>
+          <button on:click={() => openViewer(pdf.url, pdf.name)}
+            class="w-full flex items-center gap-2.5 bg-slate-800/60 border border-slate-700/50 rounded-xl p-3 mb-2
+                   hover:border-blue-500/60 hover:bg-blue-500/10 transition-all text-left">
+            <span class="text-xl">{pdf.emoji}</span>
+            <span class="flex-1 text-sm font-medium">{pdf.name}</span>
+            <span class="text-xs text-slate-400 bg-slate-700 px-2 py-0.5 rounded-full">otvoriť</span>
+          </button>
         {/each}
       </div>
 
@@ -104,15 +119,17 @@
                 <p class="text-sm truncate">{pdf.name}</p>
                 <p class="text-xs text-slate-500">{pdf.size}</p>
               </div>
-              <button on:click={() => openPDF(i)} class="w-7 h-7 rounded-lg bg-slate-700 hover:bg-blue-500 transition-colors flex items-center justify-center text-xs">🔍</button>
-              <button on:click={() => delPDF(i)} class="w-7 h-7 rounded-lg bg-slate-700 hover:bg-red-500 transition-colors flex items-center justify-center text-xs">🗑️</button>
+              <button on:click={() => openUserPDF(i)}
+                class="w-7 h-7 rounded-lg bg-slate-700 hover:bg-blue-500 transition-colors flex items-center justify-center text-xs">🔍</button>
+              <button on:click={() => delPDF(i)}
+                class="w-7 h-7 rounded-lg bg-slate-700 hover:bg-red-500 transition-colors flex items-center justify-center text-xs">🗑️</button>
             </div>
           {/each}
         </div>
       {/if}
     </aside>
 
-    <!-- Answers -->
+    <!-- Answers panel -->
     <div class="flex-1 min-w-0">
       <div class="flex flex-wrap gap-2 mb-5">
         {#each Object.entries(META) as [k, m]}
@@ -151,3 +168,34 @@
 
   </main>
 </div>
+
+<!-- PDF Viewer Modal -->
+{#if viewerOpen}
+  <div class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col" role="dialog" aria-modal="true">
+    <!-- Modal header -->
+    <div class="flex items-center justify-between px-5 py-3 bg-slate-800 border-b border-slate-700/50 flex-shrink-0">
+      <h2 class="font-bold text-lg">{viewerName}</h2>
+      <div class="flex gap-2">
+        <a href={viewerUrl} download
+          class="px-4 py-1.5 rounded-full bg-blue-500 hover:bg-blue-600 text-white text-sm font-semibold transition-colors">
+          ⬇ Stiahnuť
+        </a>
+        <button on:click={closeViewer}
+          class="px-4 py-1.5 rounded-full bg-slate-700 hover:bg-red-500 text-sm font-semibold transition-colors">
+          ✕ Zavrieť
+        </button>
+      </div>
+    </div>
+    <!-- iframe viewer -->
+    <iframe
+      src={viewerUrl}
+      title={viewerName}
+      class="flex-1 w-full border-0"
+      type="application/pdf">
+      <p class="text-center py-10 text-slate-400">
+        Váš prehliadač nepodporuje zobrazenie PDF.
+        <a href={viewerUrl} class="text-blue-400 underline">Stiahnuť PDF</a>
+      </p>
+    </iframe>
+  </div>
+{/if}
