@@ -19,7 +19,7 @@
     { name: 'Zhrnutie B',  emoji: '📗', url: '/data/Zhrnutie-B.pdf'   },
     { name: 'Zhrnutie C',  emoji: '📕', url: '/data/Zhrnutie-C.pdf'   },
     { name: 'Zhrnutie D',  emoji: '📙', url: '/data/Zhrnutie-D.pdf'   },
-    { name: 'Legislatíva', emoji: '📓', url: '/data/Zhrnutie-leg.pdf' },
+    { name: 'Legislatíva', emoji: '📓', url: '/data/Zhrnutie-LEG.pdf' },
   ];
 
   onMount(async () => {
