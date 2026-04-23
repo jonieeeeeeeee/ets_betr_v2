@@ -36,9 +36,6 @@
   $: secs = String(timeLeft % 60).padStart(2, '0');
   $: progress = answers.filter(a => a !== null).length / (questions.length || 1) * 100;
   $: q = questions[idx];
-  // Reaktívna závislosť — prerendruje sa vždy keď sa zmení answers alebo idx
-
-  }
 
   function pick(oi) {
     if (q.type === 'single') {
@@ -49,7 +46,7 @@
       i === -1 ? cur.push(oi) : cur.splice(i, 1);
       answers[idx] = cur.length ? cur : null;
     }
-    answers = [...answers];
+    answers = answers;
   }
 
   function submit() {
@@ -117,14 +114,15 @@
 
       <div class="space-y-2.5 mb-8">
         {#each q.options as opt, oi}
-          <div on:click={() => pick(oi)} role="button" tabindex="0"
-            on:keydown={e => e.key==='Enter' && pick(oi)}
-            class="opt-row" class:opt-selected={Array.isArray(answers[idx]) && answers[idx].includes(oi)}>
-            <input type={q.type==='single'?'radio':'checkbox'} checked={Array.isArray(answers[idx]) && answers[idx].includes(oi)}
+          <button on:click={() => pick(oi)}
+            class="opt-row w-full text-left"
+            class:opt-selected={Array.isArray(answers[idx]) && answers[idx].includes(oi)}>
+            <input type={q.type==='single'?'radio':'checkbox'}
+              checked={Array.isArray(answers[idx]) && answers[idx].includes(oi)}
               on:click|stopPropagation={() => pick(oi)}
               class="w-4 h-4 accent-blue-500 flex-shrink-0" />
             <span class="font-medium text-sm">{String.fromCharCode(65+oi)}) {opt}</span>
-          </div>
+          </button>
         {/each}
       </div>
 
@@ -211,14 +209,14 @@
     gap: 12px;
     padding: 16px 20px;
     border-radius: 16px;
-    border: 1px solid rgba(51, 65, 85, 0.5);
+    border: 2px solid rgba(51, 65, 85, 0.5);
     background: rgba(30, 41, 59, 0.6);
     cursor: pointer;
     transition: border-color 0.15s, background 0.15s, transform 0.1s;
   }
   .opt-row:hover { border-color: #64748b; transform: translateX(4px); }
   .opt-selected {
-    background: rgba(59, 130, 246, 0.2) !important;
+    background: rgba(59, 130, 246, 0.25) !important;
     border-color: #3b82f6 !important;
     transform: translateX(4px);
   }
@@ -227,16 +225,15 @@
     width: 36px; height: 36px;
     border-radius: 10px;
     font-size: 12px; font-weight: bold;
-    background: #334155;
-    color: #cbd5e1;
-    transition: all 0.15s;
+    background: #334155; color: #cbd5e1;
     border: none; cursor: pointer;
+    transition: all 0.15s;
   }
   .dot-btn:hover { background: #475569; }
-  .dot-active  { background: #3b82f6 !important; color: white !important; transform: scale(1.1); }
+  .dot-active   { background: #3b82f6 !important; color: white !important; transform: scale(1.1); }
   .dot-answered { background: #10b981 !important; color: white !important; }
 
   .timer-normal { color: #fbbf24; border-color: rgba(245,158,11,0.3); }
   .timer-urgent { color: #f87171; border-color: rgba(239,68,68,0.4); animation: pulse 1s infinite; }
-  @keyframes pulse { 0%,100% { opacity:1 } 50% { opacity:0.5 } }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 </style>
