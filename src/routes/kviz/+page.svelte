@@ -17,40 +17,35 @@
   $: q = questions[idx];
   $: checked = statuses[idx];
   $: isLast = idx === questions.length - 1;
-  // Reaktívna závislosť na answers AJ idx — Svelte vždy prerendruje pri zmene
-  $: curAns = answers[idx];
-
-  function isSelected(oi) {
-    return Array.isArray(curAns) ? curAns.includes(oi) : false;
-  }
 
   function pick(oi) {
-    if (checked !== null) return;
+    if (statuses[idx] !== null) return;
     if (q.type === 'multi') {
-      const cur = Array.isArray(curAns) ? [...curAns] : [];
+      const cur = Array.isArray(answers[idx]) ? [...answers[idx]] : [];
       const i = cur.indexOf(oi);
       i === -1 ? cur.push(oi) : cur.splice(i, 1);
       answers[idx] = cur.length ? cur : null;
     } else {
       answers[idx] = [oi];
     }
-    answers = [...answers];
+    // Force Svelte to detect change
+    answers = answers;
   }
 
   function check() {
-    if (checked !== null) return;
-    if (!curAns?.length) return alert('Najprv označ odpoveď!');
-    statuses[idx] = checkAnswer(q, curAns);
-    statuses = [...statuses];
+    if (statuses[idx] !== null) return;
+    if (!answers[idx]?.length) { alert('Najprv označ odpoveď!'); return; }
+    statuses[idx] = checkAnswer(q, answers[idx]);
+    statuses = statuses;
   }
 
   function next() {
-    if (checked === null) return alert('Najprv skontroluj!');
+    if (statuses[idx] === null) { alert('Najprv skontroluj!'); return; }
     idx++;
   }
 
   function finish() {
-    if (!statuses.every(s => s !== null)) return alert('Skontroluj všetky otázky!');
+    if (!statuses.every(s => s !== null)) { alert('Skontroluj všetky otázky!'); return; }
     phase = 'results';
   }
 
@@ -73,7 +68,6 @@
 
   <main class="max-w-xl mx-auto px-5 py-8">
 
-    <!-- Setup -->
     {#if phase === 'setup'}
       <div class="bg-slate-800/60 border border-slate-700/50 rounded-3xl p-8 text-center space-y-5">
         <h2 class="text-2xl font-bold">Výber kvízu</h2>
@@ -97,7 +91,6 @@
         </button>
       </div>
 
-    <!-- Quiz -->
     {:else if phase === 'quiz' && q}
       <div class="h-1 bg-slate-800 rounded-full mb-5 overflow-hidden">
         <div class="h-full bg-emerald-500 transition-all rounded-full" style="width:{(idx+1)/questions.length*100}%"></div>
@@ -111,32 +104,31 @@
         <p class="font-bold leading-snug mb-5">{q.question}</p>
 
         <div class="space-y-2">
-          {#each q.options as opt, oi}
-            {@const picked = isSelected(oi)}
-            {@const correct = checked !== null && q.correct.includes(oi)}
-            {@const wrong = checked !== null && picked && !q.correct.includes(oi)}
-            <div on:click={() => pick(oi)} role="button" tabindex="0"
-              on:keydown={e => e.key === 'Enter' && pick(oi)}
-              class="opt-row"
-              class:opt-correct={correct}
-              class:opt-wrong={wrong}
-              class:opt-selected={picked && checked === null}>
+          {#each q.options as opt, oi (oi)}
+            <button
+              on:click={() => pick(oi)}
+              disabled={checked !== null}
+              class="opt-row w-full text-left"
+              class:opt-selected={Array.isArray(answers[idx]) && answers[idx].includes(oi) && checked === null}
+              class:opt-correct={checked !== null && q.correct.includes(oi)}
+              class:opt-wrong={checked !== null && Array.isArray(answers[idx]) && answers[idx].includes(oi) && !q.correct.includes(oi)}
+            >
               {#if q.type === 'multi'}
-                <span class="checkbox" class:checkbox-on={picked}>
-                  {picked ? '✓' : ''}
+                <span class="chk" class:chk-on={Array.isArray(answers[idx]) && answers[idx].includes(oi)}>
+                  {Array.isArray(answers[idx]) && answers[idx].includes(oi) ? '✓' : ''}
                 </span>
               {:else}
-                <span class="radio-btn" class:radio-on={picked}>
+                <span class="radio" class:radio-on={Array.isArray(answers[idx]) && answers[idx].includes(oi)}>
                   {String.fromCharCode(65 + oi)}
                 </span>
               {/if}
               <span class="text-sm">{String.fromCharCode(65 + oi)}) {opt}</span>
-            </div>
+            </button>
           {/each}
         </div>
 
         {#if checked !== null}
-          <div class="mt-4 rounded-xl p-4 border-l-4" class:result-ok={checked} class:result-fail={!checked}>
+          <div class="mt-4 rounded-xl p-4" class:result-ok={checked} class:result-fail={!checked}>
             <p class="font-bold" class:text-emerald-400={checked} class:text-red-400={!checked}>
               {checked ? '✓ Správne!' : '✗ Nesprávne'}
             </p>
@@ -166,13 +158,12 @@
           </button>
         {:else if checked !== null}
           <button on:click={finish}
-            class="flex-1 py-2.5 rounded-full font-semibond bg-emerald-500 hover:bg-emerald-600 text-white transition-colors">
+            class="flex-1 py-2.5 rounded-full font-semibold bg-emerald-500 hover:bg-emerald-600 text-white transition-colors">
             🏁 Ukončiť
           </button>
         {/if}
       </div>
 
-    <!-- Results -->
     {:else if phase === 'results'}
       <div class="bg-slate-800/60 border border-slate-700/50 rounded-3xl p-8 text-center mb-5">
         <h2 class="text-2xl font-bold mb-3">📊 Výsledky</h2>
@@ -187,7 +178,8 @@
       </div>
       <div class="space-y-2.5">
         {#each questions as qr, i}
-          <div class="rounded-xl p-3.5 bg-slate-800/60 border-l-4" class:border-emerald-500={statuses[i]} class:border-red-500={!statuses[i]}>
+          <div class="rounded-xl p-3.5 bg-slate-800/60 border-l-4"
+            class:border-emerald-500={statuses[i]} class:border-red-500={!statuses[i]}>
             <p class="font-semibold text-sm">{i+1}. {qr.question}</p>
             <p class="text-xs text-slate-400 mt-1">Tvoja: {letter(answers[i])}</p>
             <p class="text-xs text-emerald-400">Správna: {qr.correct.map(c => String.fromCharCode(65+c)).join(', ')}</p>
@@ -213,22 +205,22 @@
     100% { background-position: 200% center; }
   }
 
-  /* Option rows — scoped CSS, never purged by Tailwind */
   .opt-row {
     display: flex;
     align-items: center;
     gap: 12px;
     padding: 12px 16px;
     border-radius: 12px;
-    border: 1px solid rgba(71, 85, 105, 0.4);
+    border: 2px solid rgba(71, 85, 105, 0.5);
     background: rgba(51, 65, 85, 0.4);
     cursor: pointer;
     transition: border-color 0.15s, background 0.15s;
   }
-  .opt-row:hover { border-color: #64748b; }
+  .opt-row:hover:not(:disabled) { border-color: #64748b; }
+  .opt-row:disabled { cursor: default; }
 
   .opt-selected {
-    background: rgba(59, 130, 246, 0.2) !important;
+    background: rgba(59, 130, 246, 0.25) !important;
     border-color: #3b82f6 !important;
   }
   .opt-correct {
@@ -240,35 +232,26 @@
     border-color: #ef4444 !important;
   }
 
-  .checkbox {
-    width: 20px; height: 20px;
-    border-radius: 4px;
+  .chk {
+    width: 20px; height: 20px; flex-shrink: 0;
+    border-radius: 5px;
     border: 2px solid #64748b;
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; font-weight: bold;
-    flex-shrink: 0;
-    transition: background 0.15s, border-color 0.15s;
+    transition: all 0.15s;
   }
-  .checkbox-on {
-    background: #3b82f6;
-    border-color: #3b82f6;
-    color: white;
-  }
+  .chk-on { background: #3b82f6; border-color: #3b82f6; color: white; }
 
-  .radio-btn {
-    width: 28px; height: 28px;
+  .radio {
+    width: 28px; height: 28px; flex-shrink: 0;
     border-radius: 50%;
     background: #475569;
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; font-weight: bold;
-    flex-shrink: 0;
-    transition: background 0.15s;
+    transition: all 0.15s;
   }
-  .radio-on {
-    background: #3b82f6;
-    color: white;
-  }
+  .radio-on { background: #3b82f6; color: white; }
 
-  .result-ok  { background: rgba(16,185,129,0.1); border-left: 4px solid #10b981; border-radius: 12px; padding: 16px; }
-  .result-fail{ background: rgba(239,68,68,0.1);  border-left: 4px solid #ef4444;  border-radius: 12px; padding: 16px; }
+  .result-ok   { background: rgba(16,185,129,0.1); border-left: 4px solid #10b981; }
+  .result-fail { background: rgba(239,68,68,0.1);  border-left: 4px solid #ef4444; }
 </style>

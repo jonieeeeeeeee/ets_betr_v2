@@ -37,10 +37,7 @@
   $: progress = answers.filter(a => a !== null).length / (questions.length || 1) * 100;
   $: q = questions[idx];
   // Reaktívna závislosť — prerendruje sa vždy keď sa zmení answers alebo idx
-  $: curAns = answers[idx];
 
-  function isSelected(oi) {
-    return Array.isArray(curAns) ? curAns.includes(oi) : false;
   }
 
   function pick(oi) {
@@ -120,11 +117,10 @@
 
       <div class="space-y-2.5 mb-8">
         {#each q.options as opt, oi}
-          {@const picked = isSelected(oi)}
           <div on:click={() => pick(oi)} role="button" tabindex="0"
             on:keydown={e => e.key==='Enter' && pick(oi)}
-            class="opt-row" class:opt-selected={picked}>
-            <input type={q.type==='single'?'radio':'checkbox'} checked={picked}
+            class="opt-row" class:opt-selected={Array.isArray(answers[idx]) && answers[idx].includes(oi)}>
+            <input type={q.type==='single'?'radio':'checkbox'} checked={Array.isArray(answers[idx]) && answers[idx].includes(oi)}
               on:click|stopPropagation={() => pick(oi)}
               class="w-4 h-4 accent-blue-500 flex-shrink-0" />
             <span class="font-medium text-sm">{String.fromCharCode(65+oi)}) {opt}</span>
