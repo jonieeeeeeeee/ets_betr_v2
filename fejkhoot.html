@@ -4,103 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>🎮 FEJKHOOT | ELTEC Certifikačný systém</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <!-- Zdieľané štýly -->
+    <link rel="stylesheet" href="css/shared.css">
+
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ===== FEJKHOOT — farebné premenné pre tlačidlá hráča ===== */
         :root {
-            --bg-primary: #0b1120;
-            --bg-secondary: #1e293b;
-            --surface: #2d3a4f;
-            --surface-light: #334155;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --accent: #3b82f6;
-            --accent-hover: #2563eb;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --card-bg: #1e293b;
-            --border: rgba(255, 255, 255, 0.1);
-            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-            --nav-link-bg: rgba(255, 255, 255, 0.05);
-            --red: #ef4444;
-            --blue: #3b82f6;
+            --red:    #ef4444;
+            --blue:   #3b82f6;
             --yellow: #f59e0b;
-            --green: #10b981;
+            --green:  #10b981;
         }
-        body.light-theme {
-            --bg-primary: #f8fafc;
-            --bg-secondary: #ffffff;
-            --surface: #f1f5f9;
-            --surface-light: #e2e8f0;
-            --text-primary: #0f172a;
-            --text-secondary: #475569;
-            --accent: #2563eb;
-            --accent-hover: #1d4ed8;
-            --success: #059669;
-            --warning: #d97706;
-            --danger: #dc2626;
-            --card-bg: #ffffff;
-            --border: rgba(0, 0, 0, 0.1);
-            --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            --nav-link-bg: rgba(0, 0, 0, 0.05);
-        }
-        body {
-            font-family: 'Inter', system-ui, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            padding: 16px;
-            transition: all 0.3s;
-        }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: var(--bg-secondary);
-            border-radius: 32px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            border: 1px solid var(--border);
-        }
-        header {
-            background: var(--surface);
-            padding: 20px 24px;
-            text-align: center;
-            border-bottom: 1px solid var(--border);
-        }
-        .header-top { display: flex; justify-content: flex-end; margin-bottom: 10px; }
-        .theme-toggle {
-            background: var(--nav-link-bg);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            font-size: 1.3rem;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+
+        /* ===== Výber roly ===== */
+        .role-screen {
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
+            min-height: 50vh;
+            padding: 30px;
         }
-        h1 { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, var(--text-primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 6px; }
-        .subtitle { font-size: 0.85rem; color: var(--text-secondary); }
-        .nav-bar { display: flex; justify-content: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-        .nav-link {
-            color: var(--text-primary);
-            text-decoration: none;
-            padding: 5px 14px;
-            border-radius: 40px;
-            background: var(--nav-link-bg);
-            border: 1px solid var(--border);
-            font-weight: 500;
-            font-size: 0.85rem;
-        }
-        .nav-link:hover { background: var(--accent); color: white; }
 
-        .role-screen { display: flex; align-items: center; justify-content: center; min-height: 50vh; padding: 30px; }
         .role-cards { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+
         .role-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -111,52 +42,126 @@
             transition: all 0.3s;
             width: 220px;
         }
-        .role-card:hover { border-color: var(--accent); transform: translateY(-5px); }
-        .role-icon { font-size: 3rem; margin-bottom: 12px; }
-        .role-card h2 { font-size: 1.5rem; margin-bottom: 8px; }
-        .role-card p { font-size: 0.8rem; color: var(--text-secondary); }
 
-        .kahoot-layout { display: flex; gap: 20px; padding: 24px; flex-direction: row; }
+        .role-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .role-icon  { font-size: 3rem; margin-bottom: 12px; }
+        .role-card h2 { font-size: 1.5rem; margin-bottom: 8px; }
+        .role-card p  { font-size: .8rem; color: var(--text-secondary); }
+
+        /* ===== Rozloženie hosta/prezentujúceho ===== */
+        .kahoot-layout {
+            display: flex;
+            gap: 20px;
+            padding: 24px;
+        }
+
         @media (max-width: 800px) { .kahoot-layout { flex-direction: column; } }
-        .host-panel { flex: 2; background: var(--surface); border-radius: 24px; padding: 24px; border: 1px solid var(--border); }
-        .players-panel { flex: 1; background: var(--surface); border-radius: 24px; padding: 24px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 16px; }
-        .room-code { text-align: center; background: var(--card-bg); padding: 16px; border-radius: 20px; border: 2px dashed var(--accent); }
-        .code-display { font-size: 2rem; font-weight: 800; letter-spacing: 6px; color: var(--accent); font-family: monospace; }
-        .players-list { background: var(--card-bg); border-radius: 20px; padding: 16px; max-height: 200px; overflow-y: auto; }
+
+        .host-panel {
+            flex: 2;
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+
+        .players-panel {
+            flex: 1;
+            background: var(--surface);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .room-code {
+            text-align: center;
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 20px;
+            border: 2px dashed var(--accent);
+        }
+
+        .code-display {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: 6px;
+            color: var(--accent);
+            font-family: monospace;
+        }
+
+        .players-list {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 16px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
         .players-list h3 { margin-bottom: 12px; font-size: 1rem; }
-        .player-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+
+        .player-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: .9rem;
+        }
+
+        /* ===== Otázka a možnosti (host/presenter) ===== */
         .question-text { font-size: 1.3rem; font-weight: 700; margin-bottom: 20px; }
-        .options-host { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+
+        .options-host {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
         .opt-host-btn {
             padding: 14px;
             background: var(--card-bg);
             border: 2px solid var(--border);
             border-radius: 16px;
-            font-size: 0.9rem;
+            font-size: .9rem;
             font-weight: 600;
             text-align: left;
             color: var(--text-primary);
         }
+
         .opt-host-btn.A { border-left: 8px solid var(--red); }
         .opt-host-btn.B { border-left: 8px solid var(--blue); }
         .opt-host-btn.C { border-left: 8px solid var(--yellow); }
         .opt-host-btn.D { border-left: 8px solid var(--green); }
-        .opt-host-btn.correct-answer { background: var(--success); border-color: var(--success); }
-        .quiz-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-        .btn { padding: 10px 20px; background: var(--accent); color: white; border: none; border-radius: 40px; font-weight: 600; cursor: pointer; font-size: 0.85rem; }
-        .btn:hover { background: var(--accent-hover); }
-        .btn-danger { background: var(--danger); }
-        .btn-fullscreen { background: var(--surface-light); color: var(--text-primary); }
-        .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
-        .checkbox-group label { display: flex; align-items: center; gap: 6px; background: var(--card-bg); padding: 5px 12px; border-radius: 40px; border: 1px solid var(--border); cursor: pointer; font-size: 0.8rem; }
-        select.btn { background: var(--surface-light); color: var(--text-primary); }
+        .opt-host-btn.correct-answer { background: var(--success); border-color: var(--success); color: white; }
 
+        .quiz-controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+        .btn-danger     { background: var(--danger) !important; }
+        .btn-fullscreen { background: var(--surface-light) !important; color: var(--text-primary) !important; }
+
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--card-bg);
+            padding: 5px 12px;
+            border-radius: 40px;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            font-size: .8rem;
+        }
+
+        select.btn { background: var(--surface-light) !important; color: var(--text-primary) !important; }
+
+        /* ===== Celá obrazovka (host / presenter) ===== */
         .host-fullscreen {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background: var(--bg-primary);
             z-index: 2000;
             display: none;
@@ -164,30 +169,28 @@
             padding: 40px;
             overflow-y: auto;
         }
+
         .host-fullscreen.active { display: flex; }
         .host-fullscreen .question-text { font-size: 2.5rem; }
-        .host-fullscreen .opt-host-btn { padding: 30px; font-size: 1.5rem; }
+        .host-fullscreen .opt-host-btn  { padding: 30px; font-size: 1.5rem; }
+
         .close-fullscreen {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 20px; right: 20px;
             background: var(--danger);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 50px; height: 50px;
             font-size: 1.5rem;
             cursor: pointer;
         }
 
+        /* ===== Pohľad hráča ===== */
         .player-view {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background: var(--bg-primary);
             z-index: 1000;
             flex-direction: column;
@@ -195,7 +198,9 @@
             justify-content: center;
             padding: 20px;
         }
+
         .player-view.active { display: flex; }
+
         .join-card {
             background: var(--surface);
             border-radius: 32px;
@@ -205,6 +210,7 @@
             width: 100%;
             border: 1px solid var(--border);
         }
+
         .join-input {
             padding: 12px 16px;
             font-size: 1rem;
@@ -216,15 +222,17 @@
             text-align: center;
             margin: 8px 0;
         }
+
         .game-fullscreen {
             display: none;
             flex-direction: column;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             background: var(--bg-primary);
             position: relative;
         }
+
         .game-fullscreen.active { display: flex; }
+
         .game-header {
             padding: 16px;
             display: flex;
@@ -233,23 +241,30 @@
             background: var(--surface);
             border-bottom: 1px solid var(--border);
         }
-        .question-progress { font-size: 0.85rem; background: var(--card-bg); padding: 6px 12px; border-radius: 40px; }
+
+        .question-progress {
+            font-size: .85rem;
+            background: var(--card-bg);
+            padding: 6px 12px;
+            border-radius: 40px;
+        }
+
         .timer-circle {
-            width: 50px;
-            height: 50px;
+            width: 50px; height: 50px;
             border-radius: 50%;
             background: var(--card-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             font-size: 1.5rem;
             font-weight: 800;
             font-family: monospace;
             border: 2px solid var(--accent);
             color: var(--accent);
         }
+
         .timer-circle.warning { border-color: var(--danger); color: var(--danger); animation: pulse 0.5s infinite; }
+
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
         .game-question {
             flex: 1;
             display: flex;
@@ -261,6 +276,7 @@
             font-weight: 700;
             line-height: 1.4;
         }
+
         .game-answers {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -269,6 +285,7 @@
             background: var(--bg-secondary);
             border-top: 1px solid var(--border);
         }
+
         .game-ans-btn {
             padding: 20px 12px;
             border: none;
@@ -282,31 +299,35 @@
             align-items: center;
             gap: 6px;
         }
-        .game-ans-btn:active { transform: scale(0.96); }
-        .game-ans-btn.disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .game-ans-btn:active     { transform: scale(0.96); }
+        .game-ans-btn:disabled   { opacity: .5; cursor: not-allowed; transform: none; }
+
         .ans-letter { font-size: 2rem; font-weight: 900; }
-        .ans-text { font-size: 0.7rem; font-weight: 400; text-align: center; word-break: break-word; max-width: 100%; }
-        .ans-btn-A { background: var(--red); color: white; }
-        .ans-btn-B { background: var(--blue); color: white; }
+        .ans-text   { font-size: .7rem; font-weight: 400; text-align: center; word-break: break-word; }
+
+        .ans-btn-A { background: var(--red);    color: white; }
+        .ans-btn-B { background: var(--blue);   color: white; }
         .ans-btn-C { background: var(--yellow); color: #1a1a00; }
-        .ans-btn-D { background: var(--green); color: white; }
+        .ans-btn-D { background: var(--green);  color: white; }
+
         .game-feedback {
             position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            bottom: 0; left: 0; right: 0;
             padding: 20px;
             text-align: center;
             font-size: 1rem;
             font-weight: 600;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,.9);
             transform: translateY(100%);
             transition: transform 0.3s;
             z-index: 1001;
         }
-        .game-feedback.show { transform: translateY(0); }
+
+        .game-feedback.show    { transform: translateY(0); }
         .game-feedback.correct { background: var(--success); color: white; }
-        .game-feedback.wrong { background: var(--danger); color: white; }
+        .game-feedback.wrong   { background: var(--danger);  color: white; }
+
         .game-waiting {
             display: flex;
             flex-direction: column;
@@ -316,10 +337,11 @@
             text-align: center;
             padding: 20px;
         }
+
+        /* ===== Výsledky kola ===== */
         .round-results {
             position: fixed;
-            top: 50%;
-            left: 50%;
+            top: 50%; left: 50%;
             transform: translate(-50%, -50%);
             background: var(--surface);
             border-radius: 32px;
@@ -331,19 +353,26 @@
             text-align: center;
             border: 2px solid var(--accent);
         }
+
         .round-results.active { display: block; animation: popIn 0.3s ease; }
-        @keyframes popIn { from { transform: translate(-50%, -50%) scale(0.8); opacity: 0; } to { transform: translate(-50%, -50%) scale(1); opacity: 1; } }
+
+        @keyframes popIn {
+            from { transform: translate(-50%,-50%) scale(0.8); opacity: 0; }
+            to   { transform: translate(-50%,-50%) scale(1);   opacity: 1; }
+        }
+
         .round-results h3 { color: var(--accent); margin-bottom: 16px; }
+
         .top-list { text-align: left; margin: 16px 0; max-height: 300px; overflow-y: auto; }
         .top-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid var(--border); }
-        .top-item.first { background: rgba(245,158,11,0.2); border-radius: 12px; font-weight: 800; }
+        .top-item.first { background: rgba(245,158,11,.2); border-radius: 12px; font-weight: 800; }
+
         .my-rank { margin-top: 16px; padding: 12px; background: var(--card-bg); border-radius: 16px; }
+
+        /* ===== Výsledky koniec ===== */
         .results-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            inset: 0;
             background: var(--bg-primary);
             z-index: 1002;
             display: none;
@@ -353,7 +382,9 @@
             padding: 20px;
             overflow-y: auto;
         }
+
         .results-overlay.active { display: flex; }
+
         .results-card {
             background: var(--surface);
             border-radius: 32px;
@@ -362,2397 +393,211 @@
             width: 100%;
             text-align: center;
         }
+
         .final-score { font-size: 3rem; font-weight: 800; color: var(--accent); margin: 16px 0; }
-        footer { text-align: center; padding: 16px; background: var(--surface); color: var(--text-secondary); border-top: 1px solid var(--border); font-size: 0.75rem; }
-        .footer-links { margin-top: 8px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-        .footer-links a { color: var(--text-secondary); text-decoration: none; font-size: 0.75rem; }
-        .footer-links a:hover { color: var(--accent); }
     </style>
 </head>
 <body>
-<div class="container">
-    <header>
-        <div class="header-top">
-            <div class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</div>
-        </div>
-        <h1>🎮 FEJKHOOT</h1>
-        <p class="subtitle">Multiplayer hra - hosť vytvorí hru, hráči a prezentujúci sa pripájajú cez kód</p>
-        <div class="nav-bar">
-            <a href="index.html" class="nav-link">🏠 Hlavná</a>
-            <a href="spravne_odpovede.html" class="nav-link">📚 Odpovede</a>
-            <a href="kviz.html" class="nav-link">🎯 Kvíz</a>
-            <a href="fejkhoot.html" class="nav-link">🎮 FEJKHOOT</a>
-        </div>
-    </header>
 
-    <main>
-        <div id="roleScreen" class="role-screen">
-            <div class="role-cards">
-                <div class="role-card" onclick="selectRole('host')"><div class="role-icon">🖥️</div><h2>Hostiteľ</h2><p>Vytvor hru na veľkej obrazovke</p></div>
-                <div class="role-card" onclick="selectRole('presenter')"><div class="role-icon">📽️</div><h2>Prezentujúci</h2><p>Pripoj sa k hre a zobrazuj otázky</p></div>
-                <div class="role-card" onclick="selectRole('player')"><div class="role-icon">📱</div><h2>Hráč</h2><p>Pripoj sa cez telefón a odpovedaj</p></div>
+    <div class="container">
+        <header>
+            <div class="header-top">
+                <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
             </div>
-        </div>
+            <h1>🎮 FEJKHOOT</h1>
+            <p class="subtitle">Multiplayer hra — hosť vytvorí hru, hráči a prezentujúci sa pripájajú cez kód</p>
+            <nav class="nav-bar">
+                <a href="index.html"            class="nav-link">🏠 Hlavná</a>
+                <a href="spravne_odpovede.html" class="nav-link">📚 Odpovede</a>
+                <a href="kviz.html"             class="nav-link">🎯 Kvíz</a>
+                <a href="fejkhoot.html"         class="nav-link">🎮 FEJKHOOT</a>
+            </nav>
+        </header>
 
-        <!-- HOST VIEW -->
-        <div id="hostView" class="kahoot-layout" style="display: none;">
-            <div class="host-panel">
-                <h2>🎮 Hostiteľ <button class="btn btn-fullscreen" onclick="toggleHostFullscreen()" style="margin-left:10px">🖥️ Celá obrazovka</button></h2>
-                <div class="question-area">
+        <main>
+
+            <!-- ===== VÝBER ROLY ===== -->
+            <div id="roleScreen" class="role-screen">
+                <div class="role-cards">
+                    <div class="role-card" onclick="selectRole('host')">
+                        <div class="role-icon">🖥️</div>
+                        <h2>Hostiteľ</h2>
+                        <p>Vytvor hru na veľkej obrazovke</p>
+                    </div>
+                    <div class="role-card" onclick="selectRole('presenter')">
+                        <div class="role-icon">📽️</div>
+                        <h2>Prezentujúci</h2>
+                        <p>Pripoj sa k hre a zobrazuj otázky</p>
+                    </div>
+                    <div class="role-card" onclick="selectRole('player')">
+                        <div class="role-icon">📱</div>
+                        <h2>Hráč</h2>
+                        <p>Pripoj sa cez telefón a odpovedaj</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== HOSTITEĽ ===== -->
+            <div id="hostView" class="kahoot-layout" style="display:none;">
+                <div class="host-panel">
+                    <h2>🎮 Hostiteľ
+                        <button class="btn btn-fullscreen" onclick="toggleHostFullscreen()" style="margin-left:10px;">🖥️ Celá obrazovka</button>
+                    </h2>
                     <div class="question-text" id="questionText">Vyber kategórie a klikni Štart</div>
                     <div class="options-host" id="hostOptions"></div>
                     <div class="quiz-controls">
                         <div class="checkbox-group" id="categoryCheckboxes">
-                            <label><input type="checkbox" value="A" checked> Test A</label>
-                            <label><input type="checkbox" value="B" checked> Test B</label>
-                            <label><input type="checkbox" value="C" checked> Test C</label>
-                            <label><input type="checkbox" value="D" checked> Test D</label>
+                            <label><input type="checkbox" value="A"   checked> Test A</label>
+                            <label><input type="checkbox" value="B"   checked> Test B</label>
+                            <label><input type="checkbox" value="C"   checked> Test C</label>
+                            <label><input type="checkbox" value="D"   checked> Test D</label>
                             <label><input type="checkbox" value="LEG" checked> Legislatíva</label>
                         </div>
-                        <select id="questionCountSelect" class="btn"><option value="5">5 otázok</option><option value="10" selected>10 otázok</option><option value="15">15 otázok</option><option value="20">20 otázok</option></select>
+                        <select id="questionCountSelect" class="btn">
+                            <option value="5">5 otázok</option>
+                            <option value="10" selected>10 otázok</option>
+                            <option value="15">15 otázok</option>
+                            <option value="20">20 otázok</option>
+                        </select>
                         <button class="btn" id="startGameBtn" disabled>🚀 Spustiť hru</button>
-                        <button class="btn" id="nextQuestionBtn" style="display: none;">⏩ Ďalšia otázka</button>
-                        <button class="btn btn-danger" id="endGameBtn" style="display: none;">🏁 Ukončiť</button>
+                        <button class="btn" id="nextQuestionBtn" style="display:none;">⏩ Ďalšia otázka</button>
+                        <button class="btn btn-danger" id="endGameBtn" style="display:none;">🏁 Ukončiť</button>
+                    </div>
+                </div>
+
+                <div class="players-panel">
+                    <div class="room-code">
+                        <h3>📋 Kód miestnosti</h3>
+                        <div class="code-display" id="roomCode">------</div>
+                        <p style="font-size:.7rem; margin-top:8px;">Hráči zadajú tento kód</p>
+                    </div>
+                    <div class="players-list">
+                        <h3>👥 Hráči v lobby (<span id="playerCount">0</span>)</h3>
+                        <div id="playersList"></div>
+                    </div>
+                    <div class="players-list">
+                        <h3>🏆 Leaderboard</h3>
+                        <div id="leaderboard"></div>
                     </div>
                 </div>
             </div>
-            <div class="players-panel">
-                <div class="room-code"><h3>📋 Kód miestnosti</h3><div class="code-display" id="roomCode">------</div><p style="font-size:0.7rem; margin-top:8px">Hráči zadajú tento kód</p></div>
-                <div class="players-list"><h3>👥 Hráči v lobby (<span id="playerCount">0</span>)</h3><div id="playersList"></div></div>
-                <div class="players-list"><h3>🏆 Leaderboard</h3><div id="leaderboard"></div></div>
-            </div>
-        </div>
-        <div id="hostFullscreen" class="host-fullscreen"><button class="close-fullscreen" onclick="toggleHostFullscreen()">✕</button><div class="question-text" id="fsQuestionText"></div><div class="options-host" id="fsHostOptions"></div></div>
 
-        <!-- PRESENTER VIEW -->
-        <div id="presenterView" class="kahoot-layout" style="display: none;">
-            <div class="host-panel" style="flex:2">
-                <h2>📽️ Prezentujúci <button class="btn btn-fullscreen" onclick="togglePresenterFullscreen()" style="margin-left:10px">🖥️ Celá obrazovka</button></h2>
-                <div class="question-area">
+            <!-- Hostiteľ celá obrazovka -->
+            <div id="hostFullscreen" class="host-fullscreen">
+                <button class="close-fullscreen" onclick="toggleHostFullscreen()">✕</button>
+                <div class="question-text" id="fsQuestionText"></div>
+                <div class="options-host" id="fsHostOptions"></div>
+            </div>
+
+            <!-- ===== PREZENTUJÚCI ===== -->
+            <div id="presenterView" class="kahoot-layout" style="display:none;">
+                <div class="host-panel" style="flex:2;">
+                    <h2>📽️ Prezentujúci
+                        <button class="btn btn-fullscreen" onclick="togglePresenterFullscreen()" style="margin-left:10px;">🖥️ Celá obrazovka</button>
+                    </h2>
                     <div class="question-text" id="presQuestionText">Zadaj kód miestnosti a klikni Pripojiť</div>
                     <div class="options-host" id="presOptions"></div>
                     <div class="quiz-controls">
-                        <input type="text" id="presJoinCode" class="join-input" placeholder="Kód miestnosti" style="width:150px; margin:0">
-                        <input type="text" id="presName" class="join-input" placeholder="Tvoje meno" style="width:150px; margin:0" value="Prezentátor">
+                        <input type="text" id="presJoinCode" class="join-input" placeholder="Kód miestnosti" style="width:150px;margin:0;">
+                        <input type="text" id="presName" class="join-input" placeholder="Tvoje meno" style="width:150px;margin:0;" value="Prezentátor">
                         <button class="btn" id="presJoinBtn">🔗 Pripojiť sa k hre</button>
-                        <button class="btn" id="presDisconnectBtn" style="display:none; background:var(--danger)">❌ Odpojiť</button>
+                        <button class="btn btn-danger" id="presDisconnectBtn" style="display:none;">❌ Odpojiť</button>
+                    </div>
+                </div>
+
+                <div class="players-panel" style="flex:1;">
+                    <div class="players-list">
+                        <h3>🏆 Leaderboard</h3>
+                        <div id="presLeaderboard"></div>
+                    </div>
+                    <div class="players-list">
+                        <h3>📊 Štatistika</h3>
+                        <div id="presStats">Zatiaľ žiadne dáta</div>
                     </div>
                 </div>
             </div>
-            <div class="players-panel" style="flex:1">
-                <div class="players-list"><h3>🏆 Leaderboard</h3><div id="presLeaderboard"></div></div>
-                <div class="players-list"><h3>📊 Štatistika</h3><div id="presStats">Zatiaľ žiadne dáta</div></div>
+
+            <!-- Prezentujúci celá obrazovka -->
+            <div id="presFullscreen" class="host-fullscreen">
+                <button class="close-fullscreen" onclick="togglePresenterFullscreen()">✕</button>
+                <div class="question-text" id="presFsQuestionText"></div>
+                <div class="options-host" id="presFsOptions"></div>
+                <div class="timer-circle" id="presTimer" style="position:absolute;top:20px;right:80px;">15</div>
+                <div style="position:absolute;bottom:20px;left:20px;background:var(--card-bg);padding:10px;border-radius:16px;max-width:300px;">
+                    <div id="presFsLeaderboard"></div>
+                </div>
             </div>
-        </div>
-        <div id="presFullscreen" class="host-fullscreen">
-            <button class="close-fullscreen" onclick="togglePresenterFullscreen()">✕</button>
-            <div class="question-text" id="presFsQuestionText"></div>
-            <div class="options-host" id="presFsOptions"></div>
-            <div class="timer-circle" id="presTimer" style="position: absolute; top: 20px; right: 80px;">15</div>
-            <div style="position: absolute; bottom: 20px; left: 20px; background: var(--card-bg); padding: 10px; border-radius: 16px; max-width: 300px;"><div id="presFsLeaderboard"></div></div>
-        </div>
 
-        <!-- PLAYER VIEW -->
-        <div id="playerView" class="player-view">
-            <div id="joinScreen" class="join-card"><h2>🎮 Pripojiť sa</h2><input type="text" id="joinCodeInput" class="join-input" placeholder="Kód miestnosti" maxlength="6"><input type="text" id="playerNameInput" class="join-input" placeholder="Tvoje meno"><button class="btn" id="joinGameBtn" style="width:100%">🔗 Pripojiť sa</button></div>
-            <div id="gameFullscreen" class="game-fullscreen"><div class="game-header"><span class="question-progress" id="gameProgress">Otázka 1/10</span><div class="timer-circle" id="gameTimer">15</div></div><div class="game-question" id="gameQuestionText">Načítavam...</div><div class="game-answers" id="gameAnswers"></div><div id="gameFeedback" class="game-feedback"></div></div>
-            <div id="gameWaiting" class="game-fullscreen"><div class="game-waiting"><div style="font-size:3rem; margin-bottom:20px">⏳</div><h2>Čakáme na začiatok...</h2><p style="color:var(--text-secondary); margin-top:10px">Hostiteľ čoskoro spustí hru</p></div></div>
-        </div>
+            <!-- ===== HRÁČ ===== -->
+            <div id="playerView" class="player-view">
+                <div id="joinScreen" class="join-card">
+                    <h2>🎮 Pripojiť sa</h2>
+                    <input type="text" id="joinCodeInput" class="join-input" placeholder="Kód miestnosti" maxlength="6">
+                    <input type="text" id="playerNameInput" class="join-input" placeholder="Tvoje meno">
+                    <button class="btn" id="joinGameBtn" style="width:100%;">🔗 Pripojiť sa</button>
+                </div>
 
-        <div id="roundResults" class="round-results"><h3>📊 Výsledky kola</h3><div id="roundTopList" class="top-list"></div><div id="roundMyRank" class="my-rank"></div><button class="btn" onclick="closeRoundResults()" style="margin-top:16px">Pokračovať</button></div>
-        <div id="resultsOverlay" class="results-overlay"><div class="results-card"><h2>🏆 Kvíz skončil!</h2><div class="final-score" id="finalScore">0 bodov</div><div id="finalRank"></div><button class="btn close-results" onclick="closeResults()">🔙 Späť do lobby</button></div></div>
-    </main>
-    <footer><p>© 2026 ELTEC Certifikačný systém - Džanči</p><div class="footer-links"><a href="index.html">🏠 Hlavná</a><a href="spravne_odpovede.html">📚 Odpovede</a><a href="kviz.html">🎯 Kvíz</a><a href="kahoot.html">🎮 Kahoot</a></div> <p style="margin-top: 8px;">⚙️ Posledný update: 22.4.2026 - 21:25</p></footer>
-</div>
+                <div id="gameFullscreen" class="game-fullscreen">
+                    <div class="game-header">
+                        <span class="question-progress" id="gameProgress">Otázka 1/10</span>
+                        <div class="timer-circle" id="gameTimer">15</div>
+                    </div>
+                    <div class="game-question" id="gameQuestionText">Načítavam...</div>
+                    <div class="game-answers" id="gameAnswers"></div>
+                    <div id="gameFeedback" class="game-feedback"></div>
+                </div>
 
-<script>
-    // ========== FIREBASE ==========
-    const firebaseConfig = { databaseURL: "https://eltec-fejkhoot-default-rtdb.europe-west1.firebasedatabase.app/" };
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+                <div id="gameWaiting" class="game-fullscreen">
+                    <div class="game-waiting">
+                        <div style="font-size:3rem;margin-bottom:20px;">⏳</div>
+                        <h2>Čakáme na začiatok...</h2>
+                        <p style="color:var(--text-secondary);margin-top:10px;">Hostiteľ čoskoro spustí hru</p>
+                    </div>
+                </div>
+            </div>
 
-    // ========== OTÁZKY (ukážka) ==========
-    const questionsDatabase = {
-            'A': [
-                    {
-                        id: "A_1", chapter: "A",
-                        question: "Aký je postup pripojenia ochranného vodiča v jednofázovej zásuvke v sieti TNC?",
-                        options: [
-                            "ochranný vodič najprv privedieme na pravú pracovnú dierku",
-                            "ochranný vodič najprv privedieme na ochranný kolík",
-                            "na poradí pripojenia na dierku alebo na kolik nezáleží",
-                            "na dierku privedieme jeden vodič a na kolík druhý vodič"
-                        ],
-                        correct: [1], type: "single"
-                    },
-                    {
-                        id: "A_2", chapter: "A",
-                        question: "Jednou z ochrán živých častí elektrických zariadení je ochrana zábranou. Je zábrana priamo súčasťou elektrického zariadenia?",
-                        options: [
-                            "áno",
-                            "nie",
-                            "zábrana nie je ochrana živých častí elektrických zariadení"
-                        ],
-                        correct: [1], type: "single"
-                    },
-                    {
-                        id: "A_3", chapter: "A",
-                        question: "Stupeň ochrany krytím sa označuje symbolom IP a potom nasledujú dve povinné čísla. Čo vyjadruje prvé povinné číslo?",
-                        options: [
-                            "stupeň ochrany pred vniknutím vody",
-                            "stupeň ochrany pred vniknutím cudzieho telesa",
-                            "typ materiálu z ktorého je kryt zhotovený",
-                            "ochrana krytím sa vyjadruje symbolom PI"
-                        ],
-                        correct: [1], type: "single"
-                    },
-                    {
-                        id: "A_4", chapter: "A",
-                        question: "Ktorý je najnižší prakticky používaný stupeň ochrany krytím (okrem spodku poistiek a objímok žiaroviek)?",
-                        options: [
-                            "IP XY",
-                            "IP 2X",
-                            "IP X2",
-                            "IP XXB"
-                        ],
-                        correct: [1], type: "single"
-                    },
-                    {
-                        id: "A_5", chapter: "A",
-                        question: "Stupeň ochrany krytím sa označuje symbolom IP a potom nasledujú dve povinné čísla. Čo vyjadruje druhé povinné číslo?",
-                        options: [
-                            "stupeň ochrany pred vniknutím vody",
-                            "stupeň ochrany pred vniknutím cudzieho telesa",
-                            "ochrana krytím sa vyjadruje symbolom PI",
-                            "typ materiálu z ktorého je kryt zhotovený"
-                        ],
-                        correct: [0], type: "single"
-                    },
-                    {
-                        id: "A_6", chapter: "A",
-                        question: "Je lakovanie, smaltovanie alebo natretie farbou súčasťou izolácie, ktorá znemožní nebezpečný dotyk živých častí zariadenia?",
-                        options: [
-                            "áno",
-                            "nie",
-                            "žiadna izolácia neznemožní dotyk živej časti"
-                        ],
-                        correct: [1], type: "single"
-                    },
-                    {
-                        id: "A_7", chapter: "A",
-                        question: "Pre aké napätia musí byť navrhnutá základná izolácia?",
-                        options: [
-                            "pre menovité napätia",
-                            "pre menovité napätia a očakávané prepätia",
-                            "pre 10 násobok menovitého napätia",
-                            "pre 8 násobok menovitého napätia"
-                        ],
-                        correct: [1], type: "single"
-                    },
-                    {
-                        id: "A_8", chapter: "A",
-                        question: "Čo sa používa ako doplnková izolácia?",
-                        options: [
-                            "dvojitá alebo zosilnená izolácia",
-                            "izolačný koberec na stanovišti",
-                            "dielektrické rukavice galoše",
-                            "vypínacia tyč"
-                        ],
-                        correct: [1,2], type: "multi"
-                    },
-                    {
-                        id: "A_9", chapter: "A",
-                        question: "V čom spočíva ochrana odpojením od zdroja v TN sieťach?",
-                        options: [
-                            "poruchové elektrické zariadenie je odpojené od zdroja",
-                            "pri poruche je vypnutý zdroj",
-                            "na vypnutie poruchy sa použije ochranný vodič",
-                            "ochranný vodič je spojený s uzlom zdroja"
-                        ],
-                        correct: [0,2,3], type: "multi"
-                    },
-                    {
-                        id: "A_10", chapter: "A",
-                        question: "Môže sa ochranný vodič istiť?",
-                        options: [
-                            "nesmie sa istiť",
-                            "musí sa istiť",
-                            "môže sa istiť poistkou",
-                            "môže sa istiť ističom"
-                        ],
-                        correct: [0], type: "single"
-                    },
-                    {
-                        id: "A_11", chapter: "A",
-                        question: "Aký má byť celkový zemný odpor ochranných vodičov transformátora vrátane jeho uzemneného uzla, ak je odpor pôdy v hĺbke 1 až 3 m do 200 ohmov?",
-                        options: [
-                            "do 2 Ω",
-                            "do 15 Ω",
-                            "do 5 Ω",
-                            "do 20 Ω"
-                        ],
-                        correct: [0], type: "single"
-                    },
-                    {
-                        id: "A_12", chapter: "A",
-                        question: "Aký má byť zemný odpor pracovného uzemnenia uzla zdroja v bežných pôdnych podmienkach?",
-                        options: [
-                            "do 15 Ω",
-                            "do 5 Ω",
-                            "do 20 Ω",
-                            "do 10 Ω"
-                        ],
-                        correct: [1], type: "single"
-                    },
-                    {
-                        id: "A_13", chapter: "A",
-                        question: "Kde sa musí uzemniť ochranný vodič v sieťach TNC a TNS v objektoch s vlastným transformátorom?",
-                        options: [
-                            "nemusí sa zvlášť uzemniť",
-                            "pri hlavnom rozvádzači",
-                            "na koncoch odbočiek dlhších ako 200 m",
-                            "každých 500 m a na konci vedenia"
-                        ],
-                        correct: [1,2,3], type: "multi"
-                    },
-                    {
-                        id: "A_14", chapter: "A",
-                        question: "V čom spočíva podstata ochrany zemnením?",
-                        options: [
-                            "neživá časť elektrického zariadenia sa spojí so zemou",
-                            "zem sa používa na vedenie poruchy",
-                            "porucha sa zo zeme neodvádza",
-                            "uzol zdroja musí byť pri ochrane zemnením vždy uzemnený"
-                        ],
-                        correct: [0,1], type: "multi"
-                    },
-                    {
-                        id: "A_15", chapter: "A",
-                        question: "Je nutné, aby v sieti s uzemneným uzlom pri ochrane zemnením boli ochranné kolíky zásuviek spojené zemničom so zemou?",
-                        options: [
-                            "nie - nie je to nutné",
-                            "nie - nie je to dovolené",
-                            "nezáleží na tom",
-                            "áno - jedine tak je to správne"
-                        ],
-                        correct: [3], type: "single"
-                    },
-                    {
-                        id: "A_16", chapter: "A",
-                        question: "Je dovolené pri ochrane zemnením pripájať neživé časti elektrických zariadení na stredný vodič rozvodnej sústavy?",
-                        options: [
-                            "áno - je to dovolené",
-                            "nie - pri ochrane zemnením sa stredný vodič nikdy nepoužíva",
-                            "áno - pri ochrane zemnením sa stredný vodič vždy používa",
-                            "nie"
-                        ],
-                        correct: [3], type: "single"
-                    },
-                    {
-                        id: "A_17", chapter: "A",
-                        question: "V akom čase nastáva samočinné odpojenie poruchového zariadenia od zdroja v prípade použitia chráničov (prúdového alebo napäťového)?",
-                        options: [
-                            "v čase od 2 s",
-                            "v čase do 0.2 s",
-                            "v čase do 1 s",
-                            "v čase do 5 s"
-                        ],
-                        correct: [1], type: "single"
-                    },
-                    {
-                        id: "A_18", chapter: "A",
-                        question: "Kde sa pripája vypínacia cievka ochrannej spúšte napäťového chrániča?",
-                        options: [
-                            "na neživú časť chráneného zariadenia",
-                            "na svoj uzemňovač",
-                            "na vodič PEN"
-                        ],
-                        correct: [0,1], type: "multi"
-                    },
-                    {
-                        id: "A_19", chapter: "A",
-                        question: "V prúdovom chrániči je za normálneho stavu geometrický súčet pritekajúcich a odtekajúcich prúdov rovný nule. Ktoré vodiče sa vedú cez súčtový transformátor prúdového chrániča?",
-                        options: [
-                            "všetky pracovné vodiče a stredný ak je ako pracovný",
-                            "len ochranný vodič",
-                            "len fázové vodiče"
-                        ],
-                        correct: [0], type: "single"
-                    },
-                    {
-                        id: "A_20", chapter: "A",
-                        question: "Je stredný vodič vždy spojený cez uzol zdroja so zemou?",
-                        options: [
-                            "v sieti TT nie",
-                            "v sieti IT nie",
-                            "v sieťach TN nie",
-                            "vždy musí byť spojený so zemou"
-                        ],
-                        correct: [1], type: "single"
-                    },
-                    {
-                        id: "A_21", chapter: "A",
-                        question: "Ako sa volá ochrana, kde sa spoja všetky neživé časti chránených elektrických zariadení so všetkými kovovými vodivými časťami na okolí? (kovové potrubia, vane,...)",
-                        options: [
-                            "ochrana uzemnením na náhodné zemniče",
-                            "ochrana pospájaním",
-                            "ochrana nulovaním",
-                            "ochrana bezpečným napätím"
-                        ],
-                        correct: [1], type: "single"
-                    },
-                    {
-                        id: "A_22", chapter: "A",
-                        question: "Aké je možné najväčšie napätie oddeleného prúdového obvodu od obvodov rozvodnej sústavy v prípade ochrany oddelením obvodov?",
-                        options: [
-                            "napätie elektricky oddeleného obvodu nesmie prekročiť 500 V",
-                            "napätie elektricky oddeleného obvodu nesmie prekročiť 50 V",
-                            "napätie elektricky oddeleného obvodu nesmie prekročiť 1500 V",
-                            "napätie elektricky oddeleného obvodu nesmie prekročiť 1000 V"
-                        ],
-                        correct: [0], type: "single"
-                    },
-                    {
-                        id: "A_23", chapter: "A",
-                        question: "Ktorý obvod zabráni vzniku nebezpečného dotykového napätia na neživej časti chráneného elektrického zariadenia v prípade ochrany bezpečným napätím?",
-                        options: [
-                            "SELV",
-                            "PELV",
-                            "FELV",
-                            "MELVV"
-                        ],
-                        correct: [0,1,2], type: "multi"
-                    },
-                    {
-                        id: "A_24", chapter: "A",
-                        question: "Označenie prepäťovej ochrany je:",
-                        options: [
-                            "SPD",
-                            "SDP",
-                            "PDS",
-                            "SPS"
-                        ],
-                        correct: [0], type: "single"
-                    },
-                    {
-                        id: "A_25", chapter: "A",
-                        question: "Typy prepäťových ochrán sú:",
-                        options: [
-                            "Typ B Typ C Typ D",
-                            "Typ A Typ B Typ C",
-                            "Typ A Typ B Typ C Typ D"
-                        ],
-                        correct: [0], type: "single"
-                    },
-                    {
-                        id: "A_26", chapter: "A",
-                        question: "Každý bleskozvod má tieto tri hlavné časti:",
-                        options: [
-                            "zachytávacie zariadenie skúšobné svorky a uzemňovače",
-                            "zachytávacie zariadenie zvody a skúšobné svorky",
-                            "zachytávacie zariadenie zvody a uzemňovače"
-                        ],
-                        correct: [2], type: "single"
-                    },
-                    {
-                        id: "A_27", chapter: "A",
-                        question: "Náhodné zberače bleskozvodu tvoria:",
-                        options: [
-                            "izolačné predmety ktoré sú súčasťou chráneného objektu",
-                            "kovové predmety ktoré nie sú súčasťou chráneného objektu",
-                            "kovové predmety ktoré sú súčasťou chráneného objektu"
-                        ],
-                        correct: [2], type: "single"
-                    },
-                    {
-                        id: "A_28", chapter: "A",
-                        question: "Vrcholový uhol kužeľa ochranného priestoru tyčového bleskozvodu je:",
-                        options: [
-                            "112°",
-                            "120°",
-                            "60°"
-                        ],
-                        correct: [0], type: "single"
-                    },
-                    {
-                        id: "A_29", chapter: "A",
-                        question: "Počet zvodov bleskozvodu sa riadi:",
-                        options: [
-                            "pôdorysnými rozmermi tvarom strechy a výškou objektu",
-                            "výškou a dĺžkou objektu",
-                            "výškou objektu a počtom rohov objektu"
-                        ],
-                        correct: [0], type: "single"
-                    },
-                    {
-                        id: "A_30", chapter: "A",
-                        question: "Pri vonkajších zvodoch bleskozvodov sa skúšobná svorka montuje vo výške:",
-                        options: [
-                            "0.6 až 1.8 m nad zemou",
-                            "0.6 až 2.0 m nad zemou",
-                            "1.8 až 2.0 m nad zemou"
-                        ],
-                        correct: [2], type: "single"
-                    },
-                    {
-                        id: "A_31", chapter: "A",
-                        question: "Zhotovené uzemňovače bleskozvodov:",
-                        options: [
-                            "sa majú prednostne použiť",
-                            "sa musia prednostne použiť",
-                            "sa vyhotovujú vtedy ak odpor náhodných nevyhovuje"
-                        ],
-                        correct: [2], type: "single"
-                    },
-                    {
-                        id: "A_32", chapter: "A",
-                        question: "Ako náhodné uzemňovače bleskozvodov sa nesmú použiť:",
-                        options: [
-                            "kovové plášte káblov",
-                            "rozvody plynu horľavých kvapalín a vykurovacích médií",
-                            "vodovodné potrubia"
-                        ],
-                        correct: [1], type: "single"
-                    }
-                ],
-            'B': 
-            [
-                {
-                    id: "B_1", chapter: "B",
-                    question: "Pri meraní ochrany v sieti TT:",
-                    options: [
-                        "ochranné uzemnenie sa spojí cez regulačný odpor R s niektorým neuzemneným krajným vodičom",
-                        "pracovné uzemnenie sa spojí cez regulačný odpor R s niektorým neuzemneným krajným vodičom",
-                        "ochranné uzemnenie sa spojí cez regulačný odpor R s niektorým uzemneným krajným vodičom",
-                        "pracovné uzemnenie sa spojí cez regulačný odpor R s niektorým uzemneným krajným vodičom"
-                    ],
-                    correct: [0,1], type: "multi"
-                },
-                {
-                    id: "B_2", chapter: "B",
-                    question: "Pri meraní ochrany v sieti TT sa regulačným odporom R nastaví na voltmetri V:",
-                    options: [
-                        "sieťové napätie 220 V",
-                        "dovolené dotykové - bezpečné - napätie 50 V",
-                        "ľubovoľné napätie podľa typu voltmetra"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "B_3", chapter: "B",
-                    question: "Pri meraní ochrany v sieti TT sa po nastavení požadovanej hodnoty napätia na voltmetri V:",
-                    options: [
-                        "musí vypnúť predradené istenie v požadovanom čase",
-                        "nemusí vypnúť predradené istenie",
-                        "musí vypnúť predradené istenie v ľubovoľnom čase"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "B_4", chapter: "B",
-                    question: "Ak ostane pri meraní ochrany v sieti TT napätie na voltmetri V aj pri úplnom vyradení odporu R (skrat) pod hodnotou 50 V, tak uzemnenie:",
-                    options: [
-                        "vyhovuje aj v prípade že vypínacie prvky nevypnú",
-                        "vyhovuje len v prípade že vypínacie prvky nevypnú",
-                        "nevyhovuje"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "B_5", chapter: "B",
-                    question: "Pri skúšaní ochrany napäťovým chráničom sa musí zapnúť zariadenie na chrániči. Tým sa vyskúša:",
-                    options: [
-                        "či ochrana pracuje",
-                        "či je chránič spojený s pomocným zemničom",
-                        "či je zariadenie funkčné"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "B_6", chapter: "B",
-                    question: "Pri skúšaní ochrany napäťovým chráničom:",
-                    options: [
-                        "chránený elektrický predmet sa spojí cez vhodný rezistor R s jedným neuzemneným krajným vodičom medzi chráničom a elektrickým predmetom",
-                        "chránený elektrický predmet sa spojí cez vhodný rezistor R s uzemneným krajným vodičom medzi chráničom a elektrickým predmetom",
-                        "chránený elektrický predmet sa spojí cez vhodný rezistor R s jedným neuzemneným krajným vodičom medzi chráničom a sondou"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "B_7", chapter: "B",
-                    question: "Pri skúšaní ochrany napäťovým chráničom voltmeter V s vnútorným odporom Rv > 3 000 Ω použijeme na meranie napätia medzi:",
-                    options: [
-                        "sondou a zemničom",
-                        "elektrickým predmetom a sondou S",
-                        "elektrickým predmetom a zemničom"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "B_8", chapter: "B",
-                    question: "Pri skúšaní ochrany napäťovým chráničom má byť sonda vzdialená od pomocného zemniča:",
-                    options: [
-                        "20 m",
-                        "2 m",
-                        "200 m"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "B_9", chapter: "B",
-                    question: "Pri skúšaní ochrany napäťovým chráničom odpor R zvolíme tak, aby na elektrickom predmete vzniklo napätie, ktorého hodnota je:",
-                    options: [
-                        "omnoho menšia ako dovolené dotykové napätie",
-                        "omnoho väčšia ako dovolené dotykové napätie",
-                        "omnoho menšia ako sieťové napätie"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "B_10", chapter: "B",
-                    question: "Pri skúšaní ochrany napäťovým chráničom pri zmenšovaní odporu R musí chránič vypnúť:",
-                    options: [
-                        "skôr ako napätie na elektrickom predmete prekročí dovolené dotykové napätie",
-                        "neskôr ako napätie na elektrickom predmete prekročí dovolené dotykové napätie",
-                        "skôr ako napätie na elektrickom predmete prekročí sieťové napätie"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "B_11", chapter: "B",
-                    question: "Pri meraní odporu uzemnenia musíme merať:",
-                    options: [
-                        "striedavým prúdom lebo pri meraní jednosmerným prúdom sa môže uplatniť polarizácia elektród",
-                        "jednosmerným prúdom lebo pri meraní striedavým prúdom sa môže uplatniť polarizácia elektród",
-                        "ľubovoľným prúdom podľa typu ampérmetra"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "B_12", chapter: "B",
-                    question: "Pri meraní odporu uzemnenia je odpor uzemnenia sústredený v okolí uzemňovača, ktorého veľkosť závisí od:",
-                    options: [
-                        "mernej vodivosti zeme v okolí uzemňovača",
-                        "od tvaru a rozmerov uzemňovača",
-                        "prúdu pretekaného uzemňovačom"
-                    ],
-                    correct: [0,1], type: "multi"
-                },
-                {
-                    id: "B_13", chapter: "B",
-                    question: "Pri meraní odporu uzemnenia možno odmerať napätie voči ktorémukoľvek uzemňovaču:",
-                    options: [
-                        "pomocou špeciálneho voltmetra",
-                        "pomocou napäťovej sondy položenej medzi oboma uzemňovačmi",
-                        "pomocou napäťovej sondy položenej medzi krajnými vodičmi"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "B_14", chapter: "B",
-                    question: "Ak pri meraní odporu uzemnenia odmeriame napätie voči ktorémukoľvek uzemňovaču, vieme následne vypočítať:",
-                    options: [
-                        "odpor uzemnenia",
-                        "odpor krajných vodičov",
-                        "odpor uzemnenia uzla transformátora"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "B_15", chapter: "B",
-                    question: "Pri meraní ochrany v sieti TN možno impedanciu vypínacej slučky merať:",
-                    options: [
-                        "ohmetrom",
-                        "špeciálnymi na tento účel vyvinutými meracími prístrojmi",
-                        "V-A metódou"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "B_16", chapter: "B",
-                    question: "Pri meraní ochrany v sieti TN sa merací prístroj pripojí:",
-                    options: [
-                        "medzi dve fázy",
-                        "medzi sondu a krajný vodič",
-                        "jedným pólom k fázovému vodiču siete a druhým pólom na neživú časť kontrolovaného zariadenia"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "B_17", chapter: "B",
-                    question: "Pri meraní ochrany v sieti TN:",
-                    options: [
-                        "pracuje sa s jednosmerným napätím",
-                        "pracuje sa s malým napätím",
-                        "ide o priame meranie v sieti nn preto treba zachovať zvýšenú opatrnosť"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "B_18", chapter: "B",
-                    question: "Pri meraní ochrany v sieti TN odčítame priamo na meracom prístroji:",
-                    options: [
-                        "hodnotu Zv (impedanciu slučky)",
-                        "údaj o napätí UL-N alebo UL-PE",
-                        "hodnotu prevádzkového prúdu"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "B_19", chapter: "B",
-                    question: "Pri skúšaní ochrany prúdovým chráničom:",
-                    options: [
-                        "chránený elektrický predmet sa spojí cez vhodný rezistor R s jedným neuzemneným krajným vodičom medzi chráničom a elektrickým predmetom",
-                        "chránený elektrický predmet sa spojí cez vhodný rezistor R s uzemneným krajným vodičom medzi chráničom a elektrickým predmetom",
-                        "chránený elektrický predmet sa spojí cez vhodný rezistor R s jedným neuzemneným krajným vodičom medzi chráničom a sondou"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "B_20", chapter: "B",
-                    question: "Pri skúšaní ochrany prúdovým chráničom sa ampérmetrom A odmeria, či:",
-                    options: [
-                        "chránič funguje",
-                        "chránič vypína pri udanom poruchovom prúde",
-                        "chránič vypína pri prevádzkovom prúde"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "B_21", chapter: "B",
-                    question: "Pri skúšaní ochrany prúdovým chráničom voltmeter V s vnútorným odporom Rv > 3 000 Ω použijeme na meranie napätia medzi:",
-                    options: [
-                        "sondou a zemničom",
-                        "elektrickým predmetom a sondou S",
-                        "elektrickým predmetom a zemničom"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "B_22", chapter: "B",
-                    question: "Pri skúšaní ochrany prúdovým chráničom má byť sonda vzdialená od pomocného zemniča:",
-                    options: [
-                        "20 m",
-                        "2 m",
-                        "200 m"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "B_23", chapter: "B",
-                    question: "Pri skúšaní ochrany prúdovým chráničom odpor R zvolíme tak, aby na elektrickom predmete vzniklo napätie, ktorého hodnota je:",
-                    options: [
-                        "omnoho menšia ako dovolené dotykové napätie",
-                        "omnoho väčšia ako dovolené dotykové napätie",
-                        "omnoho menšia ako sieťové napätie"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "B_24", chapter: "B",
-                    question: "Pri skúšaní ochrany prúdovým chráničom pri zmenšovaní odporu R musí chránič vypnúť:",
-                    options: [
-                        "skôr ako napätie na elektrickom predmete prekročí dovolené dotykové napätie",
-                        "neskôr ako napätie na elektrickom predmete prekročí dovolené dotykové napätie",
-                        "skôr ako napätie na elektrickom predmete prekročí sieťové napätie"
-                    ],
-                    correct: [0], type: "single"
-                }
-            ],
-            'C': 
-            [
-                {
-                    id: "C_1", chapter: "C",
-                    question: "Ako rozdeľujeme priestory z hľadiska nebezpečenstva úrazu elektrickým prúdom?",
-                    options: [
-                        "bez nebezpečenstva výbuchu a s nebezpečenstvom výbuchu",
-                        "bezpečné, nebezpečné a zvlášť nebezpečné",
-                        "s prostredím obyčajným, horúcim, mokrým",
-                        "suché, vlhké, mokré"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_2", chapter: "C",
-                    question: "Do akej triedy sú zaradené objekty bez nebezpečenstva výbuchu?",
-                    options: [
-                        "objekty triedy A",
-                        "objekty triedy B",
-                        "objekty triedy B1",
-                        "objekty triedy C"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_3", chapter: "C",
-                    question: "Do akej triedy sú zaradené objekty s nebezpečenstvom výbuchu?",
-                    options: [
-                        "objekty triedy A",
-                        "objekty triedy B",
-                        "objekty triedy C",
-                        "objekty triedy D"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_4", chapter: "C",
-                    question: "Do akej triedy sú zaradené objekty s nebezpečenstvom výbuchu zahŕňajúce regulačné stanice plynu?",
-                    options: [
-                        "objekty triedy A",
-                        "objekty triedy B",
-                        "objekty triedy B1",
-                        "objekty triedy C"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "C_5", chapter: "C",
-                    question: "Kde musí byť umiestnený ochranný kolík v pevnej jednofázovej zásuvke, do ktorej pripájame pohyblivým prívodom prenosné elektrické spotrebiče?",
-                    options: [
-                        "hore nad dierkami",
-                        "dole pod dierkami",
-                        "pri pripájaní prenosných spotrebičov nemusí byť ochranný kolík"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_6", chapter: "C",
-                    question: "Koľko žíl musí mať jednofázová predlžovacia šnúra?",
-                    options: [
-                        "2 alebo 3",
-                        "2",
-                        "3",
-                        "viac ako 3"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "C_7", chapter: "C",
-                    question: "Ako farebne musí byť označený izolovaný ochranný vodič?",
-                    options: [
-                        "zelený",
-                        "žltý",
-                        "hnedý alebo čierny",
-                        "po celej dĺžke má zelenožlté pruhy"
-                    ],
-                    correct: [3], type: "single"
-                },
-                {
-                    id: "C_8", chapter: "C",
-                    question: "Koľko vodičov má pohyblivý prívod pre predmety s triedou ochrany II?",
-                    options: [
-                        "musí mať tri vodiče",
-                        "môže mať dva alebo tri vodiče",
-                        "má len dva vodiče",
-                        "viac ako tri vodiče"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "C_9", chapter: "C",
-                    question: "Kde môže byť prerušovaný ochranný vodič pri pohyblivých prívodoch?",
-                    options: [
-                        "v zásuvkových spojoch, ističoch a vypínačoch",
-                        "len v zásuvkových spojoch",
-                        "v istiacich prvkoch",
-                        "podľa potreby"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_10", chapter: "C",
-                    question: "Čo je uzemnenie?",
-                    options: [
-                        "vodivé spojenie živých alebo neživých častí so zemou",
-                        "vodivé teleso úmyselne vložené do zeme",
-                        "vodivé teleso náhodne sa nachádzajúce v zemi"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_11", chapter: "C",
-                    question: "Aké uzemnenie predstavuje uzemnenie realizované priamym spojením vodivých častí elektrického zariadenia so zemou za účelom ochrany pred nebezpečným dotykom?",
-                    options: [
-                        "dotykové",
-                        "pracovné",
-                        "ochranné",
-                        "bleskozvodné"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "C_12", chapter: "C",
-                    question: "Aké zemniče poznáte?",
-                    options: [
-                        "náhodné a zhotovené",
-                        "ochranné a pracovné",
-                        "priame a nepriame",
-                        "do 1000 V a nad 1000 V"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_13", chapter: "C",
-                    question: "Má elektrický predmet triedy I ochrannú svorku alebo ochranný kontakt?",
-                    options: [
-                        "nie, nemá",
-                        "podľa potreby",
-                        "áno, má",
-                        "elektrické predmety triedy I sú u nás zakázané"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "C_14", chapter: "C",
-                    question: "Má elektrický predmet triedy ochrán II zariadenie na pripojenie ochranného vodiča?",
-                    options: [
-                        "nie, nemá",
-                        "áno, má",
-                        "podľa potreby"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_15", chapter: "C",
-                    question: "Môžu mať vnútorné obvody elektrického predmetu triedy III napätie vyššie ako malé napätie?",
-                    options: [
-                        "áno",
-                        "nie",
-                        "napätie nie je rozhodujúcim kritériom"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_16", chapter: "C",
-                    question: "Elektrické zariadenie je zariadenie určené na?",
-                    options: [
-                        "výrobu elektrickej energie",
-                        "rozvod elektrickej energie",
-                        "spotrebu elektrickej energie",
-                    ],
-                    correct: [0,1,2], type: "multi"
-                },
-                {
-                    id: "C_17", chapter: "C",
-                    question: "Je súčasťou obsluhy elektrického zariadenia aj výmena žiaroviek?",
-                    options: [
-                        "áno",
-                        "nie",
-                        "áno, ale len pri triede II",
-                        "áno, ale len pri zariadeniach s vyššou mierou ohrozenia"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_18", chapter: "C",
-                    question: "Sú úkony ako zabezpečenie pracoviska a meranie prenosnými prístrojmi súčasťou práce na elektrickom zariadení?",
-                    options: [
-                        "áno",
-                        "nie",
-                        "len zabezpečenie pracoviska",
-                        "len meranie prenosnými prístrojmi"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_19", chapter: "C",
-                    question: "Je súčasťou zabezpečenia pracoviska aj príkaz 'B'?",
-                    options: [
-                        "áno",
-                        "nie",
-                        "pojem príkaz 'B' vyhláška nepozná"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_20", chapter: "C",
-                    question: "Je zriaďovanie nových a rekonštrukcia už prevádzkovaných zariadení montážou elektrického zariadenia?",
-                    options: [
-                        "áno",
-                        "nie",
-                        "len zriaďovanie nových",
-                        "len rekonštrukcia"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_21", chapter: "C",
-                    question: "Je čistenie elektrických zariadení pre zaistenie ich dobrého stavu údržbou?",
-                    options: [
-                        "áno, údržba je čistenie",
-                        "áno, spolu so všetkými druhmi opráv a odstraňovaním závad",
-                        "nie, čistenie je obsluhou"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_22", chapter: "C",
-                    question: "Revíziou elektrického zariadenia sa zisťuje, či elektrické zariadenie?",
-                    options: [
-                        "funguje",
-                        "vyhovuje normám",
-                        "má zodpovedajúcu kvalitu",
-                        "má vyhovujúcu technickú dokumentáciu"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_23", chapter: "C",
-                    question: "Pracovné rukavice sú?",
-                    options: [
-                        "ochranné pomôcky",
-                        "pracovné pomôcky",
-                        "pracovný odev",
-                        "pracovné náradie"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_24", chapter: "C",
-                    question: "Patria kódové karty na otvorenie zábrany na vstup do priestoru medzi pracovné pomôcky?",
-                    options: [
-                        "áno, ale len pre zábranu kde nemajú prístup laici",
-                        "áno",
-                        "nie",
-                        "kódové karty patria medzi ochranné pomôcky"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_25", chapter: "C",
-                    question: "Môže byť vedúcim práce aj osoba, ktorá pracuje na elektrickom zariadení sama?",
-                    options: [
-                        "nie, lebo nemá komu byť vedúcim",
-                        "áno",
-                        "v skupine musí byť minimálne 5 pracovníkov"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_26", chapter: "C",
-                    question: "Kto zodpovedá za dodržiavanie bezpečnostných predpisov pri Práci podľa pokynov?",
-                    options: [
-                        "osoba ktorá vydala pokyny",
-                        "pracujúci ktorým boli vydané pokyny",
-                        "osoba ktorá vydala pokyny a aj pracujúci"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_27", chapter: "C",
-                    question: "Kto zodpovedá za dodržiavanie bezpečnostných predpisov pri Práci pod dohľadom?",
-                    options: [
-                        "osoba ktorá robí dohľad",
-                        "pracujúci nad ktorými je dohľad vykonávaný",
-                        "osoba ktorá robí dohľad a aj pracujúci"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "C_28", chapter: "C",
-                    question: "Kto zodpovedá za dodržiavanie bezpečnostných predpisov pri Práci pod dozorom?",
-                    options: [
-                        "osoba ktorá je poverená dozorom",
-                        "pracujúci nad ktorými je dozor vykonávaný",
-                        "osoba ktorá je poverená dozorom a aj pracujúci"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_29", chapter: "C",
-                    question: "Používajú sa pri práci pod napätím (PPN) predpísané špeciálne ochranné pomôcky?",
-                    options: [
-                        "áno",
-                        "nie",
-                        "podľa potreby",
-                        "PPN je zakázaná"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_30", chapter: "C",
-                    question: "Aké typy Prác pod napätím (PPN) rozlišujeme?",
-                    options: [
-                        "PPN v dotyku",
-                        "PPN na vzdialenosť",
-                        "PPN na potenciáli",
-                        "PPN na fáze"
-                    ],
-                    correct: [0,1,2], type: "multi"
-                },
-                {
-                    id: "C_31", chapter: "C",
-                    question: "Priestor ohrozenia pri PPN je vzdialenosť od nekrytých živých častí, ktorá je:",
-                    options: [
-                        "menšia alebo rovná dovolenej vzdialenosti priblíženia",
-                        "väčšia ako dovolená vzdialenosť priblíženia",
-                        "menšia ako dovolená vzdialenosť priblíženia",
-                        "nezávislá na dovolenej vzdialenosti"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_32", chapter: "C",
-                    question: "Zvláštny režim prevádzky (ZRP) - je to súhrn opatrení pri práci?",
-                    options: [
-                        "v beznapäťovom stave",
-                        "v blízkosti napätia",
-                        "pod napätím"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "C_33", chapter: "C",
-                    question: "Znížená viditeľnosť je stav, kedy vedúci práce zo svojho stanoviska?",
-                    options: [
-                        "nerozozná bezpečne pracovníkov alebo obrysy zariadení",
-                        "pracovníkov a zariadenia vidí hmlisto",
-                        "nerozozná ich na vzdialenosť 10 m",
-                        "nerozozná ich na vzdialenosť 15 m"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_34", chapter: "C",
-                    question: "Môžu sa používať aj elektrické zariadenia, ktoré nevyhovujú platným elektrotechnickým normám?",
-                    options: [
-                        "áno, ak neohrozujú bezpečnosť osôb a vecí",
-                        "áno, podľa zvláštnych miestnych predpisov",
-                        "áno",
-                        "nie"
-                    ],
-                    correct: [0,1], type: "multi"
-                },
-                {
-                    id: "C_35", chapter: "C",
-                    question: "Čo sú bezpečnostné oznámenia?",
-                    options: [
-                        "súpis priestupkov",
-                        "vyjadrujú príkazy alebo zákazy pre zaistenie bezpečnosti",
-                        "oznámenia polícii",
-                        "oznámenia Technickej inšpekcii"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_36", chapter: "C",
-                    question: "Ako sú realizované bezpečnostné oznámenia?",
-                    options: [
-                        "píšu sa na predpísaný formulár",
-                        "sú to bezpečnostné tabuľky a nápisy",
-                        "telefónna alebo faxová správa"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_37", chapter: "C",
-                    question: "Môžu sa bezpečnostné tabuľky upevňovať na živé časti pod napätím?",
-                    options: [
-                        "áno",
-                        "nie",
-                        "môže tak urobiť elektrotechnik špecialista",
-                        "môže tak urobiť vedúci prevádzky"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_38", chapter: "C",
-                    question: "Kedy je nutné presvedčiť sa o dobrom stave ochranných a pracovných pomôcok?",
-                    options: [
-                        "raz za pracovnú zmenu",
-                        "pred každým použitím",
-                        "po každom použití",
-                        "raz za tri dni"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_39", chapter: "C",
-                    question: "Kedy sa musí vydať príkaz 'B' pre prácu na zariadeniach mn a nn?",
-                    options: [
-                        "ak sú v spoločných priestoroch so zariadeniami vn, vvn, zvn",
-                        "na križovatkách s vedením vn, vvn, zvn",
-                        "v častiach súbehov s vedením vn, vvn, zvn",
-                        "pre mn a nn sa nemusí vydávať"
-                    ],
-                    correct: [0,1,2], type: "multi"
-                },
-                {
-                    id: "C_40", chapter: "C",
-                    question: "Kto vydáva a podpisuje príkaz 'B' a 'B-PPN'?",
-                    options: [
-                        "osoba zodpovedajúca za prevádzku príslušného zariadenia",
-                        "vedúci prevádzky alebo údržby",
-                        "Technická inšpekcia",
-                        "Orgán dozoru"
-                    ],
-                    correct: [1,2], type: "multi"
-                },
-                {
-                    id: "C_41", chapter: "C",
-                    question: "Na koho sa vystavuje príkaz 'B' alebo 'B-PPN'?",
-                    options: [
-                        "na každého pracovníka v priestore ohrozenia",
-                        "na vedúceho práce",
-                        "na osobu ktorá robí dohľad"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_42", chapter: "C",
-                    question: "Okrem iných údajov, čo musí obsahovať príkaz 'B-PPN'?",
-                    options: [
-                        "červený nápis 'Pozor práca pod napätím'",
-                        "údaje o atmosferických podmienkach",
-                        "súhlas TI",
-                        "súhlas orgánu dozoru"
-                    ],
-                    correct: [0,1], type: "multi"
-                },
-                {
-                    id: "C_43", chapter: "C",
-                    question: "Ako dlho platí príkaz 'B-PPN'?",
-                    options: [
-                        "najviac jednu pracovnú zmenu",
-                        "najviac 24 hodín",
-                        "najviac 48 hodín",
-                        "najviac 1 týždeň"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_44", chapter: "C",
-                    question: "Kedy končí platnosť príkazu 'B'?",
-                    options: [
-                        "jeho písomným uzavretím",
-                        "ukončením práce",
-                        "uvedením pracoviska do beznapäťového stavu"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_45", chapter: "C",
-                    question: "Kedy začína platnosť príkazu 'B'?",
-                    options: [
-                        "keď vedúci práce alebo určený dozor prevzal pracovisko",
-                        "keď dal vedúci práce alebo alebo určený dozor príkaz na začatie prác",
-                        "keď skontroloval ochranné pomôcky",
-                        "keď skontroloval pracovné pomôcky"
-                    ],
-                    correct: [0,1], type: "multi"
-                },
-                {
-                    id: "C_46", chapter: "C",
-                    question: "Z akého dôvodu je pracovník povinný evidovať na jednom mieste všetky príkazy 'B'?",
-                    options: [
-                        "z dôvodu vydania príkazu na zapnutie zariadenia",
-                        "z dôvodu optimálneho rozdelenia prác",
-                        "z dôvodu normovania práce"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_47", chapter: "C",
-                    question: "Kedy je možné upustiť od príkazu 'B'?",
-                    options: [
-                        "nikdy",
-                        "len keď práce vykonáva Elektrotechnik špecialista",
-                        "ak hrozí vznik veľkých škôd alebo ohrozenie života",
-                        "vždy"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "C_48", chapter: "C",
-                    question: "Patrí do zaistenia pracoviska aj uschovanie vložiek a hlavíc tavných poistiek?",
-                    options: [
-                        "áno, spolu s vypnutím zariadenia a odskúšaním",
-                        "áno, spolu so skratovaním a zemnením",
-                        "nie",
-                        "áno, spolu s označením a ohradením"
-                    ],
-                    correct: [0,1,3], type: "multi"
-                },
-                {
-                    id: "C_49", chapter: "C",
-                    question: "Čo musí robiť osoba, ktorá preberá ústne príkazy?",
-                    options: [
-                        "zapisuje ich",
-                        "opakuje ich",
-                        "len ich dôsledne vypočuje"
-                    ],
-                    correct: [0,1], type: "multi"
-                },
-                {
-                    id: "C_50", chapter: "C",
-                    question: "Čo je potrebné urobiť pri odovzdávaní príkazov telefonicky alebo rádiotelefonicky?",
-                    options: [
-                        "dôležité údaje treba vzájomne zapísať",
-                        "prijaté príkazy zopakovať a tým ich znova potvrdiť",
-                        "hovory treba nahrávať"
-                    ],
-                    correct: [0,1], type: "multi"
-                },
-                {
-                    id: "C_51", chapter: "C",
-                    question: "Musí celá pracovná skupina opustiť pracovisko pri prerušení práce?",
-                    options: [
-                        "nie",
-                        "áno",
-                        "môže ostať osoba len so súhlasom vedúceho"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_52", chapter: "C",
-                    question: "Kedy uzavrie vedúci práce príkaz 'B-PPN'?",
-                    options: [
-                        "po odstránení všetkých pracovných a ochranných pomôcok",
-                        "po sústredení všetkých pracovníkov na určenom mieste",
-                        "obe uvedené možnosti",
-                        "po súhlase s IBP"
-                    ],
-                    correct: [0,1], type: "multi"
-                },
-                {
-                    id: "C_53", chapter: "C",
-                    question: "Aké dohodnuté znamenia sa používajú na diaľku ako súhlas na zapnutie zariadenia?",
-                    options: [
-                        "kruhový pohyb zelenou zástavou",
-                        "nedovoľuje sa zapínanie znameniami na diaľku",
-                        "blikaním zeleným svetlom"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_54", chapter: "C",
-                    question: "Ako často sa musí v kinách a divadlách preskúšať funkcia núdzového osvetlenia?",
-                    options: [
-                        "raz za deň",
-                        "pred každým predstavením",
-                        "raz za týždeň",
-                        "raz za mesiac"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_55", chapter: "C",
-                    question: "Ako členíme práce na elektrických zariadeniach?",
-                    options: [
-                        "bez napätia, v blízkosti napätia, pod napätím",
-                        "bez napätia, pod napätím",
-                        "dovolené a zakázané"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_56", chapter: "C",
-                    question: "Aké sú bezpečné prúdy?",
-                    options: [
-                        "striedavý do 10 mA, jednosmerný do 25 mA",
-                        "striedavý do 20 mA, jednosmerný do 40 mA",
-                        "striedavý do 2 mA, jednosmerný do 5 mA"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_57", chapter: "C",
-                    question: "Ktoré bezpečnostné tabuľky obsahujú informáciu o nebezpečenstve a označujú rizikový stav?",
-                    options: [
-                        "tabuľky príkazu",
-                        "tabuľky výstrahy",
-                        "tabuľky zákazu",
-                        "tabuľky upozornenia"
-                    ],
-                    correct: [1], type: "single"
-                },
-                {
-                    id: "C_58", chapter: "C",
-                    question: "Ktoré bezpečnostné tabuľky obsahujú informáciu označujúcu neprípustnosť konania?",
-                    options: [
-                        "tabuľky príkazu",
-                        "tabuľky výstrahy",
-                        "tabuľky zákazu",
-                        "tabuľky upozornenia"
-                    ],
-                    correct: [2], type: "single"
-                },
-                {
-                    id: "C_59", chapter: "C",
-                    question: "Ktoré bezpečnostné tabuľky obsahujú informáciu o bezpečí?",
-                    options: [
-                        "tabuľky príkazu",
-                        "tabuľky výstrahy",
-                        "tabuľky zákazu",
-                        "tabuľky upozornenia"
-                    ],
-                    correct: [3], type: "single"
-                },
-                {
-                    id: "C_60", chapter: "C",
-                    question: "Aký geometrický tvar má na tabuľke bezpečnostná značka výstrahy?",
-                    options: [
-                        "trojuholník",
-                        "štvorec",
-                        "kruh",
-                        "obdĺžnik"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_61", chapter: "C",
-                    question: "Medzinárodné označenie vonkajšieho vplyvu je tvorené:",
-                    options: [
-                        "dvomi písmenami veľkej abecedy a jednou číslicou",
-                        "tromi písmenami veľkej abecedy",
-                        "tromi číslicami"
-                    ],
-                    correct: [0], type: "single"
-                },
-                {
-                    id: "C_62", chapter: "C",
-                    question: "Prvé písmeno (A, B, C) v označení vonkajšieho vplyvu vyjadruje:",
-                    options: [
-                        "kategóriu vonkajšieho vplyvu",
-                        "povahu vonkajšieho vplyvu",
-                        "upresnenie vonkajšieho vplyvu"
-                    ],
-                    correct: [0], type: "single"
-                }
-            ],
-            'D': 
-                [
-                    {
-                        "id": "D_1", "chapter": "D",
-                        "question": "Existuje určitý bod (prah citlivosti) po prekročení ktorého organizmus začne reagovať na pôsobenie elektrickej energie. Do akej hranice je organizmus necitlivý na pôsobenie elektrickej energie?",
-                        "options": [
-                            "do I = 10 mA po dobu 5 sekúnd",
-                            "do I = 2 mA bez ohľadu na čas pôsobenia",
-                            "do I = 1 mA bez ohľadu na čas pôsobenia"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "D_2", "chapter": "D",
-                        "question": "Do akej veľkosti prúdu pretekajúceho telom postihnutého nedôjde k fibrilácii srdca (ani po dlhodobom pôsobení)?",
-                        "options": [
-                            "do I = 1 A",
-                            "do I = 500 mA",
-                            "do I = 10 mA",
-                            "do I = 20 mA"
-                        ],
-                        "correct": [3], "type": "single"
-                    },
-                    {
-                        "id": "D_3", "chapter": "D",
-                        "question": "Ako sa volá (pri úraze elektrinou) dotyk človeka s jednou fázou a súčasne inou časťou tela sa dotýka vodivej zeme?",
-                        "options": [
-                            "dvojpólový",
-                            "jednopólový",
-                            "priamy",
-                            "nepriamy"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "D_4", "chapter": "D",
-                        "question": "Ako sa volá (pri úraze elektrinou) dotyk človeka s dvomi fázami (napr. každou rukou sa dotýka jednej fázy)?",
-                        "options": [
-                            "dvojpólový",
-                            "jednopólový",
-                            "priamy",
-                            "nepriamy"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "D_5", "chapter": "D",
-                        "question": "Cesta prúdu telom (kadiaľ sa obvod uzatvára) je dôležitá z hľadiska stupňa nebezpečenstva. Kedy sú ťažké úrazy?",
-                        "options": [
-                            "keď prúd preteká: pravá ruka - pravá noha",
-                            "keď prúd preteká hlavou alebo srdcom",
-                            "keď prúd preteká pravou a ľavou nohou"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "D_6", "chapter": "D",
-                        "question": "Čím je daná veľkosť úrazového prúdu(v úrazovej slučke je: telo postihnutého, betónová podlaha, kombinačky atď)?",
-                        "options": [
-                            "pôsobiacim napätím a ohmickým odporom tela",
-                            "pôsobiacim napätím a celkovým odporom úrazovej slučky",
-                            "pôsobiacim napätím a odporom kože"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "D_7", "chapter": "D",
-                        "question": "Aké napätie spôsobí prerazenie suchej tvrdej kože napr. na tvrdých \"vypracovaných rukách\"?",
-                        "options": [
-                            "napätie nad 100 V",
-                            "napätie nad 60 V",
-                            "napätie nad 24 V"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "D_8", "chapter": "D",
-                        "question": "Ktorá je nebezpečná frekvencia striedavého prúdu?",
-                        "options": [
-                            "stovky Hz",
-                            "rádovo kHz",
-                            "rádovo MHz",
-                            "priemyselná frekvencia 50 Hz"
-                        ],
-                        "correct": [3], "type": "single"
-                    },
-                    {
-                        "id": "D_9", "chapter": "D",
-                        "question": "Je možné preseknúť vodiče sekerou tam, kde nie je možné urobiť vypnutie vypínačom alebo poistkami?",
-                        "options": [
-                            "nie nesmie sa to",
-                            "áno jeto možné pri \"nn\"",
-                            "áno jeto možné pri bezpečnom napätí"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "D_10", "chapter": "D",
-                        "question": "Kedy a ako možno hasiť horiace šaty na postihnutom?",
-                        "options": [
-                            "po vypnutí elektrického prúdu možno hasit' suchou vinenou alebo azbestovou dekou",
-                            "treba hasiť okamžite snehovým hasiacim prístrojom",
-                            "treba hasiť okamžite vodou"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "D_11", "chapter": "D",
-                        "question": "Kedy je treba postihnutého čo najrýchlejšie previesť pod stálym dozorom do nemocnice?",
-                        "options": [
-                            "ak je popálený na väčšej ploche",
-                            "ak nezadržateľne krváca",
-                            "pri zlomeninách",
-                            "ak je v bezvedomí"
-                        ],
-                        "correct": [0,1], "type": "multi"
-                    },
-                    {
-                        "id": "D_12", "chapter": "D",
-                        "question": "Ako postupujeme, keď je postihnutý po vyslobodení z prúdového okruhu pri vedomí?",
-                        "options": [
-                            "uložíme ho do teplej miestnosti",
-                            "uvoľníme mu odev a zvlhčujeme pery",
-                            "až do súhlasu lekára nesmie vstať",
-                            "nenecháme ho osamote"
-                        ],
-                        "correct": [0,1,2,3], "type": "multi"
-                    },
-                    {
-                        "id": "D_13", "chapter": "D",
-                        "question": "Resustitáciu dospelých začíname:",
-                        "options": [
-                            "nepriamou masážou hrudníka",
-                            "uložením do stabilizovanej polohy",
-                            "umelým dýchaním"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "D_14", "chapter": "D",
-                        "question": "Čo spravíme, keď zistíme, že správne umelé dýchanie je neúčinné a postihnutý stratil pulz?",
-                        "options": [
-                            "zväčšíme frekvenciu vdychov",
-                            "doplníme oživovanie nepriamou masážou srdca",
-                            "ukončíme oživovacie činnosti"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "D_15", "chapter": "D",
-                        "question": "Aká je frekvencia rytmického stláčania hrudnej kosti pri nepriamej masáži srdca?",
-                        "options": [
-                            "12-16 krát za minútu",
-                            "25 krát za minútu",
-                            "80-100 krát za minútu"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "D_16", "chapter": "D",
-                        "question": "Ako robí oživovanie jeden záchranca, keď postihnutý nedýcha a nemá pulz?",
-                        "options": [
-                            "v pomere 16:1 (16 kompresií a 1 vdych)",
-                            "v pomere 30: 2 (30 kompresií a 2 vdychy)",
-                            "v pomere 5:2 (5 kompresií a 2 vdychy)"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "D_17", "chapter": "D",
-                        "question": "Ako robia oživovanie dvaja záchrancovia, keď postihnutý nedýcha a nemá pulz?",
-                        "options": [
-                            "v pomere 30: 2 (30 kompresií a 2 vdychy)",
-                            "v pomere 5:2 (5 kompresií a 2 vdychy)",
-                            "v pomere 2: 15 (2 kompresie a 15 vdychov)"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "D_18", "chapter": "D",
-                        "question": "Pri krvácaní z rán tepny krv strieka prerušovane a pri krvácaní zo žíl tečie neprerušene. Akým spôsobom zastavujeme krvácanie?",
-                        "options": [
-                            "priložením čistej látky alebo obväzu a prelepením",
-                            "priložením tlakového obväzu",
-                            "obviazaním rany"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "D_19", "chapter": "D",
-                        "question": "Kde stiahneme končatinu pri krvácaní z veľkých tepien a čo ešte musíme urobiť (veľmi kokotná otázka)?",
-                        "options": [
-                            "končatinu nesťahujeme nad ranou Martinovým obvínadlom",
-                            "priložíme len tlakový obväz",
-                            "postihutého urýchlene vezieme do nemocnice",
-                            "stiahneme pod ranou Martinovým obvínadlom"
-                        ],
-                        "correct": [0,2], "type": "multi"
-                    },
-                    {
-                        "id": "D_20", "chapter": "D",
-                        "question": "Môžu sa otvorené rany alebo popáleniny vymývať alebo natierat'?",
-                        "options": [
-                            "áno - tinktúrou",
-                            "nie nesmú sa",
-                            "áno - čistou vodouu"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "D_21", "chapter": "D",
-                        "question": "Protišokové opatrenia:",
-                        "options": [
-                            "tíšenie bolesti, tekutiny, teplo, ticho, transport",
-                            "uloženie do stabilizovanej polohy",
-                            "zabezpečenie priechodnosti horných dýchacích ciest"
-                        ],
-                        "correct": [0], "type": "single"
-                    }
-                ],
-            'LEG':
-                [
-                    {
-                        "id": "LEG_1", "chapter": "LEG",
-                        "question": "Ako podľa Vyhlášky č.508/09 rozdeľujeme elektrické zariadenia?",
-                        "options": [
-                            "skupina A (neohrozujúca) a skupina B (ohrozujúca)",
-                            "skupina A a B - elektrické zariadenia s vyššou mierou ohrozenia",
-                            "skupina C - elektrické zariadenia s nižšou mierou ohrozenia",
-                            "elektrické zariadenia nové a elektrické zariadenia rekonštruované"
-                        ],
-                        "correct": [1,2], "type": "multi"
-                    },
-                    {
-                        "id": "LEG_2", "chapter": "LEG",
-                        "question": "Ktoré elektrické zariadenia sa považujú za vyhradené?",
-                        "options": [
-                            "elektrické zariadenia s automatickým riadením",
-                            "skupina A a B - elektrické zariadenia s vyššou mierou ohrozenia",
-                            "skupina C - elektrické zariadenia s nižšou mierou ohrozenia",
-                            "elektrické zariadenia obsluhované pracovníkmi bez elektrotechnického vzdelania"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_3", "chapter": "LEG",
-                        "question": "Vyrábať, montovať a rekonštruovať vyhradené technické zariadenia elektrické skupiny A možno iba podľa:",
-                        "options": [
-                            "oprávnenia",
-                            "osvedčenej konštrukčnej dokumentácie",
-                            "sprievodnej technickej dokumentácie"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_4", "chapter": "LEG",
-                        "question": "Sprievodná technická dokumentácia technického zariadenia musí vždy obsahovať najmenej:",
-                        "options": [
-                            "návod na jeho bezpečné používanie údržbu a obsluhu",
-                            "údaje týkajúce sa identifikácie výrobcu",
-                            "vyhlásenie výrobcu o zhode technického zariadenia s bezpečnostnotechnickými požiadavkami"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_5", "chapter": "LEG",
-                        "question": "Kto vydáva organizácii oprávnenie na výrobu, montáž, rekonštrukciu, opravy, údržbu a odborné prehliadky a odborné skúšky vyhradených elektrických zariadení?",
-                        "options": [
-                            "Technická inšpekcia (TI)",
-                            "Inšpektorát bezpečnosti práce (IBP) na základe stanoviska TI",
-                            "projektová organizácia",
-                            "Štátna skúšobňa"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_6", "chapter": "LEG",
-                        "question": "Kto preverí odbornú spôsobilosť organizácie na opravy vyhradených elektrických zariadení?",
-                        "options": [
-                            "Technická inšpekcia (TI)",
-                            "Orgán štátneho dozoru nad bezpečnosťou práce (IBP)",
-                            "výrobca príslušného technického zariadenia",
-                            "projektant príslušného technického zariadenia"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_7", "chapter": "LEG",
-                        "question": "Prehliadka a skúška technického zariadenia sa vykonáva:",
-                        "options": [
-                            "po odstavení dlhšom ako 6 mesiacov",
-                            "počas prevádzky v dvojročných lehotách",
-                            "pred prvým uvedením do prevádzky po umiestnení na mieste prevádzky"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "LEG_8", "chapter": "LEG",
-                        "question": "Prevádzkovateľ na zaistenie bezpečnej prevádzky technického zariadenia musí zabezpečiť vypracovanie:",
-                        "options": [
-                            "prevádzkových predpisov na obsluhu technického zariadenia",
-                            "prevádzkových predpisov na prevádzku vyhradeného technického zariadenia",
-                            "sprievodnej technickej dokumentácie vyhradeného technického zariadenia"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_9", "chapter": "LEG",
-                        "question": "Kto vydáva osvedčenie o konštrukčnej dokumentácii?",
-                        "options": [
-                            "Orgán štátneho dozoru nad bezpečnosťou práce (IBP)",
-                            "Technická inšpekcia (TI)",
-                            "projektant",
-                            "Štátna skúšobňa"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_10", "chapter": "LEG",
-                        "question": "Čo patrí medzi povinnosti výrobcov a dodávateľov?",
-                        "options": [
-                            "archivovanie troch sád originálov výrobnej dokumentácie",
-                            "vedenie dokumentácie najmenej 10 rokov",
-                            "ustanovenie organizačných štruktúr zodpovednosti a postupov výroby",
-                            "zabezpečenie prác iba odborne spôsobilým"
-                        ],
-                        "correct": [2,3], "type": "multi"
-                    },
-                    {
-                        "id": "LEG_11", "chapter": "LEG",
-                        "question": "Minimálne akú dokumentáciu odberateľovi dodáva výrobca alebo dodávateľ elektrických zariadení spolu s vyrobeným, zmontovaným alebo rekonštruovaným elektrickým zariadením?",
-                        "options": [
-                            "sprievodnú technickú dokumentáciu",
-                            "osvedčenú konštrukčnú dokumentáciu",
-                            "zoznam modulov s uvedením ich výrobných čísel",
-                            "oprávnenie o odbornej spôsobilosti"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_12", "chapter": "LEG",
-                        "question": "Odbornou prehliadkou a odbornou skúškou sa preveruje:",
-                        "options": [
-                            "bezpečnosť vyhradeného technického zariadenia",
-                            "súlad s osvedčením o typovej skúške",
-                            "súlad so sprievodnou technickou dokumentáciou"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_13", "chapter": "LEG",
-                        "question": "Kedy možno upustiť od vykonania úradných skúšok pri dovoze alebo vývoze vyhradených technických zariadení?",
-                        "options": [
-                            "pri dovoze z Česka",
-                            "pri dovoze z EÚ",
-                            "ak sú v súlade so smernicami EÚ a opatrené označením CE",
-                            "ak je so zariadením sprievodná technická dokumentácia"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "LEG_14", "chapter": "LEG",
-                        "question": "Koho organizácia poverí obsluhou elektrických zariadení?",
-                        "options": [
-                            "len odborne spôsobilé osoby",
-                            "len osoby s elektrotechnickým vzdelaním",
-                            "len dospelé osoby",
-                            "len mužov"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_15", "chapter": "LEG",
-                        "question": "Kto zabezpečí vykonanie predpísaných prehliadok a skúšok, bezpečnostno-technických požiadaviek a sprievodnej dokumentácie?",
-                        "options": [
-                            "Technická inšpekcia (TI)",
-                            "Inšpektorát bezpečnosti práce (IBP)",
-                            "organizácia ktorá má zariadenie v prevádzke",
-                            "obsluha príslušného elektrického zariadenia"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "LEG_16", "chapter": "LEG",
-                        "question": "Systém opatrení zameraných na utváranie pracovných podmienok zaisťujúcich bezpečnosť a ochranu zdravia pri práci, zachovanie zdravia a pracovnej schopnosti zamestnanca je:",
-                        "options": [
-                            "inšpekcia práce",
-                            "ochrana práce",
-                            "technická inšpekcia"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_17", "chapter": "LEG",
-                        "question": "Kto riadi výkon a vyhodnocuje výsledky typovej skúšky?",
-                        "options": [
-                            "Technická inšpekcia (TI)",
-                            "Inšpektorát bezpečnosti práce (IBP)",
-                            "projektant elektrického zariadenia",
-                            "výrobca elektrického zariadenia"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_18", "chapter": "LEG",
-                        "question": "Pre ktoré vyhradené elektrické zariadenia je potrebná typová skúška?",
-                        "options": [
-                            "technické zariadenie pri ktorom sa predpokladá sériová výroba desiatich a viacerých kusov rovnakého vyhotovenia",
-                            "nevýbušné elektrické zariadenia",
-                            "zariadenia na premenu elektrickej energie s príkonom 250KVA",
-                            "eletrické rozvody v miestnostiach na lekárske účely"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_19", "chapter": "LEG",
-                        "question": "Kto overuje zhody ďaľších kusov EZ, na ktoré bolo vydané osvedčenie o typovej skúške, so schválenou konštrukčnou dokumentáciou typu?",
-                        "options": [
-                            "Technická inšpekcia (IT)",
-                            "Revízny technik (§ 24)",
-                            "konštruktér daného výrobku",
-                            "Inšpektorát bezpečnosti práce (IBP)"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_20", "chapter": "LEG",
-                        "question": "Kedy sa vyhradené EZ skupiny A podrobia prvej úradnej skúške?",
-                        "options": [
-                            "po 1 roku prevádzky",
-                            "po 3 rokoch prevádzky",
-                            "po 5 rokoch prevádzky",
-                            "po ukončení výroby montáže a rekonštrukcie"
-                        ],
-                        "correct": [3], "type": "single"
-                    },
-                    {
-                        "id": "LEG_21", "chapter": "LEG",
-                        "question": "Kedy sa najneskôr vyhradené EZ skupiny A podrobia opakovanej úradnej skúške?",
-                        "options": [
-                            "po 10 rokoch prevádzky",
-                            "po 12 rokoch prevádzky",
-                            "po 15 rokoch prevádzky",
-                            "po 20 rokoch prevádzky"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_22", "chapter": "LEG",
-                        "question": "Na základe čoho sa robia úradné skúšky?",
-                        "options": [
-                            "na základe nariadenia Technickej inšpekcie (TI)",
-                            "na základe požiadania organizácie",
-                            "na základe nariadenia Inšpektorátu bezpečnosti práce (IBP)",
-                            "na základe plánu skúšok"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_23", "chapter": "LEG",
-                        "question": "Kto vydá osvedčenie o úspešnom vykonaní úradnej skúšky?",
-                        "options": [
-                            "skúšku vyhodnotí Technická inšpekcia (TI) osvedčenie vydá Inšpektorát bezpečnosti práce (IBP)",
-                            "skúšku vyhodnotí skúšobný technik výrobcu a osvedčenie vydá Technická inšpekcia (TI)",
-                            "Technická inšpekcia (TI) skúšku vyhodnotí aj vydá osvedčenie",
-                            "Inšpektorát bezpečnosti práce (IBP)"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "LEG_24", "chapter": "LEG",
-                        "question": "Základné podmienky na zaistenie bezpečnosti a ochrany zdravia pri práci ustanovuje:",
-                        "options": [
-                            "Vyhláška č. 508/2009 Z.z.",
-                            "Zákon č. 124/2006 Z.z.",
-                            "Zákon č. 330/2001 Z.z"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_25", "chapter": "LEG",
-                        "question": "Odmietnuť vykonať prácu, ak sa dôvodne domnieva, že je bezprostredne a vážne ohrozený jeho život alebo zdravie zamestnanec:",
-                        "options": [
-                            "má právo",
-                            "môže",
-                            "nesmie"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_26", "chapter": "LEG",
-                        "question": "Kto potvrdí v sprievodnej dokumentácii úspešnosť úradnej skúšky a vyskúšané zariadenie označí?",
-                        "options": [
-                            "Skúšobný technik výrobcu",
-                            "Elektrotechnik špecialista od výrobcu",
-                            "Technická inšpekcia (TI)",
-                            "Inšpektorát bezpečnosti práce (IBP)"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "LEG_27", "chapter": "LEG",
-                        "question": "Akými prehliadkami a skúškami sa preveruje bezpečnosť technických zariadení, ak nie je predpísaná úradná skúška?",
-                        "options": [
-                            "odbornými preliadkami",
-                            "odbornými skúškami",
-                            "kontrolami istiacich prvkov",
-                            "prehliadky a skúšky nie sú potrebné"
-                        ],
-                        "correct": [0,1], "type": "multi"
-                    },
-                    {
-                        "id": "LEG_28", "chapter": "LEG",
-                        "question": "Kto vykonáva odborné prehliadky a odborné skúšky?",
-                        "options": [
-                            "Revízny technik (§24)",
-                            "projektant",
-                            "Technická inšpekcia (TI)",
-                            "Inšpektorát bezpečnosti práce (IBP)"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_29", "chapter": "LEG",
-                        "question": "Čím sú definované lehoty odborných prehliadok a odborných skúšok elektrických zariadení?",
-                        "options": [
-                            "rozhodnutím Technickej inšpekcie (TI)",
-                            "bezpečnostno-technickými požiadavkami",
-                            "Vyhláškou MPaSV SR č. 508/09 Z.z.",
-                            "rozhodnutím Inšpektorátu bezpečnosti práce (IBP)"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_30", "chapter": "LEG",
-                        "question": "Aký doklad sa vyhotoví o odbornej prehliadke alebo odbornej skúške elektrického zariadenia?",
-                        "options": [
-                            "písomný dokument (zápisnica správa)",
-                            "nerobí sa písomný dokument",
-                            "výsledok sa listom oznámi Technickej inšpekcii (TI)",
-                            "výsledok sa listom oznámi Inšpektorátu bezpečnosti práce (IBP)"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_31", "chapter": "LEG",
-                        "question": "Ako sú rozdelené lehoty odborných prehliadok a odborných skúšok elektrických zariadení?",
-                        "options": [
-                            "podľa druhu prostredia",
-                            "podľa druhu ochrany pred nebezpečným dotykom",
-                            "podľa druhu priestoru so zvýšeným rizikom ohrozenia osôb",
-                            "podľa príkonu elektrických zariadení"
-                        ],
-                        "correct": [0,2], "type": "multi"
-                    },
-                    {
-                        "id": "LEG_32", "chapter": "LEG",
-                        "question": "V akých lehotách sa vykonávajú odborné prehliadky alebo odborné skúšky elektrických zariadení v základnom - normálnom prostredí?",
-                        "options": [
-                            "každé 3 roky",
-                            "každých 5 rokov",
-                            "každé 4 roky",
-                            "každých 10 rokov"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_33", "chapter": "LEG",
-                        "question": "V akých lehotách sa vykonávajú odborné prehliadky alebo odborné skúšky elektrických zariadení v mokrom prostredí?",
-                        "options": [
-                            "každé 2 roky",
-                            "každé 3 roky",
-                            "každý 1 rok",
-                            "každé 4 roky"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "LEG_34", "chapter": "LEG",
-                        "question": "V akých lehotách sa vykonávajú odborné prehliadky alebo odborné skúšky elektrických zariadení v prostredí s nebezpečenstvom výbuchu?",
-                        "options": [
-                            "každý 1 rok",
-                            "každé 2 roky",
-                            "každé 3 roky",
-                            "každé 4 roky"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_35", "chapter": "LEG",
-                        "question": "Čo nahrádza odbornú prehliadku alebo odbornú skúšku?",
-                        "options": [
-                            "Opakovaná úradná skúška",
-                            "Typová skúška",
-                            "Prvá úradná skúška",
-                            "Nemožno ju nahradiť"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_36", "chapter": "LEG",
-                        "question": "Akou značkou sa označí vyhradené technické zariadenie, na ktorom sa vykonala Typová alebo Úradná skúška?",
-                        "options": [
-                            "značkou je číslo certifikátu",
-                            "symbolom \"TI\" a posledné dvojčíslie roka vykonania skúšky",
-                            "symbolom \"TI\" a posledné dvojčíslie roka do ktorého skúška platí",
-                            "na zariadenie sa nič nepíše"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_37", "chapter": "LEG",
-                        "question": "Čím minimálne sa preukazuje odborná spôsobilost' na obsluhu vyhradených elektrických zariadení?",
-                        "options": [
-                            "osvedčením",
-                            "zápisom o zaškolení podľa §20 Vyhl. č. 508/09 Z. Z.",
-                            "preukazom",
-                            "vysvedčením"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_38", "chapter": "LEG",
-                        "question": "Čím sa preukazuje odborná spôsobilosť na vykonávanie výroby, montáže a opravy na vyhradených elektrických zariadeniach?",
-                        "options": [
-                            "dokladom o elektrotechnickom vzdelaní",
-                            "dokladom o požadovanej dĺžke praxe",
-                            "osvedčením o odbornej spôsobilosti",
-                            "certifikátom"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "LEG_39", "chapter": "LEG",
-                        "question": "Zamestnanec používať určeným spôsobom pridelené osobné ochranné pracovné prostriedky:",
-                        "options": [
-                            "je povinný",
-                            "má právo",
-                            "môže"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_40", "chapter": "LEG",
-                        "question": "Kto vykonáva overenie odbornej spôsobilosti Revíznych technikov (§24)?",
-                        "options": [
-                            "Inšpektorát bezpečnosti práce (IBP)",
-                            "Technická inšpekcia (TI)",
-                            "Štátna skúšobňa",
-                            "oprávnená vzdelávacia organizácia"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_41", "chapter": "LEG",
-                        "question": "Kto vykonáva overenie odbornej spôsobilosti a vydáva osvedčenie Elektrotechnikov, Samostatných elektrotechnikov a Elektrotechnikov na riadenie činnosti alebo prevádzky?",
-                        "options": [
-                            "Technická inšpekcia (TI)",
-                            "Inšpektorát bezpečnosti práce (IBP)",
-                            "oprávnená vzdelávacia organizácia",
-                            "zamestnávateľ"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "LEG_42", "chapter": "LEG",
-                        "question": "Kto môže odobrať vydané osvedčenie (za porušenie povinností)?",
-                        "options": [
-                            "Technická inšpekcia (TI)",
-                            "Inšpektorát bezpečnosti práce (IBP)",
-                            "oprávnená vzdelávacia organizácia",
-                            "zamestnávateľ"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_43", "chapter": "LEG",
-                        "question": "Akým spôsobom je možné osvedčenie po jeho odobratí znova vydať'?",
-                        "options": [
-                            "nie je možné znova ho vydať",
-                            "možno ho vydať na základe novej skúšky",
-                            "možno ho vydať po 3 rokoch",
-                            "možno ho vydať po 5 rokoch"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_44", "chapter": "LEG",
-                        "question": "Kto overuje odbornú spôsobilosť obsluhy vyhradených elektrických zariadení?",
-                        "options": [
-                            "Technická inšpekcia (TI)",
-                            "Inšpektorát bezpečnosti práce (IBP)",
-                            "Revízny technik (§24)",
-                            "Samostatný elektrotechnik"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "LEG_45", "chapter": "LEG",
-                        "question": "Aká minimálna odborná spôsobilosť postačuje na obsluhu elektrických zariadení?",
-                        "options": [
-                            "Elektrotechnik",
-                            "Poučený pracovník",
-                            "Samostatný elektrotechnik",
-                            "postačuje základné vzdelanie"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_46", "chapter": "LEG",
-                        "question": "Kto môže vykonať poučenie obsluhy elektrických zariadení?",
-                        "options": [
-                            "referent zamestnaneckého útvaru bez elektrotechnického vzdelania",
-                            "dodávateľ elektrického zariadenia",
-                            "Samostatný elektrotechnik",
-                            "pracovník s kvalifikáciou podľa §23 a §24 Vyhl. č. 508/09 Z. z."
-                        ],
-                        "correct": [2,3], "type": "multi"
-                    },
-                    {
-                        "id": "LEG_47", "chapter": "LEG",
-                        "question": "Čo nesmie chýbať v poučení obsluhy elektrických zariadení?",
-                        "options": [
-                            "poučenie v rozsahu vykonávaných činností",
-                            "poučenie o rozdelení pracovných zmien",
-                            "zacvičenie na poskytnutie prvej pomoci pri úraze elektrickým prúdom"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "LEG_48", "chapter": "LEG",
-                        "question": "Aké činnosti môže vykonávať Elektrotechnik na vyhradených technických zariadeniach?",
-                        "options": [
-                            "činnosť v rozsahu osvedčenia",
-                            "musí dodržiavať predpisy na ochranu zdravia a majetku",
-                            "pri práci nie je ničím obmedzovaný",
-                            "musí sa riadiť bezpečnostno-technickými požiadavkami"
-                        ],
-                        "correct": [0,1,3], "type": "multi"
-                    },
-                    {
-                        "id": "LEG_49", "chapter": "LEG",
-                        "question": "Aké minimálne kvalifikačné predpoklady musí spĺňať Elektrotechnik?",
-                        "options": [
-                            "ukončené akékoľvek SOU",
-                            "ukončené akékoľvek ÚSO",
-                            "ukončené elektrotechnické vzdelanie",
-                            "ukončené akékoľvek vysokoškolské vzdelanie"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "LEG_50", "chapter": "LEG",
-                        "question": "Aké činnosti môže vykonávať Samostatný elektrotechnik na vyhradených technických zariadeniach?",
-                        "options": [
-                            "samostatná činnosť v rozsahu osvedčenia",
-                            "riadiť činnosť najviac 2 Elektrotechnikov",
-                            "riadiť činnosť Poučených pracovníkov bez obmedzenia ich počtu",
-                            "riadiť prevádzku"
-                        ],
-                        "correct": [0,1,2], "type": "multi"
-                    },
-                    {
-                        "id": "LEG_51", "chapter": "LEG",
-                        "question": "Aké činnosti môže vykonávať Elektrotechnik na riadenie činnosti alebo prevádzky?",
-                        "options": [
-                            "riadiť činnosť Poučených pracovníkov bez obmedzenia ich počtu",
-                            "riadiť činnosť Elektrotechnikov bez obmedzenia ich počtu",
-                            "riadiť činnosť Samostatných elektrotechnikov bez obmedzenia ich počtu",
-                            "riadiť maximálne 7 Elektrotechnikov"
-                        ],
-                        "correct": [0,1,2], "type": "multi"
-                    },
-                    {
-                        "id": "LEG_52", "chapter": "LEG",
-                        "question": "Ktorá doba sa započítava do dĺžky požadovanej odbornej praxe Elektrotechnika na riadenie činnosti a Revízneho technika?",
-                        "options": [
-                            "doba vykonávania činnosti na zariadeniach príslušného druhu a napätia",
-                            "celková doba od nástupu do praxe",
-                            "započíta sa aj doba základnej vojenskej služby a materskej dovolenky",
-                            "doba od dovŕšenia 18 rokov"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_53", "chapter": "LEG",
-                        "question": "Kedy sa započíta iba polovica praxe?",
-                        "options": [
-                            "ak bola odborná prax prerušená dlhšie ako 2 roky",
-                            "ak bola odborná prax prerušená dlhšie ako 3 roky",
-                            "ak bola odborná prax prerušená dlhšie ako 1 rok",
-                            "na započítanie odbornej praxe jej prerušenie nemá vplyvv"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_54", "chapter": "LEG",
-                        "question": "Osvedčenie na vykonávanie činnosti sa vydáva na:",
-                        "options": [
-                            "neurčitý čas",
-                            "päť rokov",
-                            "tri roky"
-                        ],
-                        "correct": [1], "type": "single"
-                    },
-                    {
-                        "id": "LEG_55", "chapter": "LEG",
-                        "question": "Fyzická osoba, ktorá má osvedčenie na vykonávanie činnosti je povinná absolvovať aktualizačnú odbornú prípravu:",
-                        "options": [
-                            "každý rok",
-                            "každých desať rokov",
-                            "každých päť rokov"
-                        ],
-                        "correct": [2], "type": "single"
-                    },
-                    {
-                        "id": "LEG_56", "chapter": "LEG",
-                        "question": "Štátnu správu v oblasti inšpekcie práce vykonávajú:",
-                        "options": [
-                            "Ministerstvo práce sociálnych vecí a rodiny Slovenskej republiky Národný inšpektorát práce a inšpektoráty práce",
-                            "Ministerstvo práce sociálnych vecí a rodiny Slovenskej republiky a Slovenský úrad bezpečnosti práce",
-                            "Ministerstvo práce sociálnych vecí a rodiny Slovenskej republiky vyššie územné celky a zamestnávatelia"
-                        ],
-                        "correct": [0], "type": "single"
-                    },
-                    {
-                        "id": "LEG_57", "chapter": "LEG",
-                        "question": "Úlohy bezpečnostnotechnickej služby vykonáva:",
-                        "options": [
-                            "bezpečnostný technik a autorizovaný bezpečnostný technik",
-                            "inšpekcia práce",
-                            "príslušný odborný orgán"
-                        ],
-                        "correct": [0], "type": "single"
-                    }
-                ]
-        };
+            <!-- ===== VÝSLEDKY KOLA ===== -->
+            <div id="roundResults" class="round-results">
+                <h3>📊 Výsledky kola</h3>
+                <div id="roundTopList" class="top-list"></div>
+                <div id="roundMyRank" class="my-rank"></div>
+                <button class="btn" onclick="closeRoundResults()" style="margin-top:16px;">Pokračovať</button>
+            </div>
 
-    // ========== GLOBÁLNE PREMENNÉ ==========
-    let gameId = null, role = null, currentQuestions = [], currentIndex = 0, gameActive = false;
-    let currentQuestion = null, acceptingAnswers = false, players = {}, playerId = null;
-    let myAnswers = [], isMultiChoice = false, answerSubmitted = false, revealTimer = null;
-    let playerTimerInterval = null, playerCurrentIndex = -1, totalQuestionsCount = 0, questionStartTime = 0;
-    let roundResultsCallback = null, presenterActive = false, presenterGameId = null, presenterTimerInterval = null;
+            <!-- ===== KONIEC HRY ===== -->
+            <div id="resultsOverlay" class="results-overlay">
+                <div class="results-card">
+                    <h2>🏆 Kvíz skončil!</h2>
+                    <div class="final-score" id="finalScore">0 bodov</div>
+                    <div id="finalRank"></div>
+                    <button class="btn" onclick="closeResults()">🔙 Späť do lobby</button>
+                </div>
+            </div>
 
-    // ========== POMOCNÉ FUNKCIE ==========
-    function shuffleArray(arr) { for (let i = arr.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [arr[i], arr[j]] = [arr[j], arr[i]]; } return arr; }
-    function prepareQuestions(categoryCheckboxesId, countSelectId) {
-        const categories = Array.from(document.querySelectorAll(`#${categoryCheckboxesId} input:checked`)).map(cb => cb.value);
-        if (categories.length === 0) { alert('Vyber aspoň jednu kategóriu!'); return null; }
-        let all = []; categories.forEach(c => { if (questionsDatabase[c]) all.push(...questionsDatabase[c]); });
-        if (all.length === 0) { alert('Žiadne otázky!'); return null; }
-        const count = parseInt(document.getElementById(countSelectId).value);
-        return shuffleArray([...all]).slice(0, Math.min(count, all.length));
-    }
-    function displayHostOptions(containerId, options, correctIndices = null) {
-        const container = document.getElementById(containerId); if (!container) return;
-        const letters = ['A','B','C','D']; let html = '';
-        options.forEach((opt, i) => { const isCorrect = correctIndices && correctIndices.includes(i); html += `<div class="opt-host-btn ${letters[i]} ${isCorrect ? 'correct-answer' : ''}">${letters[i]}) ${opt}</div>`; });
-        container.innerHTML = html;
-    }
+        </main>
 
-    // ========== HOSTITEĽ ==========
-    function selectRole(r) {
-        role = r; document.getElementById('roleScreen').style.display = 'none';
-        if (r === 'host') {
-            gameId = Math.random().toString(36).substring(2,8).toUpperCase();
-            document.getElementById('roomCode').textContent = gameId;
-            document.getElementById('hostView').style.display = 'flex';
-            database.ref(`games/${gameId}`).set({ players: {}, status: 'lobby', totalQuestions: 0 });
-            listenForLobby();
-        } else if (r === 'presenter') { document.getElementById('presenterView').style.display = 'flex'; }
-        else { document.getElementById('playerView').classList.add('active'); }
-    }
-    function listenForLobby() {
-        database.ref(`games/${gameId}/players`).on('value', (snap) => { players = snap.val() || {}; updatePlayersList(); document.getElementById('startGameBtn').disabled = Object.keys(players).length === 0; });
-    }
-    function updatePlayersList() {
-        const arr = Object.values(players); arr.sort((a,b) => (b.score||0) - (a.score||0));
-        document.getElementById('playerCount').textContent = arr.length;
-        document.getElementById('playersList').innerHTML = arr.map(p => `<div class="player-item"><span>${p.name}</span><span>${p.score||0}</span></div>`).join('');
-        document.getElementById('leaderboard').innerHTML = arr.slice(0,5).map((p,i) => `<div class="player-item"><span>${i+1}. ${p.name}</span><span>${p.score||0}</span></div>`).join('');
-        if(arr.length===0){ document.getElementById('playersList').innerHTML='<div style="text-align:center">Zatiaľ žiadni hráči</div>'; document.getElementById('leaderboard').innerHTML='<div style="text-align:center">-</div>'; }
-    }
-    async function startGame() {
-        const qs = prepareQuestions('categoryCheckboxes', 'questionCountSelect'); if (!qs) return;
-        currentQuestions = qs; currentIndex = 0; gameActive = true; totalQuestionsCount = currentQuestions.length; currentQuestion = currentQuestions[0]; acceptingAnswers = true;
-        await database.ref(`games/${gameId}`).update({ questions: currentQuestions, totalQuestions: totalQuestionsCount, status: 'playing', currentQuestion: { index: 0, question: currentQuestions[0] } });
-        document.getElementById('startGameBtn').style.display = 'none'; document.getElementById('endGameBtn').style.display = 'inline-block';
-        displayHostQuestion(); listenForGameHost();
-    }
-    function listenForGameHost() {
-        database.ref(`games/${gameId}/questionDone`).on('value', (snap) => { const done = snap.val(); if (done && done[currentIndex] === true && gameActive) document.getElementById('nextQuestionBtn').style.display = 'inline-block'; });
-    }
-    function displayHostQuestion() {
-        if (!currentQuestion) return;
-        displayHostOptions('hostOptions', currentQuestion.options); displayHostOptions('fsHostOptions', currentQuestion.options);
-        document.getElementById('questionText').innerHTML = `${currentIndex+1}. ${currentQuestion.question}`; document.getElementById('fsQuestionText').innerHTML = `${currentIndex+1}. ${currentQuestion.question}`;
-        document.querySelectorAll('.opt-host-btn').forEach(btn => btn.classList.remove('correct-answer'));
-        if (revealTimer) clearTimeout(revealTimer); questionStartTime = Date.now();
-        revealTimer = setTimeout(() => { if (acceptingAnswers) revealAnswers(); }, 15000);
-    }
-    async function revealAnswers() {
-        if (!acceptingAnswers) return; acceptingAnswers = false;
-        const q = currentQuestion; const isMulti = q.type === 'multi';
-        const answersSnap = await database.ref(`games/${gameId}/answers/${currentIndex}`).once('value');
-        const answers = answersSnap.val() || {};
-        const sortedAnswers = Object.entries(answers).sort((a,b) => (a[1].time || 999) - (b[1].time || 999));
-        const totalTime = 15000;
-        for (let i = 0; i < sortedAnswers.length; i++) {
-            const [pid, ansData] = sortedAnswers[i]; const player = players[pid]; if (!player) continue;
-            let points = 0; const isCorrect = isMulti ? ansData.answers && ansData.answers.length === q.correct.length && ansData.answers.every(a => q.correct.includes(a)) : ansData.answer === q.correct[0];
-            if (isCorrect) { const remainingTime = Math.max(0, totalTime - (ansData.time || totalTime)); points = Math.floor(1000 * (remainingTime / totalTime)); }
-            await database.ref(`games/${gameId}/players/${pid}/score`).set((player.score || 0) + points);
-            await database.ref(`games/${gameId}/players/${pid}/lastPoints`).set(points);
-        }
-        const btns = document.querySelectorAll('.opt-host-btn'); q.correct.forEach(c => { if (btns[c]) btns[c].classList.add('correct-answer'); });
-        await database.ref(`games/${gameId}/questionDone/${currentIndex}`).set(true);
-        await showRoundResults();
-    }
-    async function showRoundResults() {
-        const playersSnap = await database.ref(`games/${gameId}/players`).once('value');
-        const allPlayers = Object.values(playersSnap.val() || {}); allPlayers.sort((a,b) => (b.score||0) - (a.score||0));
-        const top5 = allPlayers.slice(0,5); const topHtml = top5.map((p,i) => `<div class="top-item ${i===0?'first':''}"><span>${i+1}. ${p.name}</span><span>${p.score} b</span></div>`).join('');
-        document.getElementById('roundTopList').innerHTML = topHtml; document.getElementById('roundResults').classList.add('active');
-        return new Promise(resolve => { roundResultsCallback = resolve; });
-    }
-    function closeRoundResults() { document.getElementById('roundResults').classList.remove('active'); if (roundResultsCallback) roundResultsCallback(); roundResultsCallback = null; }
-    async function nextQuestion() {
-        if (currentIndex + 1 >= currentQuestions.length) { endGame(); return; }
-        currentIndex++; currentQuestion = currentQuestions[currentIndex]; acceptingAnswers = true; answerSubmitted = false;
-        await database.ref(`games/${gameId}/answers/${currentIndex}`).remove();
-        await database.ref(`games/${gameId}/currentQuestion`).set({ index: currentIndex, question: currentQuestion });
-        document.getElementById('nextQuestionBtn').style.display = 'none'; displayHostQuestion();
-    }
-    async function endGame() {
-        gameActive = false; if (revealTimer) clearTimeout(revealTimer);
-        await database.ref(`games/${gameId}/status`).set('ended');
-        const sorted = Object.values(players).sort((a,b) => (b.score||0) - (a.score||0));
-        alert('🏆 Hra skončila! Víťaz: ' + (sorted[0]?.name || 'nikto'));
-        await database.ref(`games/${gameId}`).remove();
-        document.getElementById('startGameBtn').style.display = 'inline-block'; document.getElementById('endGameBtn').style.display = 'none';
-        document.getElementById('nextQuestionBtn').style.display = 'none'; document.getElementById('questionText').innerHTML = 'Vyber kategórie a klikni Štart';
-        document.getElementById('hostOptions').innerHTML = ''; listenForLobby();
-    }
-    function toggleHostFullscreen() { const fs = document.getElementById('hostFullscreen'); fs.classList.toggle('active'); if (fs.classList.contains('active') && currentQuestion) { displayHostOptions('fsHostOptions', currentQuestion.options); document.getElementById('fsQuestionText').innerHTML = `${currentIndex+1}. ${currentQuestion.question}`; } }
+        <footer>
+            <p>© 2026 ELTEC Certifikačný systém — Džanči</p>
+            <div class="footer-links">
+                <a href="index.html">🏠 Hlavná</a>
+                <a href="spravne_odpovede.html">📚 Odpovede</a>
+                <a href="kviz.html">🎯 Kvíz</a>
+            </div>
+            <p style="margin-top:8px;">⚙️ Posledný update: 22.4.2026 - 21:25</p>
+        </footer>
+    </div>
 
-    // ========== PREZENTUJÚCI ==========
-    document.getElementById('presJoinBtn')?.addEventListener('click', async () => {
-        const code = document.getElementById('presJoinCode').value.trim().toUpperCase(); const name = document.getElementById('presName').value.trim();
-        if (!code || !name) { alert('Zadaj kód miestnosti a svoje meno!'); return; }
-        presenterGameId = code; const gameRef = database.ref(`games/${presenterGameId}`); const snap = await gameRef.once('value');
-        if (!snap.exists()) { alert('Hra neexistuje! Skontroluj kód.'); return; }
-        presenterActive = true; document.getElementById('presJoinBtn').style.display = 'none'; document.getElementById('presDisconnectBtn').style.display = 'inline-block';
-        document.getElementById('presQuestionText').innerHTML = 'Sledovanie hry...';
-        database.ref(`games/${presenterGameId}/currentQuestion`).on('value', (snap) => {
-            const qData = snap.val(); if (qData && presenterActive) {
-                const q = qData.question; displayHostOptions('presOptions', q.options); displayHostOptions('presFsOptions', q.options);
-                document.getElementById('presQuestionText').innerHTML = `${qData.index+1}. ${q.question}`; document.getElementById('presFsQuestionText').innerHTML = `${qData.index+1}. ${q.question}`;
-                startPresenterTimer(15);
-                document.querySelectorAll('#presOptions .opt-host-btn').forEach(btn => btn.classList.remove('correct-answer'));
-                document.querySelectorAll('#presFsOptions .opt-host-btn').forEach(btn => btn.classList.remove('correct-answer'));
-            }
-        });
-        database.ref(`games/${presenterGameId}/questionDone`).on('value', async (snap) => {
-            const done = snap.val(); if (done && presenterActive) {
-                const currentQSnap = await database.ref(`games/${presenterGameId}/currentQuestion`).once('value'); const qData = currentQSnap.val();
-                if (qData) { const correctIndices = qData.question.correct;
-                    const btns = document.querySelectorAll('#presOptions .opt-host-btn'); correctIndices.forEach(c => { if (btns[c]) btns[c].classList.add('correct-answer'); });
-                    const fsBtns = document.querySelectorAll('#presFsOptions .opt-host-btn'); correctIndices.forEach(c => { if (fsBtns[c]) fsBtns[c].classList.add('correct-answer'); });
-                }
-                if (presenterTimerInterval) clearInterval(presenterTimerInterval); document.getElementById('presTimer').textContent = '✓';
-            }
-        });
-        database.ref(`games/${presenterGameId}/players`).on('value', (snap) => {
-            const playersData = snap.val() || {}; const arr = Object.values(playersData); arr.sort((a,b) => (b.score||0) - (a.score||0));
-            const top5 = arr.slice(0,5); const leaderHtml = top5.map((p,i) => `<div class="player-item"><span>${i+1}. ${p.name}</span><span>${p.score||0} b</span></div>`).join('');
-            document.getElementById('presLeaderboard').innerHTML = leaderHtml || '<div>Zatiaľ žiadni hráči</div>'; document.getElementById('presFsLeaderboard').innerHTML = leaderHtml || '<div>Žiadni hráči</div>';
-            if (currentQuestion) { database.ref(`games/${presenterGameId}/answers/${currentIndex}`).once('value').then(ansSnap => { const ans = ansSnap.val() || {}; const answeredCount = Object.keys(ans).length; document.getElementById('presStats').innerHTML = `Odpovedalo: ${answeredCount} / ${arr.length} hráčov`; }); }
-            else { document.getElementById('presStats').innerHTML = 'Čaká sa na prvú otázku'; }
-        });
-    });
-    function startPresenterTimer(seconds) { if (presenterTimerInterval) clearInterval(presenterTimerInterval); let remaining = seconds; const timerEl = document.getElementById('presTimer'); timerEl.textContent = remaining; presenterTimerInterval = setInterval(() => { remaining--; timerEl.textContent = remaining >=0 ? remaining : 0; if (remaining <= 0) clearInterval(presenterTimerInterval); }, 1000); }
-    function togglePresenterFullscreen() { document.getElementById('presFullscreen').classList.toggle('active'); }
-    document.getElementById('presDisconnectBtn')?.addEventListener('click', () => { presenterActive = false; if (presenterTimerInterval) clearInterval(presenterTimerInterval); document.getElementById('presJoinBtn').style.display = 'inline-block'; document.getElementById('presDisconnectBtn').style.display = 'none'; document.getElementById('presQuestionText').innerHTML = 'Zadaj kód miestnosti a klikni Pripojiť'; document.getElementById('presOptions').innerHTML = ''; document.getElementById('presFsOptions').innerHTML = ''; document.getElementById('presLeaderboard').innerHTML = ''; document.getElementById('presFsLeaderboard').innerHTML = ''; document.getElementById('presStats').innerHTML = 'Zatiaľ žiadne dáta'; });
+    <!-- Firebase init -->
+    <script>
+        const firebaseConfig = { databaseURL: "https://eltec-fejkhoot-default-rtdb.europe-west1.firebasedatabase.app/" };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+    </script>
 
-    // ========== HRÁČ ==========
-    document.getElementById('joinGameBtn').addEventListener('click', async () => {
-        const code = document.getElementById('joinCodeInput').value.toUpperCase(); const name = document.getElementById('playerNameInput').value;
-        if (!code || !name) { alert('Zadaj kód a meno!'); return; }
-        playerId = 'p_' + Date.now() + '_' + Math.random().toString(36).substr(2,6); gameId = code;
-        const gameRef = database.ref(`games/${gameId}`); const gameSnap = await gameRef.once('value');
-        if (!gameSnap.exists() || gameSnap.val().status !== 'lobby') { alert('Hra neexistuje alebo už začala!'); return; }
-        totalQuestionsCount = gameSnap.val().totalQuestions || 10;
-        await gameRef.child(`players/${playerId}`).set({ name, score: 0 });
-        document.getElementById('joinScreen').style.display = 'none'; document.getElementById('gameWaiting').classList.add('active'); document.getElementById('gameFullscreen').classList.remove('active');
-        listenForPlayerGame();
-    });
-    function listenForPlayerGame() {
-        database.ref(`games/${gameId}/currentQuestion`).on('value', (snap) => {
-            const qData = snap.val(); if (qData && playerCurrentIndex !== qData.index) {
-                playerCurrentIndex = qData.index; currentQuestion = qData.question; acceptingAnswers = true; answerSubmitted = false; myAnswers = []; questionStartTime = Date.now();
-                document.getElementById('gameWaiting').classList.remove('active'); document.getElementById('gameFullscreen').classList.add('active'); displayPlayerQuestion();
-            }
-        });
-        database.ref(`games/${gameId}/questionDone`).on('value', (snap) => { const done = snap.val(); if (done && done[playerCurrentIndex] === true && document.getElementById('gameFullscreen').classList.contains('active')) { stopPlayerTimer(); document.getElementById('gameFullscreen').classList.remove('active'); document.getElementById('gameWaiting').classList.add('active'); } });
-        database.ref(`games/${gameId}/status`).on('value', async (snap) => {
-            if (snap.val() === 'ended') { stopPlayerTimer(); const gameSnap = await database.ref(`games/${gameId}`).once('value'); const playersData = gameSnap.val()?.players || {}; const myData = playersData[playerId]; const allPlayers = Object.values(playersData); allPlayers.sort((a,b) => (b.score||0) - (a.score||0)); const rank = allPlayers.findIndex(p => p.name === myData?.name) + 1; document.getElementById('finalScore').textContent = `${myData?.score || 0} bodov`; document.getElementById('finalRank').innerHTML = `<p style="font-size:1.2rem">Tvoje umiestnenie: #${rank}</p>`; document.getElementById('resultsOverlay').classList.add('active'); document.getElementById('gameFullscreen').classList.remove('active'); document.getElementById('gameWaiting').classList.remove('active'); }
-        });
-    }
-    function startPlayerTimer() { if (playerTimerInterval) clearInterval(playerTimerInterval); let remaining = 15; const timerEl = document.getElementById('gameTimer'); timerEl.textContent = remaining; timerEl.classList.remove('warning'); playerTimerInterval = setInterval(() => { remaining--; timerEl.textContent = remaining; if (remaining <= 5) timerEl.classList.add('warning'); if (remaining <= 0) clearInterval(playerTimerInterval); }, 1000); }
-    function stopPlayerTimer() { if (playerTimerInterval) clearInterval(playerTimerInterval); }
-    function displayPlayerQuestion() {
-        startPlayerTimer(); document.getElementById('gameProgress').textContent = `Otázka ${playerCurrentIndex+1} / ${totalQuestionsCount}`; document.getElementById('gameQuestionText').textContent = currentQuestion.question;
-        const container = document.getElementById('gameAnswers'); const letters = ['A','B','C','D']; let html = '';
-        currentQuestion.options.forEach((opt, i) => { let shortText = opt.length > 30 ? opt.substring(0,27)+'...' : opt; html += `<button class="game-ans-btn ans-btn-${letters[i]}" data-ans="${i}"><span class="ans-letter">${letters[i]}</span><span class="ans-text">${shortText}</span></button>`; });
-        container.innerHTML = html; isMultiChoice = currentQuestion.type === 'multi';
-        if (isMultiChoice) {
-            document.querySelectorAll('.game-ans-btn').forEach(btn => { btn.onclick = () => { if (!acceptingAnswers || answerSubmitted) return; const val = parseInt(btn.dataset.ans); if (myAnswers.includes(val)) { myAnswers = myAnswers.filter(v => v !== val); btn.style.opacity = '0.7'; } else { myAnswers.push(val); btn.style.opacity = '1'; } }; });
-            let submitBtn = document.getElementById('multiSubmitBtn'); if (!submitBtn) { submitBtn = document.createElement('button'); submitBtn.id = 'multiSubmitBtn'; submitBtn.textContent = '✅ Odoslať odpoveď'; submitBtn.className = 'btn'; submitBtn.style.width = '100%'; submitBtn.style.marginTop = '10px'; submitBtn.style.gridColumn = 'span 2'; container.parentNode.appendChild(submitBtn); }
-            submitBtn.onclick = async () => { if (!acceptingAnswers || answerSubmitted) return; if (myAnswers.length === 0) { showPlayerFeedback('Vyber aspoň jednu odpoveď!', false); return; } answerSubmitted = true; const timeTaken = Date.now() - questionStartTime; await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answers: myAnswers, time: timeTaken }); showPlayerFeedback('✅ Odpoveď zaznamenaná!', true); document.querySelectorAll('.game-ans-btn').forEach(b => b.disabled = true); submitBtn.disabled = true; }; submitBtn.style.display = 'block';
-        } else {
-            const oldSubmit = document.getElementById('multiSubmitBtn'); if (oldSubmit) oldSubmit.remove();
-            document.querySelectorAll('.game-ans-btn').forEach(btn => { btn.onclick = async () => { if (!acceptingAnswers || answerSubmitted) return; answerSubmitted = true; const timeTaken = Date.now() - questionStartTime; await database.ref(`games/${gameId}/answers/${playerCurrentIndex}/${playerId}`).set({ answer: parseInt(btn.dataset.ans), time: timeTaken }); showPlayerFeedback('✅ Odpoveď zaznamenaná!', true); document.querySelectorAll('.game-ans-btn').forEach(b => b.disabled = true); }; });
-        }
-    }
-    function showPlayerFeedback(msg, isCorrect) { const fb = document.getElementById('gameFeedback'); fb.textContent = msg; fb.className = `game-feedback show ${isCorrect ? 'correct' : 'wrong'}`; setTimeout(() => fb.classList.remove('show'), 2000); }
-    function closeResults() { document.getElementById('resultsOverlay').classList.remove('active'); location.reload(); }
-    function toggleTheme() { document.body.classList.toggle('light-theme'); localStorage.setItem('theme', document.body.classList.contains('light-theme') ? 'light' : 'dark'); document.getElementById('themeToggle').textContent = document.body.classList.contains('light-theme') ? '☀️' : '🌙'; }
-    (function() { if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-theme'); document.getElementById('themeToggle').textContent = '☀️'; } })();
-    document.getElementById('startGameBtn')?.addEventListener('click', startGame);
-    document.getElementById('nextQuestionBtn')?.addEventListener('click', nextQuestion);
-    document.getElementById('endGameBtn')?.addEventListener('click', endGame);
-</script>
+    <!-- Moduly -->
+    <script src="js/questions.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/fejkhoot.js"></script>
+
 </body>
 </html>
