@@ -1,0 +1,146 @@
+[[questions]]
+id = "D_1"
+type = "single"
+question = """Existuje určitý bod (prah citlivosti) po prekročení ktorého organizmus začne reagovať na pôsobenie elektrickej energie. Do akej hranice je organizmus necitlivý na pôsobenie elektrickej energie?"""
+options = ["do I = 10 mA po dobu 5 sekúnd", "do I = 2 mA bez ohľadu na čas pôsobenia", "do I = 1 mA bez ohľadu na čas pôsobenia"]
+correct = [1]
+
+[[questions]]
+id = "D_2"
+type = "single"
+question = """Do akej veľkosti prúdu pretekajúceho telom postihnutého nedôjde k fibrilácii srdca (ani po dlhodobom pôsobení)?"""
+options = ["do I = 1 A", "do I = 500 mA", "do I = 10 mA", "do I = 20 mA"]
+correct = [3]
+
+[[questions]]
+id = "D_3"
+type = "single"
+question = """Ako sa volá (pri úraze elektrinou) dotyk človeka s jednou fázou a súčasne inou časťou tela sa dotýka vodivej zeme?"""
+options = ["dvojpólový", "jednopólový", "priamy", "nepriamy"]
+correct = [1]
+
+[[questions]]
+id = "D_4"
+type = "single"
+question = """Ako sa volá (pri úraze elektrinou) dotyk človeka s dvomi fázami (napr. každou rukou sa dotýka jednej fázy)?"""
+options = ["dvojpólový", "jednopólový", "priamy", "nepriamy"]
+correct = [0]
+
+[[questions]]
+id = "D_5"
+type = "single"
+question = """Cesta prúdu telom (kadiaľ sa obvod uzatvára) je dôležitá z hľadiska stupňa nebezpečenstva. Kedy sú ťažké úrazy?"""
+options = ["keď prúd preteká: pravá ruka - pravá noha", "keď prúd preteká hlavou alebo srdcom", "keď prúd preteká pravou a ľavou nohou"]
+correct = [1]
+
+[[questions]]
+id = "D_6"
+type = "single"
+question = """Čím je daná veľkosť úrazového prúdu(v úrazovej slučke je: telo postihnutého, betónová podlaha, kombinačky atď)?"""
+options = ["pôsobiacim napätím a ohmickým odporom tela", "pôsobiacim napätím a celkovým odporom úrazovej slučky", "pôsobiacim napätím a odporom kože"]
+correct = [1]
+
+[[questions]]
+id = "D_7"
+type = "single"
+question = """Aké napätie spôsobí prerazenie suchej tvrdej kože napr. na tvrdých "vypracovaných rukách"?"""
+options = ["napätie nad 100 V", "napätie nad 60 V", "napätie nad 24 V"]
+correct = [0]
+
+[[questions]]
+id = "D_8"
+type = "single"
+question = """Ktorá je nebezpečná frekvencia striedavého prúdu?"""
+options = ["stovky Hz", "rádovo kHz", "rádovo MHz", "priemyselná frekvencia 50 Hz"]
+correct = [3]
+
+[[questions]]
+id = "D_9"
+type = "single"
+question = """Je možné preseknúť vodiče sekerou tam, kde nie je možné urobiť vypnutie vypínačom alebo poistkami?"""
+options = ["nie nesmie sa to", "áno jeto možné pri "nn"", "áno jeto možné pri bezpečnom napätí"]
+correct = [1]
+
+[[questions]]
+id = "D_10"
+type = "single"
+question = """Kedy a ako možno hasiť horiace šaty na postihnutom?"""
+options = ["po vypnutí elektrického prúdu možno hasit' suchou vinenou alebo azbestovou dekou", "treba hasiť okamžite snehovým hasiacim prístrojom", "treba hasiť okamžite vodou"]
+correct = [0]
+
+[[questions]]
+id = "D_11"
+type = "multi"
+question = """Kedy je treba postihnutého čo najrýchlejšie previesť pod stálym dozorom do nemocnice?"""
+options = ["ak je popálený na väčšej ploche", "ak nezadržateľne krváca", "pri zlomeninách", "ak je v bezvedomí"]
+correct = [0, 1]
+
+[[questions]]
+id = "D_12"
+type = "multi"
+question = """Ako postupujeme, keď je postihnutý po vyslobodení z prúdového okruhu pri vedomí?"""
+options = ["uložíme ho do teplej miestnosti", "uvoľníme mu odev a zvlhčujeme pery", "až do súhlasu lekára nesmie vstať", "nenecháme ho osamote"]
+correct = [0, 1, 2, 3]
+
+[[questions]]
+id = "D_13"
+type = "single"
+question = """Resustitáciu dospelých začíname:"""
+options = ["nepriamou masážou hrudníka", "uložením do stabilizovanej polohy", "umelým dýchaním"]
+correct = [0]
+
+[[questions]]
+id = "D_14"
+type = "single"
+question = """Čo spravíme, keď zistíme, že správne umelé dýchanie je neúčinné a postihnutý stratil pulz?"""
+options = ["zväčšíme frekvenciu vdychov", "doplníme oživovanie nepriamou masážou srdca", "ukončíme oživovacie činnosti"]
+correct = [1]
+
+[[questions]]
+id = "D_15"
+type = "single"
+question = """Aká je frekvencia rytmického stláčania hrudnej kosti pri nepriamej masáži srdca?"""
+options = ["12-16 krát za minútu", "25 krát za minútu", "80-100 krát za minútu"]
+correct = [2]
+
+[[questions]]
+id = "D_16"
+type = "single"
+question = """Ako robí oživovanie jeden záchranca, keď postihnutý nedýcha a nemá pulz?"""
+options = ["v pomere 16:1 (16 kompresií a 1 vdych)", "v pomere 30: 2 (30 kompresií a 2 vdychy)", "v pomere 5:2 (5 kompresií a 2 vdychy)"]
+correct = [1]
+
+[[questions]]
+id = "D_17"
+type = "single"
+question = """Ako robia oživovanie dvaja záchrancovia, keď postihnutý nedýcha a nemá pulz?"""
+options = ["v pomere 30: 2 (30 kompresií a 2 vdychy)", "v pomere 5:2 (5 kompresií a 2 vdychy)", "v pomere 2: 15 (2 kompresie a 15 vdychov)"]
+correct = [0]
+
+[[questions]]
+id = "D_18"
+type = "single"
+question = """Pri krvácaní z rán tepny krv strieka prerušovane a pri krvácaní zo žíl tečie neprerušene. Akým spôsobom zastavujeme krvácanie?"""
+options = ["priložením čistej látky alebo obväzu a prelepením", "priložením tlakového obväzu", "obviazaním rany"]
+correct = [1]
+
+[[questions]]
+id = "D_19"
+type = "multi"
+question = """Kde stiahneme končatinu pri krvácaní z veľkých tepien a čo ešte musíme urobiť (veľmi kokotná otázka)?"""
+options = ["končatinu nesťahujeme nad ranou Martinovým obvínadlom", "priložíme len tlakový obväz", "postihutého urýchlene vezieme do nemocnice", "stiahneme pod ranou Martinovým obvínadlom"]
+correct = [0, 2]
+
+[[questions]]
+id = "D_20"
+type = "single"
+question = """Môžu sa otvorené rany alebo popáleniny vymývať alebo natierat'?"""
+options = ["áno - tinktúrou", "nie nesmú sa", "áno - čistou vodouu"]
+correct = [1]
+
+[[questions]]
+id = "D_21"
+type = "single"
+question = """Protišokové opatrenia:"""
+options = ["tíšenie bolesti, tekutiny, teplo, ticho, transport", "uloženie do stabilizovanej polohy", "zabezpečenie priechodnosti horných dýchacích ciest"]
+correct = [0]

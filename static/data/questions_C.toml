@@ -1,0 +1,433 @@
+[[questions]]
+id = "C_1"
+type = "single"
+question = """Ako rozdeľujeme priestory z hľadiska nebezpečenstva úrazu elektrickým prúdom?"""
+options = ["bez nebezpečenstva výbuchu a s nebezpečenstvom výbuchu", "bezpečné, nebezpečné a zvlášť nebezpečné", "s prostredím obyčajným, horúcim, mokrým", "suché, vlhké, mokré"]
+correct = [1]
+
+[[questions]]
+id = "C_2"
+type = "single"
+question = """Do akej triedy sú zaradené objekty bez nebezpečenstva výbuchu?"""
+options = ["objekty triedy A", "objekty triedy B", "objekty triedy B1", "objekty triedy C"]
+correct = [0]
+
+[[questions]]
+id = "C_3"
+type = "single"
+question = """Do akej triedy sú zaradené objekty s nebezpečenstvom výbuchu?"""
+options = ["objekty triedy A", "objekty triedy B", "objekty triedy C", "objekty triedy D"]
+correct = [1]
+
+[[questions]]
+id = "C_4"
+type = "single"
+question = """Do akej triedy sú zaradené objekty s nebezpečenstvom výbuchu zahŕňajúce regulačné stanice plynu?"""
+options = ["objekty triedy A", "objekty triedy B", "objekty triedy B1", "objekty triedy C"]
+correct = [2]
+
+[[questions]]
+id = "C_5"
+type = "single"
+question = """Kde musí byť umiestnený ochranný kolík v pevnej jednofázovej zásuvke, do ktorej pripájame pohyblivým prívodom prenosné elektrické spotrebiče?"""
+options = ["hore nad dierkami", "dole pod dierkami", "pri pripájaní prenosných spotrebičov nemusí byť ochranný kolík"]
+correct = [0]
+
+[[questions]]
+id = "C_6"
+type = "single"
+question = """Koľko žíl musí mať jednofázová predlžovacia šnúra?"""
+options = ["2 alebo 3", "2", "3", "viac ako 3"]
+correct = [2]
+
+[[questions]]
+id = "C_7"
+type = "single"
+question = """Ako farebne musí byť označený izolovaný ochranný vodič?"""
+options = ["zelený", "žltý", "hnedý alebo čierny", "po celej dĺžke má zelenožlté pruhy"]
+correct = [3]
+
+[[questions]]
+id = "C_8"
+type = "single"
+question = """Koľko vodičov má pohyblivý prívod pre predmety s triedou ochrany II?"""
+options = ["musí mať tri vodiče", "môže mať dva alebo tri vodiče", "má len dva vodiče", "viac ako tri vodiče"]
+correct = [2]
+
+[[questions]]
+id = "C_9"
+type = "single"
+question = """Kde môže byť prerušovaný ochranný vodič pri pohyblivých prívodoch?"""
+options = ["v zásuvkových spojoch, ističoch a vypínačoch", "len v zásuvkových spojoch", "v istiacich prvkoch", "podľa potreby"]
+correct = [1]
+
+[[questions]]
+id = "C_10"
+type = "single"
+question = """Čo je uzemnenie?"""
+options = ["vodivé spojenie živých alebo neživých častí so zemou", "vodivé teleso úmyselne vložené do zeme", "vodivé teleso náhodne sa nachádzajúce v zemi"]
+correct = [0]
+
+[[questions]]
+id = "C_11"
+type = "single"
+question = """Aké uzemnenie predstavuje uzemnenie realizované priamym spojením vodivých častí elektrického zariadenia so zemou za účelom ochrany pred nebezpečným dotykom?"""
+options = ["dotykové", "pracovné", "ochranné", "bleskozvodné"]
+correct = [2]
+
+[[questions]]
+id = "C_12"
+type = "single"
+question = """Aké zemniče poznáte?"""
+options = ["náhodné a zhotovené", "ochranné a pracovné", "priame a nepriame", "do 1000 V a nad 1000 V"]
+correct = [0]
+
+[[questions]]
+id = "C_13"
+type = "single"
+question = """Má elektrický predmet triedy I ochrannú svorku alebo ochranný kontakt?"""
+options = ["nie, nemá", "podľa potreby", "áno, má", "elektrické predmety triedy I sú u nás zakázané"]
+correct = [2]
+
+[[questions]]
+id = "C_14"
+type = "single"
+question = """Má elektrický predmet triedy ochrán II zariadenie na pripojenie ochranného vodiča?"""
+options = ["nie, nemá", "áno, má", "podľa potreby"]
+correct = [0]
+
+[[questions]]
+id = "C_15"
+type = "single"
+question = """Môžu mať vnútorné obvody elektrického predmetu triedy III napätie vyššie ako malé napätie?"""
+options = ["áno", "nie", "napätie nie je rozhodujúcim kritériom"]
+correct = [1]
+
+[[questions]]
+id = "C_16"
+type = "multi"
+question = """Elektrické zariadenie je zariadenie určené na?"""
+options = ["výrobu elektrickej energie", "rozvod elektrickej energie", "spotrebu elektrickej energie"]
+correct = [0, 1, 2]
+
+[[questions]]
+id = "C_17"
+type = "single"
+question = """Je súčasťou obsluhy elektrického zariadenia aj výmena žiaroviek?"""
+options = ["áno", "nie", "áno, ale len pri triede II", "áno, ale len pri zariadeniach s vyššou mierou ohrozenia"]
+correct = [0]
+
+[[questions]]
+id = "C_18"
+type = "single"
+question = """Sú úkony ako zabezpečenie pracoviska a meranie prenosnými prístrojmi súčasťou práce na elektrickom zariadení?"""
+options = ["áno", "nie", "len zabezpečenie pracoviska", "len meranie prenosnými prístrojmi"]
+correct = [0]
+
+[[questions]]
+id = "C_19"
+type = "single"
+question = """Je súčasťou zabezpečenia pracoviska aj príkaz 'B'?"""
+options = ["áno", "nie", "pojem príkaz 'B' vyhláška nepozná"]
+correct = [0]
+
+[[questions]]
+id = "C_20"
+type = "single"
+question = """Je zriaďovanie nových a rekonštrukcia už prevádzkovaných zariadení montážou elektrického zariadenia?"""
+options = ["áno", "nie", "len zriaďovanie nových", "len rekonštrukcia"]
+correct = [0]
+
+[[questions]]
+id = "C_21"
+type = "single"
+question = """Je čistenie elektrických zariadení pre zaistenie ich dobrého stavu údržbou?"""
+options = ["áno, údržba je čistenie", "áno, spolu so všetkými druhmi opráv a odstraňovaním závad", "nie, čistenie je obsluhou"]
+correct = [1]
+
+[[questions]]
+id = "C_22"
+type = "single"
+question = """Revíziou elektrického zariadenia sa zisťuje, či elektrické zariadenie?"""
+options = ["funguje", "vyhovuje normám", "má zodpovedajúcu kvalitu", "má vyhovujúcu technickú dokumentáciu"]
+correct = [1]
+
+[[questions]]
+id = "C_23"
+type = "single"
+question = """Pracovné rukavice sú?"""
+options = ["ochranné pomôcky", "pracovné pomôcky", "pracovný odev", "pracovné náradie"]
+correct = [0]
+
+[[questions]]
+id = "C_24"
+type = "single"
+question = """Patria kódové karty na otvorenie zábrany na vstup do priestoru medzi pracovné pomôcky?"""
+options = ["áno, ale len pre zábranu kde nemajú prístup laici", "áno", "nie", "kódové karty patria medzi ochranné pomôcky"]
+correct = [1]
+
+[[questions]]
+id = "C_25"
+type = "single"
+question = """Môže byť vedúcim práce aj osoba, ktorá pracuje na elektrickom zariadení sama?"""
+options = ["nie, lebo nemá komu byť vedúcim", "áno", "v skupine musí byť minimálne 5 pracovníkov"]
+correct = [1]
+
+[[questions]]
+id = "C_26"
+type = "single"
+question = """Kto zodpovedá za dodržiavanie bezpečnostných predpisov pri Práci podľa pokynov?"""
+options = ["osoba ktorá vydala pokyny", "pracujúci ktorým boli vydané pokyny", "osoba ktorá vydala pokyny a aj pracujúci"]
+correct = [1]
+
+[[questions]]
+id = "C_27"
+type = "single"
+question = """Kto zodpovedá za dodržiavanie bezpečnostných predpisov pri Práci pod dohľadom?"""
+options = ["osoba ktorá robí dohľad", "pracujúci nad ktorými je dohľad vykonávaný", "osoba ktorá robí dohľad a aj pracujúci"]
+correct = [2]
+
+[[questions]]
+id = "C_28"
+type = "single"
+question = """Kto zodpovedá za dodržiavanie bezpečnostných predpisov pri Práci pod dozorom?"""
+options = ["osoba ktorá je poverená dozorom", "pracujúci nad ktorými je dozor vykonávaný", "osoba ktorá je poverená dozorom a aj pracujúci"]
+correct = [0]
+
+[[questions]]
+id = "C_29"
+type = "single"
+question = """Používajú sa pri práci pod napätím (PPN) predpísané špeciálne ochranné pomôcky?"""
+options = ["áno", "nie", "podľa potreby", "PPN je zakázaná"]
+correct = [0]
+
+[[questions]]
+id = "C_30"
+type = "multi"
+question = """Aké typy Prác pod napätím (PPN) rozlišujeme?"""
+options = ["PPN v dotyku", "PPN na vzdialenosť", "PPN na potenciáli", "PPN na fáze"]
+correct = [0, 1, 2]
+
+[[questions]]
+id = "C_31"
+type = "single"
+question = """Priestor ohrozenia pri PPN je vzdialenosť od nekrytých živých častí, ktorá je:"""
+options = ["menšia alebo rovná dovolenej vzdialenosti priblíženia", "väčšia ako dovolená vzdialenosť priblíženia", "menšia ako dovolená vzdialenosť priblíženia", "nezávislá na dovolenej vzdialenosti"]
+correct = [0]
+
+[[questions]]
+id = "C_32"
+type = "single"
+question = """Zvláštny režim prevádzky (ZRP) - je to súhrn opatrení pri práci?"""
+options = ["v beznapäťovom stave", "v blízkosti napätia", "pod napätím"]
+correct = [2]
+
+[[questions]]
+id = "C_33"
+type = "single"
+question = """Znížená viditeľnosť je stav, kedy vedúci práce zo svojho stanoviska?"""
+options = ["nerozozná bezpečne pracovníkov alebo obrysy zariadení", "pracovníkov a zariadenia vidí hmlisto", "nerozozná ich na vzdialenosť 10 m", "nerozozná ich na vzdialenosť 15 m"]
+correct = [0]
+
+[[questions]]
+id = "C_34"
+type = "multi"
+question = """Môžu sa používať aj elektrické zariadenia, ktoré nevyhovujú platným elektrotechnickým normám?"""
+options = ["áno, ak neohrozujú bezpečnosť osôb a vecí", "áno, podľa zvláštnych miestnych predpisov", "áno", "nie"]
+correct = [0, 1]
+
+[[questions]]
+id = "C_35"
+type = "single"
+question = """Čo sú bezpečnostné oznámenia?"""
+options = ["súpis priestupkov", "vyjadrujú príkazy alebo zákazy pre zaistenie bezpečnosti", "oznámenia polícii", "oznámenia Technickej inšpekcii"]
+correct = [1]
+
+[[questions]]
+id = "C_36"
+type = "single"
+question = """Ako sú realizované bezpečnostné oznámenia?"""
+options = ["píšu sa na predpísaný formulár", "sú to bezpečnostné tabuľky a nápisy", "telefónna alebo faxová správa"]
+correct = [1]
+
+[[questions]]
+id = "C_37"
+type = "single"
+question = """Môžu sa bezpečnostné tabuľky upevňovať na živé časti pod napätím?"""
+options = ["áno", "nie", "môže tak urobiť elektrotechnik špecialista", "môže tak urobiť vedúci prevádzky"]
+correct = [1]
+
+[[questions]]
+id = "C_38"
+type = "single"
+question = """Kedy je nutné presvedčiť sa o dobrom stave ochranných a pracovných pomôcok?"""
+options = ["raz za pracovnú zmenu", "pred každým použitím", "po každom použití", "raz za tri dni"]
+correct = [1]
+
+[[questions]]
+id = "C_39"
+type = "multi"
+question = """Kedy sa musí vydať príkaz 'B' pre prácu na zariadeniach mn a nn?"""
+options = ["ak sú v spoločných priestoroch so zariadeniami vn, vvn, zvn", "na križovatkách s vedením vn, vvn, zvn", "v častiach súbehov s vedením vn, vvn, zvn", "pre mn a nn sa nemusí vydávať"]
+correct = [0, 1, 2]
+
+[[questions]]
+id = "C_40"
+type = "multi"
+question = """Kto vydáva a podpisuje príkaz 'B' a 'B-PPN'?"""
+options = ["osoba zodpovedajúca za prevádzku príslušného zariadenia", "vedúci prevádzky alebo údržby", "Technická inšpekcia", "Orgán dozoru"]
+correct = [1, 2]
+
+[[questions]]
+id = "C_41"
+type = "single"
+question = """Na koho sa vystavuje príkaz 'B' alebo 'B-PPN'?"""
+options = ["na každého pracovníka v priestore ohrozenia", "na vedúceho práce", "na osobu ktorá robí dohľad"]
+correct = [1]
+
+[[questions]]
+id = "C_42"
+type = "multi"
+question = """Okrem iných údajov, čo musí obsahovať príkaz 'B-PPN'?"""
+options = ["červený nápis 'Pozor práca pod napätím'", "údaje o atmosferických podmienkach", "súhlas TI", "súhlas orgánu dozoru"]
+correct = [0, 1]
+
+[[questions]]
+id = "C_43"
+type = "single"
+question = """Ako dlho platí príkaz 'B-PPN'?"""
+options = ["najviac jednu pracovnú zmenu", "najviac 24 hodín", "najviac 48 hodín", "najviac 1 týždeň"]
+correct = [1]
+
+[[questions]]
+id = "C_44"
+type = "single"
+question = """Kedy končí platnosť príkazu 'B'?"""
+options = ["jeho písomným uzavretím", "ukončením práce", "uvedením pracoviska do beznapäťového stavu"]
+correct = [0]
+
+[[questions]]
+id = "C_45"
+type = "multi"
+question = """Kedy začína platnosť príkazu 'B'?"""
+options = ["keď vedúci práce alebo určený dozor prevzal pracovisko", "keď dal vedúci práce alebo alebo určený dozor príkaz na začatie prác", "keď skontroloval ochranné pomôcky", "keď skontroloval pracovné pomôcky"]
+correct = [0, 1]
+
+[[questions]]
+id = "C_46"
+type = "single"
+question = """Z akého dôvodu je pracovník povinný evidovať na jednom mieste všetky príkazy 'B'?"""
+options = ["z dôvodu vydania príkazu na zapnutie zariadenia", "z dôvodu optimálneho rozdelenia prác", "z dôvodu normovania práce"]
+correct = [0]
+
+[[questions]]
+id = "C_47"
+type = "single"
+question = """Kedy je možné upustiť od príkazu 'B'?"""
+options = ["nikdy", "len keď práce vykonáva Elektrotechnik špecialista", "ak hrozí vznik veľkých škôd alebo ohrozenie života", "vždy"]
+correct = [2]
+
+[[questions]]
+id = "C_48"
+type = "multi"
+question = """Patrí do zaistenia pracoviska aj uschovanie vložiek a hlavíc tavných poistiek?"""
+options = ["áno, spolu s vypnutím zariadenia a odskúšaním", "áno, spolu so skratovaním a zemnením", "nie", "áno, spolu s označením a ohradením"]
+correct = [0, 1, 3]
+
+[[questions]]
+id = "C_49"
+type = "multi"
+question = """Čo musí robiť osoba, ktorá preberá ústne príkazy?"""
+options = ["zapisuje ich", "opakuje ich", "len ich dôsledne vypočuje"]
+correct = [0, 1]
+
+[[questions]]
+id = "C_50"
+type = "multi"
+question = """Čo je potrebné urobiť pri odovzdávaní príkazov telefonicky alebo rádiotelefonicky?"""
+options = ["dôležité údaje treba vzájomne zapísať", "prijaté príkazy zopakovať a tým ich znova potvrdiť", "hovory treba nahrávať"]
+correct = [0, 1]
+
+[[questions]]
+id = "C_51"
+type = "single"
+question = """Musí celá pracovná skupina opustiť pracovisko pri prerušení práce?"""
+options = ["nie", "áno", "môže ostať osoba len so súhlasom vedúceho"]
+correct = [1]
+
+[[questions]]
+id = "C_52"
+type = "multi"
+question = """Kedy uzavrie vedúci práce príkaz 'B-PPN'?"""
+options = ["po odstránení všetkých pracovných a ochranných pomôcok", "po sústredení všetkých pracovníkov na určenom mieste", "obe uvedené možnosti", "po súhlase s IBP"]
+correct = [0, 1]
+
+[[questions]]
+id = "C_53"
+type = "single"
+question = """Aké dohodnuté znamenia sa používajú na diaľku ako súhlas na zapnutie zariadenia?"""
+options = ["kruhový pohyb zelenou zástavou", "nedovoľuje sa zapínanie znameniami na diaľku", "blikaním zeleným svetlom"]
+correct = [1]
+
+[[questions]]
+id = "C_54"
+type = "single"
+question = """Ako často sa musí v kinách a divadlách preskúšať funkcia núdzového osvetlenia?"""
+options = ["raz za deň", "pred každým predstavením", "raz za týždeň", "raz za mesiac"]
+correct = [1]
+
+[[questions]]
+id = "C_55"
+type = "single"
+question = """Ako členíme práce na elektrických zariadeniach?"""
+options = ["bez napätia, v blízkosti napätia, pod napätím", "bez napätia, pod napätím", "dovolené a zakázané"]
+correct = [0]
+
+[[questions]]
+id = "C_56"
+type = "single"
+question = """Aké sú bezpečné prúdy?"""
+options = ["striedavý do 10 mA, jednosmerný do 25 mA", "striedavý do 20 mA, jednosmerný do 40 mA", "striedavý do 2 mA, jednosmerný do 5 mA"]
+correct = [0]
+
+[[questions]]
+id = "C_57"
+type = "single"
+question = """Ktoré bezpečnostné tabuľky obsahujú informáciu o nebezpečenstve a označujú rizikový stav?"""
+options = ["tabuľky príkazu", "tabuľky výstrahy", "tabuľky zákazu", "tabuľky upozornenia"]
+correct = [1]
+
+[[questions]]
+id = "C_58"
+type = "single"
+question = """Ktoré bezpečnostné tabuľky obsahujú informáciu označujúcu neprípustnosť konania?"""
+options = ["tabuľky príkazu", "tabuľky výstrahy", "tabuľky zákazu", "tabuľky upozornenia"]
+correct = [2]
+
+[[questions]]
+id = "C_59"
+type = "single"
+question = """Ktoré bezpečnostné tabuľky obsahujú informáciu o bezpečí?"""
+options = ["tabuľky príkazu", "tabuľky výstrahy", "tabuľky zákazu", "tabuľky upozornenia"]
+correct = [3]
+
+[[questions]]
+id = "C_60"
+type = "single"
+question = """Aký geometrický tvar má na tabuľke bezpečnostná značka výstrahy?"""
+options = ["trojuholník", "štvorec", "kruh", "obdĺžnik"]
+correct = [0]
+
+[[questions]]
+id = "C_61"
+type = "single"
+question = """Medzinárodné označenie vonkajšieho vplyvu je tvorené:"""
+options = ["dvomi písmenami veľkej abecedy a jednou číslicou", "tromi písmenami veľkej abecedy", "tromi číslicami"]
+correct = [0]
+
+[[questions]]
+id = "C_62"
+type = "single"
+question = """Prvé písmeno (A, B, C) v označení vonkajšieho vplyvu vyjadruje:"""
+options = ["kategóriu vonkajšieho vplyvu", "povahu vonkajšieho vplyvu", "upresnenie vonkajšieho vplyvu"]
+correct = [0]

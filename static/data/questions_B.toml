@@ -1,0 +1,167 @@
+[[questions]]
+id = "B_1"
+type = "multi"
+question = """Pri meraní ochrany v sieti TT:"""
+options = ["ochranné uzemnenie sa spojí cez regulačný odpor R s niektorým neuzemneným krajným vodičom", "pracovné uzemnenie sa spojí cez regulačný odpor R s niektorým neuzemneným krajným vodičom", "ochranné uzemnenie sa spojí cez regulačný odpor R s niektorým uzemneným krajným vodičom", "pracovné uzemnenie sa spojí cez regulačný odpor R s niektorým uzemneným krajným vodičom"]
+correct = [0, 1]
+
+[[questions]]
+id = "B_2"
+type = "single"
+question = """Pri meraní ochrany v sieti TT sa regulačným odporom R nastaví na voltmetri V:"""
+options = ["sieťové napätie 220 V", "dovolené dotykové - bezpečné - napätie 50 V", "ľubovoľné napätie podľa typu voltmetra"]
+correct = [1]
+
+[[questions]]
+id = "B_3"
+type = "single"
+question = """Pri meraní ochrany v sieti TT sa po nastavení požadovanej hodnoty napätia na voltmetri V:"""
+options = ["musí vypnúť predradené istenie v požadovanom čase", "nemusí vypnúť predradené istenie", "musí vypnúť predradené istenie v ľubovoľnom čase"]
+correct = [0]
+
+[[questions]]
+id = "B_4"
+type = "single"
+question = """Ak ostane pri meraní ochrany v sieti TT napätie na voltmetri V aj pri úplnom vyradení odporu R (skrat) pod hodnotou 50 V, tak uzemnenie:"""
+options = ["vyhovuje aj v prípade že vypínacie prvky nevypnú", "vyhovuje len v prípade že vypínacie prvky nevypnú", "nevyhovuje"]
+correct = [2]
+
+[[questions]]
+id = "B_5"
+type = "single"
+question = """Pri skúšaní ochrany napäťovým chráničom sa musí zapnúť zariadenie na chrániči. Tým sa vyskúša:"""
+options = ["či ochrana pracuje", "či je chránič spojený s pomocným zemničom", "či je zariadenie funkčné"]
+correct = [0]
+
+[[questions]]
+id = "B_6"
+type = "single"
+question = """Pri skúšaní ochrany napäťovým chráničom:"""
+options = ["chránený elektrický predmet sa spojí cez vhodný rezistor R s jedným neuzemneným krajným vodičom medzi chráničom a elektrickým predmetom", "chránený elektrický predmet sa spojí cez vhodný rezistor R s uzemneným krajným vodičom medzi chráničom a elektrickým predmetom", "chránený elektrický predmet sa spojí cez vhodný rezistor R s jedným neuzemneným krajným vodičom medzi chráničom a sondou"]
+correct = [0]
+
+[[questions]]
+id = "B_7"
+type = "single"
+question = """Pri skúšaní ochrany napäťovým chráničom voltmeter V s vnútorným odporom Rv > 3 000 Ω použijeme na meranie napätia medzi:"""
+options = ["sondou a zemničom", "elektrickým predmetom a sondou S", "elektrickým predmetom a zemničom"]
+correct = [2]
+
+[[questions]]
+id = "B_8"
+type = "single"
+question = """Pri skúšaní ochrany napäťovým chráničom má byť sonda vzdialená od pomocného zemniča:"""
+options = ["20 m", "2 m", "200 m"]
+correct = [0]
+
+[[questions]]
+id = "B_9"
+type = "single"
+question = """Pri skúšaní ochrany napäťovým chráničom odpor R zvolíme tak, aby na elektrickom predmete vzniklo napätie, ktorého hodnota je:"""
+options = ["omnoho menšia ako dovolené dotykové napätie", "omnoho väčšia ako dovolené dotykové napätie", "omnoho menšia ako sieťové napätie"]
+correct = [0]
+
+[[questions]]
+id = "B_10"
+type = "single"
+question = """Pri skúšaní ochrany napäťovým chráničom pri zmenšovaní odporu R musí chránič vypnúť:"""
+options = ["skôr ako napätie na elektrickom predmete prekročí dovolené dotykové napätie", "neskôr ako napätie na elektrickom predmete prekročí dovolené dotykové napätie", "skôr ako napätie na elektrickom predmete prekročí sieťové napätie"]
+correct = [0]
+
+[[questions]]
+id = "B_11"
+type = "single"
+question = """Pri meraní odporu uzemnenia musíme merať:"""
+options = ["striedavým prúdom lebo pri meraní jednosmerným prúdom sa môže uplatniť polarizácia elektród", "jednosmerným prúdom lebo pri meraní striedavým prúdom sa môže uplatniť polarizácia elektród", "ľubovoľným prúdom podľa typu ampérmetra"]
+correct = [0]
+
+[[questions]]
+id = "B_12"
+type = "multi"
+question = """Pri meraní odporu uzemnenia je odpor uzemnenia sústredený v okolí uzemňovača, ktorého veľkosť závisí od:"""
+options = ["mernej vodivosti zeme v okolí uzemňovača", "od tvaru a rozmerov uzemňovača", "prúdu pretekaného uzemňovačom"]
+correct = [0, 1]
+
+[[questions]]
+id = "B_13"
+type = "single"
+question = """Pri meraní odporu uzemnenia možno odmerať napätie voči ktorémukoľvek uzemňovaču:"""
+options = ["pomocou špeciálneho voltmetra", "pomocou napäťovej sondy položenej medzi oboma uzemňovačmi", "pomocou napäťovej sondy položenej medzi krajnými vodičmi"]
+correct = [1]
+
+[[questions]]
+id = "B_14"
+type = "single"
+question = """Ak pri meraní odporu uzemnenia odmeriame napätie voči ktorémukoľvek uzemňovaču, vieme následne vypočítať:"""
+options = ["odpor uzemnenia", "odpor krajných vodičov", "odpor uzemnenia uzla transformátora"]
+correct = [0]
+
+[[questions]]
+id = "B_15"
+type = "single"
+question = """Pri meraní ochrany v sieti TN možno impedanciu vypínacej slučky merať:"""
+options = ["ohmetrom", "špeciálnymi na tento účel vyvinutými meracími prístrojmi", "V-A metódou"]
+correct = [1]
+
+[[questions]]
+id = "B_16"
+type = "single"
+question = """Pri meraní ochrany v sieti TN sa merací prístroj pripojí:"""
+options = ["medzi dve fázy", "medzi sondu a krajný vodič", "jedným pólom k fázovému vodiču siete a druhým pólom na neživú časť kontrolovaného zariadenia"]
+correct = [2]
+
+[[questions]]
+id = "B_17"
+type = "single"
+question = """Pri meraní ochrany v sieti TN:"""
+options = ["pracuje sa s jednosmerným napätím", "pracuje sa s malým napätím", "ide o priame meranie v sieti nn preto treba zachovať zvýšenú opatrnosť"]
+correct = [2]
+
+[[questions]]
+id = "B_18"
+type = "single"
+question = """Pri meraní ochrany v sieti TN odčítame priamo na meracom prístroji:"""
+options = ["hodnotu Zv (impedanciu slučky)", "údaj o napätí UL-N alebo UL-PE", "hodnotu prevádzkového prúdu"]
+correct = [1]
+
+[[questions]]
+id = "B_19"
+type = "single"
+question = """Pri skúšaní ochrany prúdovým chráničom:"""
+options = ["chránený elektrický predmet sa spojí cez vhodný rezistor R s jedným neuzemneným krajným vodičom medzi chráničom a elektrickým predmetom", "chránený elektrický predmet sa spojí cez vhodný rezistor R s uzemneným krajným vodičom medzi chráničom a elektrickým predmetom", "chránený elektrický predmet sa spojí cez vhodný rezistor R s jedným neuzemneným krajným vodičom medzi chráničom a sondou"]
+correct = [1]
+
+[[questions]]
+id = "B_20"
+type = "single"
+question = """Pri skúšaní ochrany prúdovým chráničom sa ampérmetrom A odmeria, či:"""
+options = ["chránič funguje", "chránič vypína pri udanom poruchovom prúde", "chránič vypína pri prevádzkovom prúde"]
+correct = [1]
+
+[[questions]]
+id = "B_21"
+type = "single"
+question = """Pri skúšaní ochrany prúdovým chráničom voltmeter V s vnútorným odporom Rv > 3 000 Ω použijeme na meranie napätia medzi:"""
+options = ["sondou a zemničom", "elektrickým predmetom a sondou S", "elektrickým predmetom a zemničom"]
+correct = [2]
+
+[[questions]]
+id = "B_22"
+type = "single"
+question = """Pri skúšaní ochrany prúdovým chráničom má byť sonda vzdialená od pomocného zemniča:"""
+options = ["20 m", "2 m", "200 m"]
+correct = [1]
+
+[[questions]]
+id = "B_23"
+type = "single"
+question = """Pri skúšaní ochrany prúdovým chráničom odpor R zvolíme tak, aby na elektrickom predmete vzniklo napätie, ktorého hodnota je:"""
+options = ["omnoho menšia ako dovolené dotykové napätie", "omnoho väčšia ako dovolené dotykové napätie", "omnoho menšia ako sieťové napätie"]
+correct = [0]
+
+[[questions]]
+id = "B_24"
+type = "single"
+question = """Pri skúšaní ochrany prúdovým chráničom pri zmenšovaní odporu R musí chránič vypnúť:"""
+options = ["skôr ako napätie na elektrickom predmete prekročí dovolené dotykové napätie", "neskôr ako napätie na elektrickom predmete prekročí dovolené dotykové napätie", "skôr ako napätie na elektrickom predmete prekročí sieťové napätie"]
+correct = [0]

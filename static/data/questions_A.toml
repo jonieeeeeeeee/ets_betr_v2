@@ -1,0 +1,223 @@
+[[questions]]
+id = "A_1"
+type = "single"
+question = """Aký je postup pripojenia ochranného vodiča v jednofázovej zásuvke v sieti TNC?"""
+options = ["ochranný vodič najprv privedieme na pravú pracovnú dierku", "ochranný vodič najprv privedieme na ochranný kolík", "na poradí pripojenia na dierku alebo na kolik nezáleží", "na dierku privedieme jeden vodič a na kolík druhý vodič"]
+correct = [1]
+
+[[questions]]
+id = "A_2"
+type = "single"
+question = """Jednou z ochrán živých častí elektrických zariadení je ochrana zábranou. Je zábrana priamo súčasťou elektrického zariadenia?"""
+options = ["áno", "nie", "zábrana nie je ochrana živých častí elektrických zariadení"]
+correct = [1]
+
+[[questions]]
+id = "A_3"
+type = "single"
+question = """Stupeň ochrany krytím sa označuje symbolom IP a potom nasledujú dve povinné čísla. Čo vyjadruje prvé povinné číslo?"""
+options = ["stupeň ochrany pred vniknutím vody", "stupeň ochrany pred vniknutím cudzieho telesa", "typ materiálu z ktorého je kryt zhotovený", "ochrana krytím sa vyjadruje symbolom PI"]
+correct = [1]
+
+[[questions]]
+id = "A_4"
+type = "single"
+question = """Ktorý je najnižší prakticky používaný stupeň ochrany krytím (okrem spodku poistiek a objímok žiaroviek)?"""
+options = ["IP XY", "IP 2X", "IP X2", "IP XXB"]
+correct = [1]
+
+[[questions]]
+id = "A_5"
+type = "single"
+question = """Stupeň ochrany krytím sa označuje symbolom IP a potom nasledujú dve povinné čísla. Čo vyjadruje druhé povinné číslo?"""
+options = ["stupeň ochrany pred vniknutím vody", "stupeň ochrany pred vniknutím cudzieho telesa", "ochrana krytím sa vyjadruje symbolom PI", "typ materiálu z ktorého je kryt zhotovený"]
+correct = [0]
+
+[[questions]]
+id = "A_6"
+type = "single"
+question = """Je lakovanie, smaltovanie alebo natretie farbou súčasťou izolácie, ktorá znemožní nebezpečný dotyk živých častí zariadenia?"""
+options = ["áno", "nie", "žiadna izolácia neznemožní dotyk živej časti"]
+correct = [1]
+
+[[questions]]
+id = "A_7"
+type = "single"
+question = """Pre aké napätia musí byť navrhnutá základná izolácia?"""
+options = ["pre menovité napätia", "pre menovité napätia a očakávané prepätia", "pre 10 násobok menovitého napätia", "pre 8 násobok menovitého napätia"]
+correct = [1]
+
+[[questions]]
+id = "A_8"
+type = "multi"
+question = """Čo sa používa ako doplnková izolácia?"""
+options = ["dvojitá alebo zosilnená izolácia", "izolačný koberec na stanovišti", "dielektrické rukavice galoše", "vypínacia tyč"]
+correct = [1, 2]
+
+[[questions]]
+id = "A_9"
+type = "multi"
+question = """V čom spočíva ochrana odpojením od zdroja v TN sieťach?"""
+options = ["poruchové elektrické zariadenie je odpojené od zdroja", "pri poruche je vypnutý zdroj", "na vypnutie poruchy sa použije ochranný vodič", "ochranný vodič je spojený s uzlom zdroja"]
+correct = [0, 2, 3]
+
+[[questions]]
+id = "A_10"
+type = "single"
+question = """Môže sa ochranný vodič istiť?"""
+options = ["nesmie sa istiť", "musí sa istiť", "môže sa istiť poistkou", "môže sa istiť ističom"]
+correct = [0]
+
+[[questions]]
+id = "A_11"
+type = "single"
+question = """Aký má byť celkový zemný odpor ochranných vodičov transformátora vrátane jeho uzemneného uzla, ak je odpor pôdy v hĺbke 1 až 3 m do 200 ohmov?"""
+options = ["do 2 Ω", "do 15 Ω", "do 5 Ω", "do 20 Ω"]
+correct = [0]
+
+[[questions]]
+id = "A_12"
+type = "single"
+question = """Aký má byť zemný odpor pracovného uzemnenia uzla zdroja v bežných pôdnych podmienkach?"""
+options = ["do 15 Ω", "do 5 Ω", "do 20 Ω", "do 10 Ω"]
+correct = [1]
+
+[[questions]]
+id = "A_13"
+type = "multi"
+question = """Kde sa musí uzemniť ochranný vodič v sieťach TNC a TNS v objektoch s vlastným transformátorom?"""
+options = ["nemusí sa zvlášť uzemniť", "pri hlavnom rozvádzači", "na koncoch odbočiek dlhších ako 200 m", "každých 500 m a na konci vedenia"]
+correct = [1, 2, 3]
+
+[[questions]]
+id = "A_14"
+type = "multi"
+question = """V čom spočíva podstata ochrany zemnením?"""
+options = ["neživá časť elektrického zariadenia sa spojí so zemou", "zem sa používa na vedenie poruchy", "porucha sa zo zeme neodvádza", "uzol zdroja musí byť pri ochrane zemnením vždy uzemnený"]
+correct = [0, 1]
+
+[[questions]]
+id = "A_15"
+type = "single"
+question = """Je nutné, aby v sieti s uzemneným uzlom pri ochrane zemnením boli ochranné kolíky zásuviek spojené zemničom so zemou?"""
+options = ["nie - nie je to nutné", "nie - nie je to dovolené", "nezáleží na tom", "áno - jedine tak je to správne"]
+correct = [3]
+
+[[questions]]
+id = "A_16"
+type = "single"
+question = """Je dovolené pri ochrane zemnením pripájať neživé časti elektrických zariadení na stredný vodič rozvodnej sústavy?"""
+options = ["áno - je to dovolené", "nie - pri ochrane zemnením sa stredný vodič nikdy nepoužíva", "áno - pri ochrane zemnením sa stredný vodič vždy používa", "nie"]
+correct = [3]
+
+[[questions]]
+id = "A_17"
+type = "single"
+question = """V akom čase nastáva samočinné odpojenie poruchového zariadenia od zdroja v prípade použitia chráničov (prúdového alebo napäťového)?"""
+options = ["v čase od 2 s", "v čase do 0.2 s", "v čase do 1 s", "v čase do 5 s"]
+correct = [1]
+
+[[questions]]
+id = "A_18"
+type = "multi"
+question = """Kde sa pripája vypínacia cievka ochrannej spúšte napäťového chrániča?"""
+options = ["na neživú časť chráneného zariadenia", "na svoj uzemňovač", "na vodič PEN"]
+correct = [0, 1]
+
+[[questions]]
+id = "A_19"
+type = "single"
+question = """V prúdovom chrániči je za normálneho stavu geometrický súčet pritekajúcich a odtekajúcich prúdov rovný nule. Ktoré vodiče sa vedú cez súčtový transformátor prúdového chrániča?"""
+options = ["všetky pracovné vodiče a stredný ak je ako pracovný", "len ochranný vodič", "len fázové vodiče"]
+correct = [0]
+
+[[questions]]
+id = "A_20"
+type = "single"
+question = """Je stredný vodič vždy spojený cez uzol zdroja so zemou?"""
+options = ["v sieti TT nie", "v sieti IT nie", "v sieťach TN nie", "vždy musí byť spojený so zemou"]
+correct = [1]
+
+[[questions]]
+id = "A_21"
+type = "single"
+question = """Ako sa volá ochrana, kde sa spoja všetky neživé časti chránených elektrických zariadení so všetkými kovovými vodivými časťami na okolí? (kovové potrubia, vane,...)"""
+options = ["ochrana uzemnením na náhodné zemniče", "ochrana pospájaním", "ochrana nulovaním", "ochrana bezpečným napätím"]
+correct = [1]
+
+[[questions]]
+id = "A_22"
+type = "single"
+question = """Aké je možné najväčšie napätie oddeleného prúdového obvodu od obvodov rozvodnej sústavy v prípade ochrany oddelením obvodov?"""
+options = ["napätie elektricky oddeleného obvodu nesmie prekročiť 500 V", "napätie elektricky oddeleného obvodu nesmie prekročiť 50 V", "napätie elektricky oddeleného obvodu nesmie prekročiť 1500 V", "napätie elektricky oddeleného obvodu nesmie prekročiť 1000 V"]
+correct = [0]
+
+[[questions]]
+id = "A_23"
+type = "multi"
+question = """Ktorý obvod zabráni vzniku nebezpečného dotykového napätia na neživej časti chráneného elektrického zariadenia v prípade ochrany bezpečným napätím?"""
+options = ["SELV", "PELV", "FELV", "MELVV"]
+correct = [0, 1, 2]
+
+[[questions]]
+id = "A_24"
+type = "single"
+question = """Označenie prepäťovej ochrany je:"""
+options = ["SPD", "SDP", "PDS", "SPS"]
+correct = [0]
+
+[[questions]]
+id = "A_25"
+type = "single"
+question = """Typy prepäťových ochrán sú:"""
+options = ["Typ B Typ C Typ D", "Typ A Typ B Typ C", "Typ A Typ B Typ C Typ D"]
+correct = [0]
+
+[[questions]]
+id = "A_26"
+type = "single"
+question = """Každý bleskozvod má tieto tri hlavné časti:"""
+options = ["zachytávacie zariadenie skúšobné svorky a uzemňovače", "zachytávacie zariadenie zvody a skúšobné svorky", "zachytávacie zariadenie zvody a uzemňovače"]
+correct = [2]
+
+[[questions]]
+id = "A_27"
+type = "single"
+question = """Náhodné zberače bleskozvodu tvoria:"""
+options = ["izolačné predmety ktoré sú súčasťou chráneného objektu", "kovové predmety ktoré nie sú súčasťou chráneného objektu", "kovové predmety ktoré sú súčasťou chráneného objektu"]
+correct = [2]
+
+[[questions]]
+id = "A_28"
+type = "single"
+question = """Vrcholový uhol kužeľa ochranného priestoru tyčového bleskozvodu je:"""
+options = ["112°", "120°", "60°"]
+correct = [0]
+
+[[questions]]
+id = "A_29"
+type = "single"
+question = """Počet zvodov bleskozvodu sa riadi:"""
+options = ["pôdorysnými rozmermi tvarom strechy a výškou objektu", "výškou a dĺžkou objektu", "výškou objektu a počtom rohov objektu"]
+correct = [0]
+
+[[questions]]
+id = "A_30"
+type = "single"
+question = """Pri vonkajších zvodoch bleskozvodov sa skúšobná svorka montuje vo výške:"""
+options = ["0.6 až 1.8 m nad zemou", "0.6 až 2.0 m nad zemou", "1.8 až 2.0 m nad zemou"]
+correct = [2]
+
+[[questions]]
+id = "A_31"
+type = "single"
+question = """Zhotovené uzemňovače bleskozvodov:"""
+options = ["sa majú prednostne použiť", "sa musia prednostne použiť", "sa vyhotovujú vtedy ak odpor náhodných nevyhovuje"]
+correct = [2]
+
+[[questions]]
+id = "A_32"
+type = "single"
+question = """Ako náhodné uzemňovače bleskozvodov sa nesmú použiť:"""
+options = ["kovové plášte káblov", "rozvody plynu horľavých kvapalín a vykurovacích médií", "vodovodné potrubia"]
+correct = [1]
