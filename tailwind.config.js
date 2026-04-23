@@ -1,13 +1,5 @@
-/** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
-  theme: {
-    extend: {
-      fontFamily: {
-        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
-      },
-    }
-  },
+  content: ['./src/**/*.{html,js,svelte}'],
+  theme: { extend: { fontFamily: { sans: ['"DM Sans"', 'system-ui', 'sans-serif'] } } },
   plugins: []
 };

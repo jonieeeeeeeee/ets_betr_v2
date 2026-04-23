@@ -1,269 +1,193 @@
 <script>
   import Nav from '$lib/Nav.svelte';
-  import { questionsDatabase } from '$lib/questions.js';
+  import { loadQuestions, META, shuffle, checkAnswer } from '$lib/questions.js';
 
-  // ── Setup state ──────────────────────────────────────────────
-  let selectedTest = 'A';
-  let questionCount = 10;
+  let phase = 'setup'; // setup | quiz | results
+  let selTest = 'A', selCount = 10;
+  let questions = [], answers = [], statuses = [], idx = 0;
 
-  // ── Quiz state ───────────────────────────────────────────────
-  let phase = 'setup'; // 'setup' | 'quiz' | 'results'
-  let questions = [];
-  let userAnswers = [];
-  let answerStatus = []; // null | true | false
-  let currentIdx = 0;
-  let quizFinished = false;
-
-  const testOptions = [
-    { value: 'A',   label: 'Test A — Elektrotechnické merania' },
-    { value: 'B',   label: 'Test B — Ochranné opatrenia' },
-    { value: 'C',   label: 'Test C — Bezpečnosť práce' },
-    { value: 'D',   label: 'Test D — Prvá pomoc' },
-    { value: 'LEG', label: 'Legislatíva' },
-  ];
-
-  function shuffle(arr) {
-    const a = [...arr];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
+  async function start() {
+    const raw = await loadQuestions(selTest);
+    questions = shuffle(raw).slice(0, Math.min(selCount, raw.length));
+    answers = Array(questions.length).fill(null);
+    statuses = Array(questions.length).fill(null);
+    idx = 0; phase = 'quiz';
   }
 
-  function startQuiz() {
-    const available = questionsDatabase[selectedTest] ?? [];
-    if (!available.length) { alert('Žiadne otázky.'); return; }
-    const n = Math.min(questionCount, available.length);
-    questions    = shuffle(available).slice(0, n);
-    userAnswers  = Array(n).fill(null);
-    answerStatus = Array(n).fill(null);
-    currentIdx   = 0;
-    quizFinished = false;
-    phase        = 'quiz';
-  }
+  $: q = questions[idx];
+  $: checked = statuses[idx];
+  $: isLast = idx === questions.length - 1;
 
-  // ── Answer selection ─────────────────────────────────────────
-  function selectOption(oi) {
-    if (answerStatus[currentIdx] !== null) return;
-    const q = questions[currentIdx];
+  function pick(oi) {
+    if (checked !== null) return;
     if (q.type === 'multi') {
-      const cur = Array.isArray(userAnswers[currentIdx]) ? [...userAnswers[currentIdx]] : [];
-      const pos = cur.indexOf(oi);
-      if (pos === -1) cur.push(oi); else cur.splice(pos, 1);
-      userAnswers[currentIdx] = cur.length ? cur : null;
+      const cur = Array.isArray(answers[idx]) ? [...answers[idx]] : [];
+      const i = cur.indexOf(oi); i === -1 ? cur.push(oi) : cur.splice(i, 1);
+      answers[idx] = cur.length ? cur : null;
     } else {
-      userAnswers[currentIdx] = oi;
+      answers[idx] = oi;
     }
-    userAnswers = [...userAnswers];
+    answers = [...answers];
   }
 
-  function isSelected(oi) {
-    const ans = userAnswers[currentIdx];
-    if (ans === null || ans === undefined) return false;
-    return Array.isArray(ans) ? ans.includes(oi) : ans === oi;
+  function sel(oi) {
+    const a = answers[idx];
+    return Array.isArray(a) ? a.includes(oi) : a === oi;
   }
 
-  // ── Check ────────────────────────────────────────────────────
-  function checkAnswer() {
-    if (answerStatus[currentIdx] !== null) { alert('Túto otázku už máš skontrolovanú!'); return; }
-    const q   = questions[currentIdx];
-    const ans = userAnswers[currentIdx];
-    if (ans === null || (Array.isArray(ans) && ans.length === 0)) {
-      alert('Najprv označ nejakú odpoveď!'); return;
-    }
-    let ok = false;
-    if (q.type === 'multi') {
-      ok = Array.isArray(ans) && ans.length === q.correct.length &&
-           JSON.stringify([...ans].sort()) === JSON.stringify([...q.correct].sort());
-    } else {
-      ok = q.correct.includes(ans);
-    }
-    answerStatus[currentIdx] = ok;
-    answerStatus = [...answerStatus];
+  function check() {
+    if (checked !== null) return alert('Už skontrolované!');
+    const a = answers[idx];
+    if (a === null || (Array.isArray(a) && !a.length)) return alert('Najprv označ odpoveď!');
+    statuses[idx] = checkAnswer(q, Array.isArray(a) ? a : [a]);
+    statuses = [...statuses];
   }
-
-  // ── Navigation ───────────────────────────────────────────────
-  function prev() { if (currentIdx > 0) currentIdx--; }
 
   function next() {
-    if (answerStatus[currentIdx] === null) { alert('Najprv skontroluj odpoveď!'); return; }
-    if (currentIdx < questions.length - 1) currentIdx++;
+    if (checked === null) return alert('Najprv skontroluj!');
+    idx++;
   }
 
-  function finishQuiz() {
-    if (!answerStatus.every(s => s !== null)) { alert('Najprv skontroluj všetky otázky!'); return; }
-    quizFinished = true;
+  function finish() {
+    if (!statuses.every(s => s !== null)) return alert('Skontroluj všetky otázky!');
     phase = 'results';
   }
 
-  // ── Computed ─────────────────────────────────────────────────
-  $: q            = questions[currentIdx];
-  $: checked      = answerStatus[currentIdx];
-  $: isLast       = currentIdx === questions.length - 1;
-  $: canNext      = answerStatus[currentIdx] !== null && !isLast;
-  $: canFinish    = isLast && answerStatus[currentIdx] !== null;
-  $: correctCount = answerStatus.filter(Boolean).length;
-  $: resultPct    = questions.length ? Math.round((correctCount / questions.length) * 100) : 0;
-
-  function answerLetter(ans) {
-    if (ans === null || ans === undefined) return '?';
-    if (Array.isArray(ans)) return ans.map(a => String.fromCharCode(65 + a)).join(', ');
-    return String.fromCharCode(65 + ans);
+  function letter(a) {
+    if (a === null || a === undefined) return '—';
+    return Array.isArray(a) ? a.map(x => String.fromCharCode(65+x)).join(', ') : String.fromCharCode(65+a);
   }
+
+  $: correctCount = statuses.filter(Boolean).length;
+  $: pct = questions.length ? Math.round(correctCount/questions.length*100) : 0;
 </script>
 
 <svelte:head><title>🎯 Kvíz | ELTEC</title></svelte:head>
 
 <div class="min-h-screen bg-slate-950 text-slate-100">
   <Nav>
-    <svelte:fragment slot="title">
-      <h1 class="text-4xl font-extrabold tracking-tight bg-gradient-to-r from-slate-100 to-blue-400 bg-clip-text text-transparent mb-2">
-        🎯 Strel odpoveď!
-      </h1>
-    </svelte:fragment>
-    <svelte:fragment slot="subtitle">
-      <p class="text-slate-400 text-sm">Vyber test, označ odpovede a klikni na "Skontrolovať"</p>
-    </svelte:fragment>
+    <h1 class="text-3xl font-extrabold bg-gradient-to-r from-slate-100 to-blue-400 bg-clip-text text-transparent mb-1">🎯 Strel odpoveď!</h1>
+    <p class="text-slate-400 text-sm">Označ odpovede a klikni Skontrolovať</p>
   </Nav>
 
-  <main class="max-w-2xl mx-auto px-6 py-10">
+  <main class="max-w-xl mx-auto px-5 py-8">
 
-    <!-- ── Setup ─────────────────────────────────────────────── -->
+    <!-- Setup -->
     {#if phase === 'setup'}
-      <div class="bg-slate-800/60 border border-slate-700/50 rounded-3xl p-10 text-center">
-        <h2 class="text-2xl font-bold mb-8">🎯 Výber kvízu</h2>
-        <div class="space-y-5 text-left">
-          <label class="block">
-            <span class="text-sm font-semibold text-slate-300 mb-2 block">📘 Vyber test</span>
-            <select bind:value={selectedTest}
-                    class="w-full bg-slate-700 border border-slate-600 rounded-2xl px-4 py-3 text-slate-100 focus:outline-none focus:border-blue-500">
-              {#each testOptions as opt}
-                <option value={opt.value}>{opt.label}</option>
-              {/each}
-            </select>
-          </label>
-          <label class="block">
-            <span class="text-sm font-semibold text-slate-300 mb-2 block">🔢 Počet otázok</span>
-            <input type="number" bind:value={questionCount} min="1" max="50"
-                   class="w-full bg-slate-700 border border-slate-600 rounded-2xl px-4 py-3 text-slate-100 focus:outline-none focus:border-blue-500" />
-          </label>
-        </div>
-        <button on:click={startQuiz}
-                class="mt-8 px-10 py-3.5 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-bold transition-colors duration-200">
-          🚀 Spustiť kvíz
+      <div class="bg-slate-800/60 border border-slate-700/50 rounded-3xl p-8 text-center space-y-5">
+        <h2 class="text-2xl font-bold">Výber kvízu</h2>
+        <label class="block text-left">
+          <span class="text-sm font-semibold text-slate-300 block mb-1.5">📘 Test</span>
+          <select bind:value={selTest}
+            class="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-500">
+            {#each Object.entries(META) as [k, m]}
+              <option value={k}>{m.emoji} {m.name}</option>
+            {/each}
+          </select>
+        </label>
+        <label class="block text-left">
+          <span class="text-sm font-semibold text-slate-300 block mb-1.5">🔢 Počet otázok</span>
+          <input type="number" bind:value={selCount} min="1" max="50"
+            class="w-full bg-slate-700 border border-slate-600 rounded-xl px-4 py-2.5 focus:outline-none focus:border-blue-500" />
+        </label>
+        <button on:click={start}
+          class="w-full py-3 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-bold transition-colors">
+          🚀 Spustiť
         </button>
       </div>
 
-    <!-- ── Quiz ──────────────────────────────────────────────── -->
+    <!-- Quiz -->
     {:else if phase === 'quiz' && q}
-      <!-- Progress bar -->
-      <div class="h-1.5 bg-slate-800 rounded-full mb-6 overflow-hidden">
-        <div class="h-full bg-emerald-500 transition-all duration-300 rounded-full"
-             style="width:{(currentIdx / questions.length) * 100}%"></div>
+      <div class="h-1 bg-slate-800 rounded-full mb-5 overflow-hidden">
+        <div class="h-full bg-emerald-500 transition-all rounded-full" style="width:{idx/questions.length*100}%"></div>
       </div>
 
-      <div class="bg-slate-800/60 border border-slate-700/50 rounded-3xl p-8 mb-4">
-        <!-- Header -->
-        <div class="flex items-center justify-between gap-3 flex-wrap mb-6">
-          <span class="bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-full">
-            {currentIdx + 1} / {questions.length}
-          </span>
-          <span class="bg-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-full">
-            {q.type === 'multi' ? '✅ Viac správnych' : '🔘 Jedna správna'}
-          </span>
+      <div class="bg-slate-800/60 border border-slate-700/50 rounded-2xl p-6 mb-4">
+        <div class="flex justify-between text-xs mb-4 flex-wrap gap-2">
+          <span class="bg-blue-500 text-white px-3 py-1 rounded-full font-bold">{idx+1}/{questions.length}</span>
+          <span class="bg-slate-700 text-slate-300 px-3 py-1 rounded-full">{q.type==='multi'?'✅ Viac správnych':'🔘 Jedna správna'}</span>
         </div>
+        <p class="font-bold leading-snug mb-5">{q.question}</p>
 
-        <p class="text-lg font-bold mb-6 leading-snug">{q.question}</p>
-
-        <!-- Options -->
-        <div class="space-y-3">
+        <div class="space-y-2">
           {#each q.options as opt, oi}
-            <!-- svelte-ignore a11y-click-events-have-key-events a11y-no-static-element-interactions -->
-            <div
-              on:click={() => selectOption(oi)}
-              class="flex items-center gap-4 px-5 py-4 rounded-2xl border cursor-pointer transition-all duration-150
-                {checked !== null && q.correct.includes(oi)
-                  ? 'bg-emerald-500/20 border-emerald-500 text-white'
-                  : checked !== null && isSelected(oi) && !q.correct.includes(oi)
-                    ? 'bg-red-500/20 border-red-500 text-white'
-                    : isSelected(oi)
-                      ? 'bg-blue-500/20 border-blue-500 text-white'
-                      : 'bg-slate-700/40 border-slate-600/40 text-slate-300 hover:border-slate-500'}"
-            >
+            <div on:click={() => pick(oi)} role="button" tabindex="0" on:keydown={e=>e.key==='Enter'&&pick(oi)}
+              class="flex items-center gap-3 px-4 py-3 rounded-xl border cursor-pointer transition-all text-sm
+                {checked !== null && q.correct.includes(oi) ? 'bg-emerald-500/20 border-emerald-500'
+                : checked !== null && sel(oi) && !q.correct.includes(oi) ? 'bg-red-500/20 border-red-500'
+                : sel(oi) ? 'bg-blue-500/20 border-blue-500'
+                : 'bg-slate-700/40 border-slate-600/40 hover:border-slate-500'}">
               {#if q.type === 'multi'}
-                <span class="w-5 h-5 rounded border-2 flex items-center justify-center flex-shrink-0 text-xs font-bold
-                  {isSelected(oi) ? 'bg-blue-500 border-blue-500 text-white' : 'border-slate-500'}">
-                  {isSelected(oi) ? '✓' : ''}
+                <span class="w-5 h-5 rounded border-2 flex items-center justify-center text-xs font-bold flex-shrink-0
+                  {sel(oi) ? 'bg-blue-500 border-blue-500' : 'border-slate-500'}">
+                  {sel(oi)?'✓':''}
                 </span>
               {:else}
-                <span class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm flex-shrink-0
-                  {isSelected(oi) ? 'bg-blue-500 text-white' : 'bg-slate-600 text-slate-300'}">
-                  {String.fromCharCode(65 + oi)}
+                <span class="w-7 h-7 rounded-full flex items-center justify-center font-bold text-xs flex-shrink-0
+                  {sel(oi) ? 'bg-blue-500' : 'bg-slate-600'}">
+                  {String.fromCharCode(65+oi)}
                 </span>
               {/if}
-              <span class="text-sm font-medium">{String.fromCharCode(65 + oi)}) {opt}</span>
+              <span>{String.fromCharCode(65+oi)}) {opt}</span>
             </div>
           {/each}
         </div>
 
         <!-- Feedback -->
         {#if checked !== null}
-          {@const correctLetters = q.correct.map(c => String.fromCharCode(65 + c)).join(', ')}
-          {@const correctOpts    = q.correct.map(c => q.options[c]).join('; ')}
-          <div class="mt-5 rounded-2xl p-4 border-l-4 {checked ? 'bg-emerald-500/10 border-emerald-500' : 'bg-red-500/10 border-red-500'}">
-            <p class="font-bold mb-1 {checked ? 'text-emerald-400' : 'text-red-400'}">
-              {checked ? '✓ Správne!' : '✗ Nesprávne'}
-            </p>
-            <p class="text-sm text-slate-400">Tvoja odpoveď: {answerLetter(userAnswers[currentIdx])}</p>
+          <div class="mt-4 rounded-xl p-4 border-l-4 {checked ? 'bg-emerald-500/10 border-emerald-500' : 'bg-red-500/10 border-red-500'}">
+            <p class="font-bold {checked ? 'text-emerald-400' : 'text-red-400'}">{checked?'✓ Správne!':'✗ Nesprávne'}</p>
+            <p class="text-sm text-slate-400 mt-1">Tvoja: {letter(answers[idx])}</p>
             {#if !checked}
-              <p class="text-sm text-emerald-400 mt-1">Správna: {correctLetters}) {correctOpts}</p>
+              <p class="text-sm text-emerald-400 mt-0.5">
+                Správna: {q.correct.map(c=>String.fromCharCode(65+c)).join(', ')}) {q.correct.map(c=>q.options[c]).join('; ')}
+              </p>
             {/if}
           </div>
         {/if}
       </div>
 
-      <!-- Nav buttons -->
-      <div class="flex gap-3 flex-wrap">
-        <button on:click={prev} disabled={currentIdx === 0}
-                class="flex-1 py-3 rounded-full font-semibold transition-colors disabled:opacity-40 bg-slate-700 hover:bg-slate-600 text-slate-200">
-          ◀ Predchádzajúca
+      <div class="flex gap-2.5 flex-wrap">
+        <button on:click={() => idx--} disabled={idx===0}
+          class="flex-1 py-2.5 rounded-full font-semibold bg-slate-700 hover:bg-slate-600 disabled:opacity-40 transition-colors">
+          ◀ Späť
         </button>
-        <button on:click={checkAnswer} disabled={checked !== null}
-                class="flex-1 py-3 rounded-full font-semibold transition-colors disabled:opacity-40 bg-amber-500 hover:bg-amber-600 text-white">
+        <button on:click={check} disabled={checked !== null}
+          class="flex-1 py-2.5 rounded-full font-semibold bg-amber-500 hover:bg-amber-600 text-white disabled:opacity-40 transition-colors">
           ✅ Skontrolovať
         </button>
-        {#if canNext}
-          <button on:click={next} class="flex-1 py-3 rounded-full font-semibold bg-blue-500 hover:bg-blue-600 text-white transition-colors">
+        {#if !isLast}
+          <button on:click={next}
+            class="flex-1 py-2.5 rounded-full font-semibold bg-blue-500 hover:bg-blue-600 text-white transition-colors">
             Ďalšia ▶
           </button>
-        {:else if canFinish}
-          <button on:click={finishQuiz} class="flex-1 py-3 rounded-full font-semibold bg-emerald-500 hover:bg-emerald-600 text-white transition-colors">
-            🏁 Ukončiť kvíz
+        {:else if checked !== null}
+          <button on:click={finish}
+            class="flex-1 py-2.5 rounded-full font-semibold bg-emerald-500 hover:bg-emerald-600 text-white transition-colors">
+            🏁 Ukončiť
           </button>
         {/if}
       </div>
 
-    <!-- ── Results ────────────────────────────────────────────── -->
+    <!-- Results -->
     {:else if phase === 'results'}
-      {@const color = resultPct >= 90 ? '#10b981' : resultPct >= 75 ? '#3b82f6' : resultPct >= 50 ? '#f59e0b' : '#ef4444'}
-      <div class="bg-slate-800/60 border border-slate-700/50 rounded-3xl p-8 text-center mb-6">
-        <h2 class="text-2xl font-bold mb-4">📊 Konečné výsledky</h2>
-        <p class="text-5xl font-extrabold mb-2" style="color:{color}">{correctCount} / {questions.length}</p>
-        <p class="text-slate-400">({resultPct}%)</p>
-        <button on:click={() => { phase = 'setup'; }}
-                class="mt-6 px-8 py-3 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold transition-colors">
+      <div class="bg-slate-800/60 border border-slate-700/50 rounded-3xl p-8 text-center mb-5">
+        <h2 class="text-2xl font-bold mb-3">📊 Výsledky</h2>
+        <p class="text-5xl font-extrabold" style="color:{pct>=90?'#10b981':pct>=75?'#3b82f6':pct>=50?'#f59e0b':'#ef4444'}">
+          {correctCount}/{questions.length}
+        </p>
+        <p class="text-slate-400 mt-1">({pct}%)</p>
+        <button on:click={() => phase='setup'}
+          class="mt-5 px-8 py-2.5 rounded-full bg-blue-500 hover:bg-blue-600 text-white font-semibold transition-colors">
           🔄 Nový kvíz
         </button>
       </div>
-
-      <div class="space-y-3">
+      <div class="space-y-2.5">
         {#each questions as qr, i}
-          <div class="rounded-2xl p-4 border border-slate-700/50 bg-slate-800/40 border-l-4
-            {answerStatus[i] ? 'border-l-emerald-500' : 'border-l-red-500'}">
-            <p class="font-semibold text-sm mb-1">{i+1}. {qr.question}</p>
-            <p class="text-sm text-slate-400">Tvoja odpoveď: {answerLetter(userAnswers[i])}</p>
-            <p class="text-sm text-emerald-400">Správne: {qr.correct.map(c => String.fromCharCode(65+c)).join(', ')}</p>
+          <div class="rounded-xl p-3.5 bg-slate-800/60 border-l-4 {statuses[i]?'border-emerald-500':'border-red-500'}">
+            <p class="font-semibold text-sm">{i+1}. {qr.question}</p>
+            <p class="text-xs text-slate-400 mt-1">Tvoja: {letter(answers[i])}</p>
+            <p class="text-xs text-emerald-400">Správna: {qr.correct.map(c=>String.fromCharCode(65+c)).join(', ')}</p>
           </div>
         {/each}
       </div>
