@@ -119,10 +119,10 @@ correct = [2]
 
 [[questions]]
 id = "B_18"
-type = "single"
+type = "multi"
 question = """Pri meraní ochrany v sieti TN odčítame priamo na meracom prístroji:"""
 options = ["hodnotu Zv (impedanciu slučky)", "údaj o napätí UL-N alebo UL-PE", "hodnotu prevádzkového prúdu"]
-correct = [1]
+correct = [O, 1]
 
 [[questions]]
 id = "B_19"
