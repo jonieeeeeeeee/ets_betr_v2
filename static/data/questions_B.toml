@@ -150,7 +150,7 @@ id = "B_22"
 type = "single"
 question = """Pri skúšaní ochrany prúdovým chráničom má byť sonda vzdialená od pomocného zemniča:"""
 options = ["20 m", "2 m", "200 m"]
-correct = [1]
+correct = [0]
 
 [[questions]]
 id = "B_23"
