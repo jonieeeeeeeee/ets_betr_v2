@@ -1,9 +1,9 @@
 [[questions]]
 id = "B_1"
-type = "multi"
+type = "single"
 question = """Pri meraní ochrany v sieti TT:"""
 options = ["ochranné uzemnenie sa spojí cez regulačný odpor R s niektorým neuzemneným krajným vodičom", "pracovné uzemnenie sa spojí cez regulačný odpor R s niektorým neuzemneným krajným vodičom", "ochranné uzemnenie sa spojí cez regulačný odpor R s niektorým uzemneným krajným vodičom", "pracovné uzemnenie sa spojí cez regulačný odpor R s niektorým uzemneným krajným vodičom"]
-correct = [0, 1]
+correct = [0]
 
 [[questions]]
 id = "B_2"
@@ -24,14 +24,14 @@ id = "B_4"
 type = "single"
 question = """Ak ostane pri meraní ochrany v sieti TT napätie na voltmetri V aj pri úplnom vyradení odporu R (skrat) pod hodnotou 50 V, tak uzemnenie:"""
 options = ["vyhovuje aj v prípade že vypínacie prvky nevypnú", "vyhovuje len v prípade že vypínacie prvky nevypnú", "nevyhovuje"]
-correct = [2]
+correct = [0]
 
 [[questions]]
 id = "B_5"
-type = "single"
+type = "multi"
 question = """Pri skúšaní ochrany napäťovým chráničom sa musí zapnúť zariadenie na chrániči. Tým sa vyskúša:"""
 options = ["či ochrana pracuje", "či je chránič spojený s pomocným zemničom", "či je zariadenie funkčné"]
-correct = [0]
+correct = [0,1]
 
 [[questions]]
 id = "B_6"
@@ -45,7 +45,7 @@ id = "B_7"
 type = "single"
 question = """Pri skúšaní ochrany napäťovým chráničom voltmeter V s vnútorným odporom Rv > 3 000 Ω použijeme na meranie napätia medzi:"""
 options = ["sondou a zemničom", "elektrickým predmetom a sondou S", "elektrickým predmetom a zemničom"]
-correct = [2]
+correct = [1]
 
 [[questions]]
 id = "B_8"
