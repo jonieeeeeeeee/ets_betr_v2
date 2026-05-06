@@ -43,7 +43,7 @@ correct = [1]
 [[questions]]
 id = "D_7"
 type = "single"
-question = """Aké napätie spôsobí prerazenie suchej tvrdej kože napr. na tvrdých "vypracovaných rukách"?"""
+question = """Aké napätie spôsobí prerazenie suchej tvrdej kože napr. na tvrdých |vypracovaných rukách|?"""
 options = ["napätie nad 100 V", "napätie nad 60 V", "napätie nad 24 V"]
 correct = [0]
 
