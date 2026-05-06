@@ -58,7 +58,7 @@ correct = [3]
 id = "D_9"
 type = "single"
 question = """Je možné preseknúť vodiče sekerou tam, kde nie je možné urobiť vypnutie vypínačom alebo poistkami?"""
-options = ["nie nesmie sa to", "áno jeto možné pri "nn"", "áno jeto možné pri bezpečnom napätí"]
+options = ["nie nesmie sa to", "áno jeto možné pri |nn|", "áno jeto možné pri bezpečnom napätí"]
 correct = [1]
 
 [[questions]]
