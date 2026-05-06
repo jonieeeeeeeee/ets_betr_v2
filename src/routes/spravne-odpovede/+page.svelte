@@ -151,7 +151,7 @@
                   <div class="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm border
                     {q.correct.includes(oi) ? 'bg-emerald-500/15 border-emerald-500/50 text-emerald-300' : 'bg-slate-700/40 border-slate-600/30 text-slate-400'}">
                     <span class="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0
-                      {q.correct.includes(oi) ? 'bg-emerald-500 text-white' : 'bg-slate-600 text-slate-300'}">
+                      {q.correct.includes(oi) ? 'bg-emerald-800 text-white' : 'bg-slate-600 text-slate-300'}">
                       {q.correct.includes(oi) ? '✓' : String.fromCharCode(65+oi)}
                     </span>
                     {String.fromCharCode(65+oi)}) {opt}
