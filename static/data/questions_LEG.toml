@@ -387,7 +387,7 @@ correct = [2]
 id = "LEG_56"
 type = "single"
 question = """Štátnu správu v oblasti inšpekcie práce vykonávajú:"""
-options = ["Ministerstvo práce sociálnych vecí a rodiny Slovenskej republiky Národný inšpektorát práce a inšpektoráty práce", "Ministerstvo práce sociálnych vecí a rodiny Slovenskej republiky a Slovenský úrad bezpečnosti práce", "Ministerstvo práce sociálnych vecí a rodiny Slovenskej republiky vyššie územné celky a zamestnávatelia"]
+options = ["Ministerstvo práce sociálnych vecí a rodiny Slovenskej republiky, Národný inšpektorát práce a inšpektoráty práce", "Ministerstvo práce sociálnych vecí a rodiny Slovenskej republiky a Slovenský úrad bezpečnosti práce", "Ministerstvo práce sociálnych vecí a rodiny Slovenskej republiky, vyššie územné celky a zamestnávatelia"]
 correct = [0]
 
 [[questions]]
