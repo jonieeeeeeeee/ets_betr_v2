@@ -122,7 +122,7 @@ id = "B_18"
 type = "multi"
 question = """Pri meraní ochrany v sieti TN odčítame priamo na meracom prístroji:"""
 options = ["hodnotu Zv (impedanciu slučky)", "údaj o napätí UL-N alebo UL-PE", "hodnotu prevádzkového prúdu"]
-correct = [O, 1]
+correct = [0, 1]
 
 [[questions]]
 id = "B_19"
