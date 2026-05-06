@@ -143,7 +143,7 @@ id = "B_21"
 type = "single"
 question = """Pri skúšaní ochrany prúdovým chráničom voltmeter V s vnútorným odporom Rv > 3 000 Ω použijeme na meranie napätia medzi:"""
 options = ["sondou a zemničom", "elektrickým predmetom a sondou S", "elektrickým predmetom a zemničom"]
-correct = [2]
+correct = [1]
 
 [[questions]]
 id = "B_22"
