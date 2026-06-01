@@ -129,7 +129,7 @@ id = "B_19"
 type = "single"
 question = """Pri skúšaní ochrany prúdovým chráničom:"""
 options = ["chránený elektrický predmet sa spojí cez vhodný rezistor R s jedným neuzemneným krajným vodičom medzi chráničom a elektrickým predmetom", "chránený elektrický predmet sa spojí cez vhodný rezistor R s uzemneným krajným vodičom medzi chráničom a elektrickým predmetom", "chránený elektrický predmet sa spojí cez vhodný rezistor R s jedným neuzemneným krajným vodičom medzi chráničom a sondou"]
-correct = [1]
+correct = [0]
 
 [[questions]]
 id = "B_20"
